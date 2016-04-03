@@ -10,7 +10,17 @@ var Problem = function (text) {
 
 /*Begin the engine code...*/
 /*Engine methods*/
-
+function getInputValue(inputName) {
+	
+	var i = document.getElementsByName(inputName);
+	console.log(i);
+	
+	if (i[0].tagName == "INPUT" && i[0].type == "text") {
+		return i;
+	} else {
+		console.log("Non-input DOM element selected");
+	}
+}
 
 /*Main document code*/
 jQuery(function($) {
@@ -20,6 +30,8 @@ jQuery(function($) {
 		//Events that happen when div is clicked
 		console.log("clicked");
 	});
+	
+	getInputValue("answer");
 	
 	var problem1 = new Problem('Convert \\( \\frac{4}{5} \\) to a decimal.');
 	

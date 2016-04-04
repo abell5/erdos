@@ -15,6 +15,7 @@
 
 
 <div id="mainTV">
+	<div id="helperTV"></div>
 
 </div>
 

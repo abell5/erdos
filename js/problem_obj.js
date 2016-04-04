@@ -28,7 +28,11 @@ Problem.prototype.checkBranches = function(val) {
 	this.branches.forEach(function (entry) {
 		if(entry[0] == val) {
 			console.log("Pointer to action:")
-			displayHelper(problem1);
+			displayHelperProblem(problem1);
+			//console.log(entry[1]);
+			//var action = new Function(entry[1]);
+			//console.log(action);
+			//action();
 		}
 	});
 }
@@ -45,6 +49,9 @@ function displayProblem(prob,loc=defaultTV) {
 		htmldata = '<div class="problemTextbox">' + prob.text + '</div>';
 		htmldata += '<div class="answerBox"><input type="text" style="width: 60px"name="answer"></input></div>';
 		htmldata += '<div class="button">Blah</div>';
+		
+		console.log(htmldata);
+		console.log(loc);
 		
 		loc.innerHTML += htmldata;		
 		//I have commented out the proper line below until dependency issues are fixed using RequireJS
@@ -63,7 +70,7 @@ function displayPlaintext(text,loc=defualtTV) {
 
 //Display a problem in the helperTV
 function displayHelperProblem(prob,loc=helperTV) {
-	
+	console.log("in displayHelperProblem")
 	displayProblem(prob,loc); //
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 	
@@ -96,24 +103,23 @@ function getInputValue(inputName) {
 	var problem1 = new Problem(1
 											,'Convert \\( \\frac{4}{5} \\) to a decimal.'
 											,0.8
-											,[ [1.2,"wrong way" ] ]
+											,[ [1.2, "displayHelperProblem(problem1)" ] ]
 											,"longForm"
 										  );
 	/************/
 	
 jQuery(function($) {
 	
+	
+	
 	//Submit answer method
-	$("body").on("click", "#button", function() {
+	$("body").on("click", ".button", function() {
 		//Events that happen when div is clicked
 		k = getInputValue("answer");
 		problem1.checkAnswer(k);
 	});
 											  
-	displayProblem(problem1);
-	
-	$('#problemTextbox').text(problem1.text); //Still unsure on whether to use .text() or .html()
-	
+	displayProblem(problem1);	
 	
 });
 

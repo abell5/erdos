@@ -27,22 +27,15 @@ Problem.prototype.checkAnswer = function(ans) {
 Problem.prototype.checkBranches = function(val) {
 	this.branches.forEach(function (entry) {
 		if(entry[0] == val) {
-			console.log("Pointer to action:")
-			displayHelperProblem(problem1);
-			//console.log(entry[1]);
-			//var action = new Function(entry[1]);
-			//console.log(action);
-			//action();
+			var action = new Function(entry[1]);
+			action();
 		}
 	});
 }
 
-//Set default DOMs for TVs.
-helperTV = document.getElementById("helperTV");
-defaultTV = document.getElementById("mainTV")
 
 //Display a problem on the TV, default to the mainTV
-function displayProblem(prob,loc=defaultTV) {
+function displayProblem(prob,loc=mainTV) {
 	//longForm problem display
 	if(prob.type=="longForm") {
 		
@@ -50,17 +43,15 @@ function displayProblem(prob,loc=defaultTV) {
 		htmldata += '<div class="answerBox"><input type="text" style="width: 60px"name="answer"></input></div>';
 		htmldata += '<div class="button">Blah</div>';
 		
-		console.log(htmldata);
-		console.log(loc);
-		
-		loc.innerHTML += htmldata;		
-		//I have commented out the proper line below until dependency issues are fixed using RequireJS
+		loc.innerHTML += htmldata;	
+
+		//Make sure to fix dependency issues using RequireJS
 		//MathJax.Hub.Queue(["Typeset",MathJax.Hub]); //update MathJax
 	}
 	
 }
 //display plaintext in the mainTV
-function displayPlaintext(text,loc=defualtTV) {
+function displayPlaintext(text,loc=mainTV) {
 	htmldata = '<div class="plaintext">' + text + '</div>';
 	
 	loc.innerHTML += htmldata;
@@ -69,15 +60,17 @@ function displayPlaintext(text,loc=defualtTV) {
 
 
 //Display a problem in the helperTV
-function displayHelperProblem(prob,loc=helperTV) {
-	console.log("in displayHelperProblem")
+
+function displayHelperProblem(prob) {
+	loc = document.getElementById("helperTV");
 	displayProblem(prob,loc); //
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-	
 }
 
 //Display plaintext in the helperTV
-function displayHelperPlaintext(text, loc=helperTV) {
+function displayHelperPlaintext(text) {
+	loc = document.getElementById("helperTV");
+	
 	htmldata = '<div class="plaintext">' + text + '</div>';
 	
 	loc.innerHTML += htmldata;
@@ -103,22 +96,21 @@ function getInputValue(inputName) {
 	var problem1 = new Problem(1
 											,'Convert \\( \\frac{4}{5} \\) to a decimal.'
 											,0.8
-											,[ [1.2, "displayHelperProblem(problem1)" ] ]
+											,[ [1.2, "displayHelperPlaintext('Close!  But I think you are mixing up the numerator and denominatory.'); displayHelperProblem(problem1)" ] ]
 											,"longForm"
 										  );
 	/************/
 	
 jQuery(function($) {
-	
-	
-	
+
+	var mainTV = document.getElementById("mainTV");
 	//Submit answer method
 	$("body").on("click", ".button", function() {
 		//Events that happen when div is clicked
 		k = getInputValue("answer");
 		problem1.checkAnswer(k);
 	});
-											  
+	
 	displayProblem(problem1);	
 	
 });

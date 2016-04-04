@@ -42,9 +42,9 @@ function displayProblem(prob,loc=defaultTV) {
 	//longForm problem display
 	if(prob.type=="longForm") {
 		
-		htmldata = '<div id="problemTextbox">' + prob.text + '</div>';
-		htmldata += '<div id="answerBox"><input type="text" style="width: 60px"name="answer"></input></div>';
-		htmldata += '<div id="button">Blah</div>';
+		htmldata = '<div class="problemTextbox">' + prob.text + '</div>';
+		htmldata += '<div class="answerBox"><input type="text" style="width: 60px"name="answer"></input></div>';
+		htmldata += '<div class="button">Blah</div>';
 		
 		loc.innerHTML += htmldata;		
 		//I have commented out the proper line below until dependency issues are fixed using RequireJS
@@ -52,14 +52,31 @@ function displayProblem(prob,loc=defaultTV) {
 	}
 	
 }
+//display plaintext in the mainTV
+function displayPlaintext(text,loc=defualtTV) {
+	htmldata = '<div class="plaintext">' + text + '</div>';
+	
+	loc.innerHTML += htmldata;
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+}
 
-//Display a problem in the HelperTV
+
+//Display a problem in the helperTV
 function displayHelperProblem(prob,loc=helperTV) {
 	
 	displayProblem(prob,loc); //
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 	
 }
+
+//Display plaintext in the helperTV
+function displayHelperPlaintext(text, loc=helperTV) {
+	htmldata = '<div class="plaintext">' + text + '</div>';
+	
+	loc.innerHTML += htmldata;
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+}
+
 
 /*Begin the engine code...*/
 /*Engine methods*/

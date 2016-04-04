@@ -13,11 +13,10 @@
 
 <body>
 
-<div id="problemTextbox">test</div>
-<div id="answerBox">
-	<input type='text' style='width: 60px' name='answer'></input>
+
+<div id="mainTV">
+
 </div>
-<div id="button">Blah</div>
 
 </body>
 </html>

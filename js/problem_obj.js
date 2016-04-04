@@ -1,6 +1,7 @@
 /*Will seperate into 2 files later, and implement RequireJS...*/
 /*For now, begin the class object...*/
 
+
 var Problem = function (id,text,answer,branches, type, child=null, parent=null) {
 	this.id = id;
 	this.text = text;
@@ -27,26 +28,38 @@ Problem.prototype.checkBranches = function(val) {
 	this.branches.forEach(function (entry) {
 		if(entry[0] == val) {
 			console.log("Pointer to action:")
-			console.log(entry[1]);
+			displayHelper(problem1);
 		}
 	});
 }
 
+//Set default DOMs for TVs.
+helperTV = document.getElementById("helperTV");
+defaultTV = document.getElementById("mainTV")
 
-function displayProblem(prob) {
+//Display a problem on the TV, default to the mainTV
+function displayProblem(prob,loc=defaultTV) {
 	//longForm problem display
 	if(prob.type=="longForm") {
-		var tv = document.getElementById("mainTV");
 		
 		htmldata = '<div id="problemTextbox">' + prob.text + '</div>';
 		htmldata += '<div id="answerBox"><input type="text" style="width: 60px"name="answer"></input></div>';
 		htmldata += '<div id="button">Blah</div>';
 		
-		tv.innerHTML += htmldata;
+		loc.innerHTML += htmldata;		
+		//I have commented out the proper line below until dependency issues are fixed using RequireJS
+		//MathJax.Hub.Queue(["Typeset",MathJax.Hub]); //update MathJax
 	}
 	
 }
 
+//Display a problem in the HelperTV
+function displayHelperProblem(prob,loc=helperTV) {
+	
+	displayProblem(prob,loc); //
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+	
+}
 
 /*Begin the engine code...*/
 /*Engine methods*/
@@ -62,6 +75,15 @@ function getInputValue(inputName) {
 }
 
 /*Main document code*/
+	/*Test problem*/
+	var problem1 = new Problem(1
+											,'Convert \\( \\frac{4}{5} \\) to a decimal.'
+											,0.8
+											,[ [1.2,"wrong way" ] ]
+											,"longForm"
+										  );
+	/************/
+	
 jQuery(function($) {
 	
 	//Submit answer method
@@ -70,13 +92,6 @@ jQuery(function($) {
 		k = getInputValue("answer");
 		problem1.checkAnswer(k);
 	});
-		
-	var problem1 = new Problem(1
-												,'Convert \\( \\frac{4}{5} \\) to a decimal.'
-												,0.8
-												,[ [1.2,"wrong way" ] ]
-												,"longForm"
-											  );
 											  
 	displayProblem(problem1);
 	

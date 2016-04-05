@@ -5,20 +5,31 @@
 ?>
 
 <html>
-<head>
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+	<head>
+		<script type="text/javascript" async
+		  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+		</script>
+		
+		<script data-main="requirejsConfig" src="js/lib/require.js"></script>
+		<script>
+			/*
+			require(['common'],function() {
+				require(['problem_obj']);
+			});
+			*/
+		</script>
+	</head>
 
-<body>
 
 
-<div id="mainTV">
-	<div id="helperTV"></div>
-</div>
+	<body>
 
-</body>
+		<div id="mainTV">
+			<div id="helperTV"></div>
+		</div>
+
+	</body>
+
+
+
 </html>
-<script src="js/problem_obj.js"></script>
-</head>

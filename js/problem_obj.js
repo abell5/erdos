@@ -1,6 +1,6 @@
 /*Will seperate into 2 files later, and implement RequireJS...*/
 /*For now, begin the class object...*/
-define(function() {
+define(['jquery'], function($) {
 	var Problem = function (id,text,answer,branches, type, child=null, parent=null) {
 		this.id = id;
 		this.text = text;
@@ -32,6 +32,30 @@ define(function() {
 		});
 	}
 
+	Problem.prototype.displayMe = function(loc) {
+	//longForm problem display
+		if(this.type=="longForm") {
+			
+			var $wrapper = $("<div>", {class: "_problemWrapper", width: "500px"});
+			$wrapper.data("A_RIGHT_HERE_DATA", this );
+			
+			htmldata = '<div class="problemTextbox">' + this.text + '</div>';
+			htmldata += '<div class="answerBox"><input type="text" style="width: 60px"name="answer"></input></div>';
+			htmldata += '<div class="button">Blah</div>';
+			
+			$wrapper.append( htmldata );
+			$(loc).append($wrapper);
+			
+			/*
+			loc.innerHTML += htmldata;
+			console.log(loc);
+			$(loc).data( "_problem", this );
+			*/
+			//Make sure to fix dependency issues using RequireJS
+			MathJax.Hub.Queue(["Typeset",MathJax.Hub]); //update MathJax
+		}
+	}
+	
 	function world() {
 		console.log("world");
 	}

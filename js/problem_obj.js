@@ -37,14 +37,33 @@ define(['jquery'], function($) {
 		if(this.type=="longForm") {
 			
 			var $wrapper = $("<div>", {class: "_problemWrapper", width: "500px"});
-			$wrapper.data("A_RIGHT_HERE_DATA", this );
+			$wrapper.data("_problem", this );
+			
+			var $answerBox = $("<div>", {class:"answerBox"});
+		
+			var $answerForm = $("<input/>", {type: 'text', name: 'answer'});
+			($answerForm).appendTo($answerBox);
+			
+			var $checkAnswerButton = $("<div>", {class: "button" });
+			$checkAnswerButton.data("_form", $answerForm);
+			$checkAnswerButton.append("Button");	
+			
+			$checkAnswerButton.bind ( "click", function () {	
+				var problemObj = $(this).closest("._problemWrapper").data("_problem");
+				var answer = $(this).data("_form").val();
+				console.log(problemObj);
+				console.log(answer);
+				problemObj.checkAnswer(answer);			
+			});
 			
 			htmldata = '<div class="problemTextbox">' + this.text + '</div>';
-			htmldata += '<div class="answerBox"><input type="text" style="width: 60px"name="answer"></input></div>';
-			htmldata += '<div class="button">Blah</div>';
 			
 			$wrapper.append( htmldata );
+			$wrapper.append( $answerBox );
+			$wrapper.append( $checkAnswerButton );
 			$(loc).append($wrapper);
+			
+			
 			
 			/*
 			loc.innerHTML += htmldata;
@@ -55,6 +74,7 @@ define(['jquery'], function($) {
 			MathJax.Hub.Queue(["Typeset",MathJax.Hub]); //update MathJax
 		}
 	}
+	
 	
 	function world() {
 		console.log("world");

@@ -33,46 +33,38 @@ define(['jquery'], function($) {
 	}
 
 	Problem.prototype.displayMe = function(loc) {
-	//longForm problem display
-		if(this.type=="longForm") {
-			
-			var $wrapper = $("<div>", {class: "_problemWrapper", width: "500px"});
-			$wrapper.data("_problem", this );
-			
-			var $answerBox = $("<div>", {class:"answerBox"});
+	
+		//Create the problem wrapper
+		var $_problemWrapper = $("<div>", {class: "_problemWrapper", width: "500px"});
+		$_problemWrapper.data("_problem", this );
+	
+		var $problemTextbox = $("<div>", {class: "problemTextbox" });
+		$problemTextbox.append( this.text ).appendTo($_problemWrapper);
 		
+		var $answerBox = $("<div>", {class:"answerBox"});
+		$answerBox.appendTo($_problemWrapper);
+		
+		//If statements
+		if(this.type=="longForm") {
 			var $answerForm = $("<input/>", {type: 'text', name: 'answer'});
 			($answerForm).appendTo($answerBox);
-			
-			var $checkAnswerButton = $("<div>", {class: "button" });
-			$checkAnswerButton.data("_form", $answerForm);
-			$checkAnswerButton.append("Button");	
-			
-			$checkAnswerButton.bind ( "click", function () {	
-				var problemObj = $(this).closest("._problemWrapper").data("_problem");
-				var answer = $(this).data("_form").val();
-				console.log(problemObj);
-				console.log(answer);
-				problemObj.checkAnswer(answer);			
-			});
-			
-			htmldata = '<div class="problemTextbox">' + this.text + '</div>';
-			
-			$wrapper.append( htmldata );
-			$wrapper.append( $answerBox );
-			$wrapper.append( $checkAnswerButton );
-			$(loc).append($wrapper);
-			
-			
-			
-			/*
-			loc.innerHTML += htmldata;
-			console.log(loc);
-			$(loc).data( "_problem", this );
-			*/
-			//Make sure to fix dependency issues using RequireJS
-			MathJax.Hub.Queue(["Typeset",MathJax.Hub]); //update MathJax
 		}
+		
+		var $checkAnswerButton = $("<div>", {class: "button" });
+		$checkAnswerButton.data("_form", $answerForm);
+		$checkAnswerButton.append("Button").appendTo($_problemWrapper);	
+		
+		$checkAnswerButton.bind ( "click", function () {	
+			
+			var problemObj = $(this).closest("._problemWrapper").data("_problem");
+			var answer = $(this).data("_form").val();
+			
+			problemObj.checkAnswer(answer);			
+		});
+		
+		//Final append statement
+		$(loc).append( $_problemWrapper );
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub]); //update MathJax
 	}
 	
 	

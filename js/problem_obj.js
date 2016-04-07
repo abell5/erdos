@@ -1,6 +1,7 @@
 /*Will seperate into 2 files later, and implement RequireJS...*/
 /*For now, begin the class object...*/
 define(['jquery'], function($) {
+	
 	var Problem = function (id,text,answer,branches, type, child=null, parent=null) {
 		this.id = id;
 		this.text = text;
@@ -27,6 +28,7 @@ define(['jquery'], function($) {
 		this.branches.forEach(function (entry) {
 			if(entry[0] == val) {
 				var action = new Function(entry[1]);
+				console.log(action);
 				action();
 			}
 		});

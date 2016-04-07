@@ -15,6 +15,29 @@ define(['jquery'], function($) {
 		console.log('Problem class instantiated');
 	};
 
+	//get all info from the database
+	Problem.prototype.build = function(pid) {
+		$.ajax({
+			url: "build_problem.php",
+			type: "get",
+			data: {id: pid},
+			success: function(response) {
+				console.log("hello");
+				var data = $.parseJSON(response);
+				console.log(data);
+				this.id = data['id'];
+				this.text = data['text'];
+				this.answer=data['answer'];
+				
+				
+			},
+			error: function(xhr) {
+				console.log("error");
+			}
+		});
+		
+	}
+	
 	Problem.prototype.checkAnswer = function(ans) {
 		if(this.answer == ans) {
 			console.log("correct");
@@ -47,7 +70,7 @@ define(['jquery'], function($) {
 		$answerBox.appendTo($_problemWrapper);
 		
 		//If statements
-		if(this.type=="longForm") {
+		if(this.type=="short_answer") {
 			var $answerForm = $("<input/>", {type: 'text', name: 'answer'});
 			($answerForm).appendTo($answerBox);
 		}
@@ -55,7 +78,7 @@ define(['jquery'], function($) {
 		var $checkAnswerButton = $("<div>", {class: "button" });
 		$checkAnswerButton.data("_form", $answerForm);
 		$checkAnswerButton.append("Button").appendTo($_problemWrapper);	
-		
+		7
 		$checkAnswerButton.bind ( "click", function () {	
 			
 			var problemObj = $(this).closest("._problemWrapper").data("_problem");
@@ -86,8 +109,8 @@ define(['jquery'], function($) {
 /*
 //Display a problem on the TV, default to the mainTV
 function displayProblem(prob,loc=mainTV) {
-	//longForm problem display
-	if(prob.type=="longForm") {
+	//short_answer problem display
+	if(prob.type=="short_answer") {
 		
 		htmldata = '<div class="problemTextbox">' + prob.text + '</div>';
 		htmldata += '<div class="answerBox"><input type="text" style="width: 60px"name="answer"></input></div>';

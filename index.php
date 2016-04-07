@@ -14,24 +14,9 @@
 		<script>
 		
 			require(['js/main'], function() {
-				require(['problem_obj'], function(prob) {
-						//console.log(prob);
-						
-						var Problem = prob.getProblemObject();
-						
-						prob.world();
-						
-						var problem1 = new Problem(1
-												,'Convert \\( \\frac{4}{5} \\) to a decimal.'
-												,0.8
-												,[ [1.2, "displayHelperPlaintext('Close!  But I think you are mixing up the numerator and denominatory.'); displayHelperProblem(problem1)" ] ]
-												,"longForm"
-											  );
-											  
-					
-						});
-					
-			
+				require(['fractions'], function() {
+				
+				});
 			});
 		
 		</script>

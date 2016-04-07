@@ -4,7 +4,7 @@
 	define("MYSQL_DEFAULT_HOST", "localhost");
 	define("MYSQL_DEFAULT_USER", "root");
 	define("MYSQL_DEFAULT_PASS", "");
-	define("MYSQL_DEFAULT_DATABASE", "edu");
+	define("MYSQL_DEFAULT_DATABASE", "erdos");
 	
 	//Registration options
 	define("CAN_REGISTER", "any");

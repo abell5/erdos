@@ -24,8 +24,8 @@ try {
 		} else {
 			$data = $rows;
 		}
-		//var_dump($data);
 	}
+		//var_dump($data);
 	
 
 	echo json_encode($data);

@@ -2,7 +2,8 @@
 /*For now, begin the class object...*/
 define(['jquery'], function($) {
 	
-	var Problem = function (id,text,answer,branches, type, child=null, parent=null) {
+	//The callback here is called once the problem is fully instantiated.
+	var Problem = function (id,callback=null, text=null,answer=null,branches=null, type=null, child=null, parent=null, onCorrect=null) {
 		this.id = id;
 		this.text = text;
 		this.answer = answer;
@@ -11,36 +12,40 @@ define(['jquery'], function($) {
 		this.type = type;
 		this.child = child;
 		this.parent = parent;
+		this.onCorrect = onCorrect;
 		
-		console.log('Problem class instantiated');
+		this.build(id, callback);
 	};
-
+	
 	//get all info from the database
-	Problem.prototype.build = function(pid) {
+
+	//callback is used for when the question is built
+	Problem.prototype.build = function(pid, callback=null) {
+		var curr_prob = this;
 		$.ajax({
 			url: "build_problem.php",
 			type: "get",
 			data: {id: pid},
 			success: function(response) {
-				console.log("hello");
 				var data = $.parseJSON(response);
-				console.log(data);
-				this.id = data['id'];
-				this.text = data['text'];
-				this.answer=data['answer'];
+				//console.log(data);
 				
+				curr_prob.id = data['id'];
+				curr_prob.text = data['text'];
+				curr_prob.answer=data['answer'];
+				curr_prob.type=data['type'];
 				
+				if(callback !== null) { callback(curr_prob); }
 			},
 			error: function(xhr) {
 				console.log("error");
 			}
 		});
-		
 	}
 	
 	Problem.prototype.checkAnswer = function(ans) {
 		if(this.answer == ans) {
-			console.log("correct");
+			this.onCorrect();
 		} else {
 			console.log("Incorrect");
 			this.checkBranches(ans);
@@ -58,7 +63,7 @@ define(['jquery'], function($) {
 	}
 
 	Problem.prototype.displayMe = function(loc) {
-	
+		//console.log("function : displayMe (", loc, ")");
 		//Create the problem wrapper
 		var $_problemWrapper = $("<div>", {class: "_problemWrapper", width: "500px"});
 		$_problemWrapper.data("_problem", this );

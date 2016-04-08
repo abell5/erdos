@@ -15,6 +15,8 @@ requirejs.config({
 		
 		main: '../main',
 		
+		
+		modules: 'module_handler',
 		//modules
 		fractions: 'modules/fractions'
 	}

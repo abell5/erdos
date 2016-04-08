@@ -14,8 +14,14 @@
 		<script>
 		
 			require(['js/main'], function() {
-				require(['fractions'], function() {
-				
+				require(['modules'], function(mod) {
+					console.log("begin");
+					
+					var Module = mod.getModuleObject();
+					
+					var Fractions = new Module("Fractions", [1,2]);
+					Fractions.displayKeys();
+					
 				});
 			});
 		
@@ -26,7 +32,7 @@
 
 
 	<body>
-
+		<div id="keys"></div>
 		<div id="mainTV">
 			<div id="helperTV"></div>
 		</div>

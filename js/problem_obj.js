@@ -3,10 +3,14 @@
 define(['jquery'], function($) {
 	
 	//The callback here is called once the problem is fully instantiated.
-	var Problem = function (id,callback=null, text=null,answer=null,branches=null, type=null, child=null, parent=null, onCorrect=null) {
+	var Problem = function (id,callback=null, text=null,answer=null,branches=null, type=null, child=null, parent=null, onCorrect=null,choiceSet=null) {
 		this.id = id;
 		this.text = text;
 		this.answer = answer;
+		
+		this.choiceSet = choiceSet; //Going to place a number-of-choices-dimensional array with text and 
+											   //action
+		
 		this.branches = branches; //Branches are stored as an array of 2 dimensional arrays... a pointer
 											 //and an action. Ex. [ [pointer1,action1], [pointer2,action2] ... ]
 		this.type = type;
@@ -28,12 +32,12 @@ define(['jquery'], function($) {
 			data: {id: pid},
 			success: function(response) {
 				var data = $.parseJSON(response);
-				//console.log(data);
+				console.log(data);
 				
-				curr_prob.id = data['id'];
-				curr_prob.text = data['text'];
-				curr_prob.answer=data['answer'];
-				curr_prob.type=data['type'];
+				curr_prob.id = data['problem']['id'];
+				curr_prob.text = data['problem']['text'];
+				curr_prob.answer=data['problem']['answer'];
+				curr_prob.type=data['problem']['type'];
 				
 				if(callback !== null) { callback(curr_prob); }
 			},

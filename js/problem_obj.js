@@ -34,10 +34,14 @@ define(['jquery'], function($) {
 				var data = $.parseJSON(response);
 				console.log(data);
 				
+				curr_prob.choiceSet = data['choices'];
 				curr_prob.id = data['problem']['id'];
 				curr_prob.text = data['problem']['text'];
 				curr_prob.answer=data['problem']['answer'];
 				curr_prob.type=data['problem']['type'];
+				
+				
+				console.log(curr_prob.choiceSet);
 				
 				if(callback !== null) { callback(curr_prob); }
 			},
@@ -49,7 +53,8 @@ define(['jquery'], function($) {
 	
 	Problem.prototype.checkAnswer = function(ans) {
 		if(this.answer == ans) {
-			this.onCorrect();
+			alert('you are right, the answer was: ' + ans);
+			//this.onCorrect();
 		} else {
 			console.log("Incorrect");
 			this.checkBranches(ans);
@@ -67,38 +72,53 @@ define(['jquery'], function($) {
 	}
 
 	Problem.prototype.displayMe = function(loc) {
-		//console.log("function : displayMe (", loc, ")");
-		//Create the problem wrapper
+		var curr_prob = this;
+		
 		var $_problemWrapper = $("<div>", {class: "_problemWrapper", width: "500px"});
 		$_problemWrapper.data("_problem", this );
-	
+		
 		var $problemTextbox = $("<div>", {class: "problemTextbox" });
 		$problemTextbox.append( this.text ).appendTo($_problemWrapper);
 		
-		var $answerBox = $("<div>", {class:"answerBox"});
-		$answerBox.appendTo($_problemWrapper);
+		var $choiceBox = $("<div>", {class: "choiceBox"});
+		$choiceBox.appendTo($_problemWrapper);
 		
-		//If statements
-		if(this.type=="short_answer") {
-			var $answerForm = $("<input/>", {type: 'text', name: 'answer'});
-			($answerForm).appendTo($answerBox);
+		var $choiceForm = $("<form id='problem"+this.id+"'>");
+		for (i=0; i < this.choiceSet.length; i++) {
+				//$choiceBox.append(this.choiceSet[i]['choice']);
+				$choiceForm.append("<input type='radio' value='"+this.choiceSet[i]['choice']+"' name='problem"+this.id+"'> "+this.choiceSet[i]['text'] + "<br>");
 		}
+		$choiceForm.append("</form>");
+		$choiceForm.appendTo($choiceBox);
 		
 		var $checkAnswerButton = $("<div>", {class: "button" });
-		$checkAnswerButton.data("_form", $answerForm);
+		$checkAnswerButton.data("_form", "problem"+this.id);
 		$checkAnswerButton.append("Button").appendTo($_problemWrapper);	
-		7
+		
 		$checkAnswerButton.bind ( "click", function () {	
 			
+			var answer = $("#"+ $(this).data("_form") +" input[type='radio']:checked").val();
 			var problemObj = $(this).closest("._problemWrapper").data("_problem");
-			var answer = $(this).data("_form").val();
 			
-			problemObj.checkAnswer(answer);			
+			problemObj.checkAnswer(answer);
+			
 		});
 		
 		//Final append statement
 		$(loc).append( $_problemWrapper );
 		MathJax.Hub.Queue(["Typeset",MathJax.Hub]); //update MathJax
+		
+		/*
+		var $answerBox = $("<div>", {class:"answerBox"});
+		$answerBox.appendTo($_problemWrapper);
+		*/
+		//If statements
+		/*
+		if(this.type=="short_answer") {
+			var $answerForm = $("<input/>", {type: 'text', name: 'answer'});
+			($answerForm).appendTo($answerBox);
+		}
+		*/
 	}
 	
 	

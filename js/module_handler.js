@@ -45,12 +45,24 @@
 		if(out==null) {
 			var mod = this;
 			new Problem(id, function(p) {
+				p.module = mod;
+				//console.log("this line", p.module.name);
 				mod.problems.push(p);
 				out = mod.problems[mod.problems.length-1];
 				callback(out);
 				return;
 			});
 		}
+	}
+	
+	Module.prototype.displayHelper = function(id) {
+		var mod = this;
+		//alert("here" + id)
+		
+		mod.getProblem( id, function(p)  {
+			p.displayMe( $("#helperTV") );
+		});
+		
 	}
 	
 	Module.prototype.displayKeys = function() {
@@ -66,7 +78,8 @@
 					$(".slide_button").data("currentProblem", false); //turn on all other slide keys
 					$slide.data("currentProblem", true); // make this slide the current problem
 					
-					$("#mainTV").html(""); //clear the mainTV;
+					$("#helperTV").html(""); //clear helperTV
+					$("#mainTV").html(""); //clear the mainTV					
 					
 					mod.getProblem( $slide.data("_problem"), function(p) {
 						p.displayMe( $("#mainTV") );

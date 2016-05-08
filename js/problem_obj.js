@@ -3,10 +3,11 @@
 define(['jquery'], function($) {
 	
 	//The callback here is called once the problem is fully instantiated.
-	var Problem = function (id,callback=null, text=null,answer=null,branches=null, type=null, child=null, parent=null, onCorrect=null,choiceSet=null) {
+	var Problem = function (id,callback=null, text=null,answer=null,branches=null, type=null, child=null, parent=null, onCorrect=null,choiceSet=null,module=null) {
 		this.id = id;
 		this.text = text;
 		this.answer = answer;
+		this.module = module;
 		
 		this.choiceSet = choiceSet; //Going to place a number-of-choices-dimensional array with text and 
 											   //action
@@ -56,11 +57,29 @@ define(['jquery'], function($) {
 			alert('you are right, the answer was: ' + ans);
 			//this.onCorrect();
 		} else {
-			console.log("Incorrect");
-			this.checkBranches(ans);
+			choice = findChoiceByLetter(ans, this.choiceSet);
+			var instructions = choice['action'];
+			eval( "this." + instructions);
 		}
 	}
+	
+	findChoiceByLetter = function(ans, set) {
+		for (i=0; i < set.length; i++) {
+			if(set[i]['choice'] == ans) {
+				return set[i];
+			}
+		}
+		return false;
+	}
+	
+	Problem.prototype.wrong = function(id) {
 
+		this.module.displayHelper(id);
+
+	}
+
+	
+	/*
 	Problem.prototype.checkBranches = function(val) {
 		this.branches.forEach(function (entry) {
 			if(entry[0] == val) {
@@ -70,6 +89,7 @@ define(['jquery'], function($) {
 			}
 		});
 	}
+	*/
 
 	Problem.prototype.displayMe = function(loc) {
 		var curr_prob = this;

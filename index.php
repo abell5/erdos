@@ -35,9 +35,10 @@
 		Version 0.2, designed for SAT prep
 		<div id="keys"></div>
 		<div id="mainTV">
-			<div id="helperTV"></div>
+			
 		</div>
-
+		<div id="helperTV"></div>
+		
 	</body>
 
 

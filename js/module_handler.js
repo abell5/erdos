@@ -6,6 +6,7 @@
 		this.name=name;
 		this.key_ids=key_ids; //key_ids should be an array
 		this.problems = [];
+		this.displayedTree = [];  //the tree of displayed problems... note that 2 main problems can never be displayed anyway.
 		
 		//Make a function that grabs all the problems by ids, and push them into an array of objects
 		//which is stored as a variable as part of the object
@@ -57,10 +58,17 @@
 	
 	Module.prototype.displayHelper = function(id) {
 		var mod = this;
-		//alert("here" + id)
+
+		for (i=0; i<mod.displayedTree.length; i++) {
+			if(mod.displayedTree[i] == id) {
+				console.log("already displayed");
+				return false
+			}
+		}
 		
 		mod.getProblem( id, function(p)  {
 			p.displayMe( $("#helperTV") );
+			mod.displayedTree.push(id);
 		});
 		
 	}
@@ -79,10 +87,12 @@
 					$slide.data("currentProblem", true); // make this slide the current problem
 					
 					$("#helperTV").html(""); //clear helperTV
+					mod.displayedTree = [];
+					
 					$("#mainTV").html(""); //clear the mainTV					
 					
 					mod.getProblem( $slide.data("_problem"), function(p) {
-						p.displayMe( $("#mainTV") );
+						p.displayMe( $("#mainTV") );					
 					});
 				}
 			});

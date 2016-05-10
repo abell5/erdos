@@ -7,6 +7,7 @@
 		this.key_ids=key_ids; //key_ids should be an array
 		this.problems = [];
 		this.displayedTree = [];  //the tree of displayed problems... note that 2 main problems can never be displayed anyway.
+		this.displayedHelperTextFrom = []; //ids to prevent lots of helper text.
 		
 		//Make a function that grabs all the problems by ids, and push them into an array of objects
 		//which is stored as a variable as part of the object
@@ -56,7 +57,7 @@
 		}
 	}
 	
-	Module.prototype.displayHelper = function(id) {
+	Module.prototype.displayHelper = function(id,text=null) {
 		var mod = this;
 
 		for (i=0; i<mod.displayedTree.length; i++) {
@@ -67,17 +68,43 @@
 		}
 		
 		mod.getProblem( id, function(p)  {
+			if(text!=null) {
+				$("#helperTV").append(text);
+			}
 			p.displayMe( $("#helperTV") );
 			mod.displayedTree.push(id);
 		});
 		
 	}
 	
+	Module.prototype.displayHelperText = function(id, text) {
+		var mod = this;
+		
+		if(text == null) {
+			return false;
+		}
+		for (i=0; i<mod.displayedHelperTextFrom.length; i++) {
+			if(mod.displayedHelperTextFrom[i] == id) {
+				console.log("already displayed");
+				return false
+			}
+		}
+		
+		
+		$("#helperTV").append(text);
+		console.log(mod.displayedHelperTextFrom)
+		mod.displayedHelperTextFrom.push(id);
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+		
+	}
+	
 	Module.prototype.displayKeys = function() {
 		var mod = this;
+		var count = 0;
 		this.key_ids.forEach(function (entry) {
+			count = count+1;
 			var $slide = $("<div>", {class: "slide_button", width: "20px"});
-			$slide.append(entry)
+			$slide.append(count)
 			$slide.data("_problem", entry)
 			$slide.data("currentProblem", false);
 			
@@ -88,6 +115,7 @@
 					
 					$("#helperTV").html(""); //clear helperTV
 					mod.displayedTree = [];
+					mod.displayedHelperTextFrom = [];
 					
 					$("#mainTV").html(""); //clear the mainTV					
 					

@@ -57,9 +57,19 @@ define(['jquery'], function($) {
 			alert('you are right, the answer was: ' + ans);
 			//this.onCorrect();
 		} else {
-			choice = findChoiceByLetter(ans, this.choiceSet);
+			choice = findChoiceByLetter(ans, this.choiceSet)
 			var instructions = choice['action'];
-			eval( "this." + instructions);
+			
+			if(instructions=="descend") {
+				if(choice['assist_text'] == null) {
+					this.descend(choice['action_to']);
+					return;
+				}
+				this.descend(choice['action_to'], choice['assist_text']);
+			}
+			if(instructions=="displayText") {
+				this.module.displayHelperText(choice['pid'],choice['assist_text']);
+			}
 		}
 	}
 	
@@ -72,10 +82,12 @@ define(['jquery'], function($) {
 		return false;
 	}
 	
-	Problem.prototype.descend= function(id) {
-
-		this.module.displayHelper(id);
-
+	Problem.prototype.descend= function(id,text=null) {
+		if(text === null) {
+			this.module.displayHelper(id);
+			return;
+		}
+		this.module.displayHelper(id,text);
 	}
 
 	

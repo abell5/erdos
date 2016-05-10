@@ -72,7 +72,7 @@ define(['jquery'], function($) {
 		return false;
 	}
 	
-	Problem.prototype.wrong = function(id) {
+	Problem.prototype.descend= function(id) {
 
 		this.module.displayHelper(id);
 

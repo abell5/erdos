@@ -1,0 +1,43 @@
+.container {
+	padding:10%;
+	margin:auto;
+}
+
+h1 {
+	font-family:Futura, 'Trebuchet MS', Arial, sans-serif;
+	padding:0px;
+	margin:0px;
+	margin-bottom:5px;
+	font-size:2em;
+	text-transform:uppercase;
+	letter-spacing:2px;
+	color: #000;
+}
+
+h2 {
+	font-family:Futura, 'Trebuchet MS', Arial, sans-serif;
+	padding:0px;
+	margin:0px;
+	margin-bottom:5px;
+	font-size:1.2em;
+	text-transform:uppercase;
+	letter-spacing:2px;
+	color: #95a5a6;
+}
+
+h3 {
+	font-family:Futura, 'Trebuchet MS', Arial, sans-serif;
+	padding:0px;
+	margin:0px;
+	margin-bottom:5px;
+	font-size:1.2em;
+	text-transform:uppercase;
+	letter-spacing:1px;
+	color: #000;
+}
+
+.spacer{
+	height: 3em;
+	display: block;
+	width:1px;
+}

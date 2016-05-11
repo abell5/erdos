@@ -14,7 +14,7 @@
 		<script>
 		
 			require(['js/main'], function() {
-				require(['modules'], function(mod) {
+				require(['jquery', 'modules', 'bootstrap'], function($,mod) {
 					console.log("begin");
 					
 					var Module = mod.getModuleObject();

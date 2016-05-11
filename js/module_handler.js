@@ -101,6 +101,7 @@
 	Module.prototype.displayKeys = function() {
 		var mod = this;
 		var count = 0;
+		
 		this.key_ids.forEach(function (entry) {
 			count = count+1;
 			var $slide = $("<div>", {class: "slide_button", width: "20px"});

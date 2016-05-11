@@ -8,10 +8,13 @@
 requirejs.config({
 	
 	baseUrl: "js",
-	
+	shim: {
+		"bootstrap" : {"deps" :['jquery'] }
+	},
 	paths: {
 		jquery: 'http://code.jquery.com/jquery-latest.min',
 		problem_obj: 'problem_obj',
+		bootstrap: 'bootstrap',
 		
 		main: '../main',
 		

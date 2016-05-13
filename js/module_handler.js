@@ -68,6 +68,7 @@
 		}
 		
 		mod.getProblem( id, function(p)  {
+			$("#helperTV").show();
 			if(text!=null) {
 				$("#helperTV").append(text);
 			}
@@ -89,10 +90,12 @@
 				return false
 			}
 		}
-		
-		
-		$("#helperTV").append(text);
-		console.log(mod.displayedHelperTextFrom)
+		//console.log("here");
+		var $textDiv = $("<div>", {class: "helperText"});
+		$textDiv.append(text);
+		$("#helperTV").show();
+		$("#helperTV").append($textDiv);
+		//console.log(mod.displayedHelperTextFrom)
 		mod.displayedHelperTextFrom.push(id);
 		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 		
@@ -102,9 +105,11 @@
 		var mod = this;
 		var count = 0;
 		
+		
 		this.key_ids.forEach(function (entry) {
 			count = count+1;
-			var $slide = $("<div>", {class: "slide_button", width: "20px"});
+			var $slide = $("<button>", {class: "slide_button btn btn-primary"});
+			//var $slide = $("<div>", {class: "btn btn-default"});
 			$slide.append(count)
 			$slide.data("_problem", entry)
 			$slide.data("currentProblem", false);
@@ -115,6 +120,7 @@
 					$slide.data("currentProblem", true); // make this slide the current problem
 					
 					$("#helperTV").html(""); //clear helperTV
+					$("#helperTV").hide();
 					mod.displayedTree = [];
 					mod.displayedHelperTextFrom = [];
 					
@@ -125,7 +131,8 @@
 					});
 				}
 			});
-			
+			$("#keys").addClass("btn-group");
+			$("#keys").attr("role", "group");
 			$("#keys").append($slide);
 		});
 		

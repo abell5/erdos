@@ -106,7 +106,7 @@ define(['jquery'], function($) {
 	Problem.prototype.displayMe = function(loc) {
 		var curr_prob = this;
 		
-		var $_problemWrapper = $("<div>", {class: "_problemWrapper", width: "500px"});
+		var $_problemWrapper = $("<div>", {class: "_problemWrapper"});
 		$_problemWrapper.data("_problem", this );
 		
 		var $problemTextbox = $("<div>", {class: "problemTextbox" });
@@ -118,20 +118,22 @@ define(['jquery'], function($) {
 		var $choiceForm = $("<form id='problem"+this.id+"'>");
 		for (i=0; i < this.choiceSet.length; i++) {
 				//$choiceBox.append(this.choiceSet[i]['choice']);
-				$choiceForm.append("<input type='radio' value='"+this.choiceSet[i]['choice']+"' name='problem"+this.id+"'> "+this.choiceSet[i]['text'] + "<br>");
+				
+				
+				$choiceForm.append("<div class='choice_buffer'><input class='magic-radio' type='radio' name='problem"+this.id+"' id='"+this.id+i+"' value='"+this.choiceSet[i]['choice']+"'><label for='"+this.id+i+"'>"+this.choiceSet[i]['text']+"</label></div>");
+				//$choiceForm.append("<input type='radio' class='magic-radio' value='"+this.choiceSet[i]['choice']+"' name='problem"+this.id+"'> "+this.choiceSet[i]['text'] + "<br>");
 		}
 		$choiceForm.append("</form>");
 		$choiceForm.appendTo($choiceBox);
 		
-		var $checkAnswerButton = $("<div>", {class: "button" });
+		var $checkAnswerButton = $("<div>", {class: "button btn btn-primary" });
 		$checkAnswerButton.data("_form", "problem"+this.id);
-		$checkAnswerButton.append("Button").appendTo($_problemWrapper);	
+		$checkAnswerButton.append("Go").appendTo($_problemWrapper);	
 		
 		$checkAnswerButton.bind ( "click", function () {	
-			
-			var answer = $("#"+ $(this).data("_form") +" input[type='radio']:checked").val();
+			//var answer = $('form[id="problem'+curr_prob.id+'"] > input:radio:checked').val();
+			var answer = $("input[name='problem"+curr_prob.id+"']:checked").val();
 			var problemObj = $(this).closest("._problemWrapper").data("_problem");
-			
 			problemObj.checkAnswer(answer);
 			
 		});

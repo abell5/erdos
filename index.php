@@ -39,15 +39,17 @@
 		$(document).ready(function(){    
 		
 			$("#send_feedback").on("click", function(e) {
-					$.ajax({
-						type: 'post',
-						url: 'feedback.php',
-						data: $('#feedbackForm').serialize(),
-						success: function () {
-							$("#changeMe").html('Thanks!');
-						}
-					});
 				e.preventDefault();
+				
+				$.ajax({
+					type: 'POST',
+					url: 'feedback.php',
+					data: $('#feedbackForm').serialize(),
+					success: function () {
+						$("#changeMe").html('Thanks!');
+					}
+				});
+				
 				$("#myModal").modal('hide');
 
 			});
@@ -98,7 +100,7 @@
 									</div>
 									
 										<div class="submit-container">
-											<form class="input-group" name="feedbackForm" action="feedback.php" method="post">
+											<form class="input-group" name="feedbackForm" id="feedbackForm" action="feedback.php" method="post">
 											
 												<div class="modalMargins">
 													<input class="magic-radio" type="radio" name="feedback" id="1" value="bad_follow_up_questions"><label for="1"><div class="mf">Follow up questions aren't helping</div></label>

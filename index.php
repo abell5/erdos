@@ -31,7 +31,15 @@
 		
 		</script>
 		<!--JQuery-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+		<!-- Bootstrap Core JavaScript -->
+		<script src="js/bootstrap.min.js"></script>
 		
+		<script lanuage="Javascript">
+		$(document).ready(function(){    
+		
+		});
+		</script>
 		
 	</head>
 
@@ -47,20 +55,63 @@
 		</div>
 		
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-10">
 				<div id="mainTV">	
 					<h1>Let's begin!</h1>
 				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-md-12">
 				<div id="helperTV">	
 					<h1>Let's begin!</h1>
 				</div>
 			</div>
+			
+			<div class="col-md-2">
+				<div id="feedback">
+					<div class="full-modal-wrapper">
+							<a href="#myModal" role="button" class="btn btn-success btn-large" data-toggle="modal"><div class="learn-more-font">Not helpful?</div></a>
+							<!-- Modal -->
+							<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header modal-header-text">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+										Feedback
+									</div>
+								<div class="modal-body">
+									<div class="modalMargins">
+										<div class="modal-inside-font">
+											We're sorry we couldn't help you with this problem!  We really value your feedback.  Can you be more specific about the issue?
+										</div>
+									</div>
+									
+										<div class="submit-container modalMargins">
+											<form class="input-group" action="feedback.php" method="post">
+												<div class="modalMargins">
+												<input class="magic-checkbox" type="checkbox" name="feedback" id="1" value="bad_follow_up_questions"><label for="1"><div class="mf">Follow up questions aren't helping</div></label>
+												<input class="magic-checkbox" type="checkbox" name="feedback" id="2" value="buggy"><label for="2"><div class="mf">The program is buggy</div></label>
+												<input class="magic-checkbox" type="checkbox" name="feedback" id="3" value="too_easy"><label for="3"><div class="mf">Question was too easy</div></label>
+												</div>
+												
+													<label for="comments">Any additional comments?</label>
+													<input type="text" id="comments" class="form-control glow-no-mo inputlg"
+												  maxlength="200" placeholder="Comments" name="comments"/>
+												
+											</form>
+										</div>
+									
+									<div class="modalMargins">
+										<div class="submit-button">
+											<button type="submit" class="btn btn-primary" id="send_feedback">Send feedback</button>
+										</div>
+									</div>
+								</div><!-- End of Modal body -->
+								</div><!-- End of Modal content -->
+								</div><!-- End of Modal dialog -->
+							</div><!-- End of Modal -->
+						</div>
+				</div>
+			</div>
 		</div>
+
 </div>	
 	
 	</body>

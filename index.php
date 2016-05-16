@@ -38,6 +38,20 @@
 		<script lanuage="Javascript">
 		$(document).ready(function(){    
 		
+			$("#send_feedback").on("click", function(e) {
+					$.ajax({
+						type: 'post',
+						url: 'feedback.php',
+						data: $('#feedbackForm').serialize(),
+						success: function () {
+							$("#changeMe").html('Thanks!');
+						}
+					});
+				e.preventDefault();
+				$("#myModal").modal('hide');
+
+			});
+		
 		});
 		</script>
 		
@@ -67,7 +81,7 @@
 			<div class="col-md-2">
 				<div id="feedback">
 					<div class="full-modal-wrapper">
-							<a href="#myModal" role="button" class="btn btn-success btn-large" data-toggle="modal"><div class="learn-more-font">Not helpful?</div></a>
+							<a href="#myModal" role="button" class="btn btn-success btn-large" data-toggle="modal"><div class="learn-more-font" id="changeMe">Not helpful?</div></a>
 							<!-- Modal -->
 							<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 								<div class="modal-dialog">
@@ -83,26 +97,29 @@
 										</div>
 									</div>
 									
-										<div class="submit-container modalMargins">
-											<form class="input-group" action="feedback.php" method="post">
+										<div class="submit-container">
+											<form class="input-group" name="feedbackForm" action="feedback.php" method="post">
+											
 												<div class="modalMargins">
-												<input class="magic-checkbox" type="checkbox" name="feedback" id="1" value="bad_follow_up_questions"><label for="1"><div class="mf">Follow up questions aren't helping</div></label>
-												<input class="magic-checkbox" type="checkbox" name="feedback" id="2" value="buggy"><label for="2"><div class="mf">The program is buggy</div></label>
-												<input class="magic-checkbox" type="checkbox" name="feedback" id="3" value="too_easy"><label for="3"><div class="mf">Question was too easy</div></label>
+													<input class="magic-radio" type="radio" name="feedback" id="1" value="bad_follow_up_questions"><label for="1"><div class="mf">Follow up questions aren't helping</div></label>
+													<input class="magic-radio" type="radio" name="feedback" id="2" value="buggy"><label for="2"><div class="mf">The program is buggy</div></label>
+													<input class="magic-radio" type="radio" name="feedback" id="3" value="too_easy"><label for="3"><div class="mf">Question was too easy</div></label>
 												</div>
 												
+									
 													<label for="comments">Any additional comments?</label>
-													<input type="text" id="comments" class="form-control glow-no-mo inputlg"
-												  maxlength="200" placeholder="Comments" name="comments"/>
+													<input type="text" id="comments" class="form-control glow-no-mo inputlg" maxlength="200" placeholder="Comments" name="comments"/>
 												
+												
+												
+												<div class="submit-button">
+													<button type="submit" class="btn btn-primary northMargins" id="send_feedback">Send Feedback</button>
+												</div>
 											</form>
+											
 										</div>
 									
-									<div class="modalMargins">
-										<div class="submit-button">
-											<button type="submit" class="btn btn-primary" id="send_feedback">Send feedback</button>
-										</div>
-									</div>
+
 								</div><!-- End of Modal body -->
 								</div><!-- End of Modal content -->
 								</div><!-- End of Modal dialog -->

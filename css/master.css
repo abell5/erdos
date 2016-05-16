@@ -17,11 +17,15 @@
 	margin:5px;
 	display:none;
 }
+.northMargins {
+	margin-top:15px;
+}
 
 .modalMargins {
 	margin-top: 2px;
 	margin-bottom: 15px;
 }
+
 .mf {
 	text-decoration: none;
 	font-weight: normal;

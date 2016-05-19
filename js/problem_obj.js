@@ -52,10 +52,18 @@ define(['jquery'], function($) {
 		});
 	}
 	
-	Problem.prototype.checkAnswer = function(ans) {
+	Problem.prototype.checkAnswer = function(ans,button=null) {
 		if(this.answer == ans) {
-			alert('you are right, the answer was: ' + ans);
-			//this.onCorrect();
+
+			//$(".button").find("[data-_form='problem"+this.id+"']").css("border","3px solid #000");
+			var $button = $(".button[name='problem"+this.id+"']")
+			$button.removeClass("btn-primary");
+			$button.addClass("btn-success");
+			$button.html("Correct!");
+			//$button.unbind("click");
+			$button.css("cursor", "default");
+			$button.attr('disabled', true);
+			
 		} else {
 			choice = findChoiceByLetter(ans, this.choiceSet)
 			var instructions = choice['action'];
@@ -126,11 +134,12 @@ define(['jquery'], function($) {
 		$choiceForm.append("</form>");
 		$choiceForm.appendTo($choiceBox);
 		
-		var $checkAnswerButton = $("<div>", {class: "button btn btn-primary" });
+		var $checkAnswerButton = $("<div>", {class: "button btn btn-primary", name: "problem"+this.id });
 		$checkAnswerButton.data("_form", "problem"+this.id);
 		$checkAnswerButton.append("Go").appendTo($_problemWrapper);	
 		
 		$checkAnswerButton.bind ( "click", function () {	
+			
 			//var answer = $('form[id="problem'+curr_prob.id+'"] > input:radio:checked').val();
 			var answer = $("input[name='problem"+curr_prob.id+"']:checked").val();
 			var problemObj = $(this).closest("._problemWrapper").data("_problem");

@@ -22,7 +22,7 @@
 					
 					var Module = mod.getModuleObject();
 					
-					var Fractions = new Module("Fractions", [1,3,2]);
+					var Fractions = new Module("Fractions", [1,4,6,8,9,11,13,16]);
 					Fractions.displayKeys();
 
 					

@@ -69,6 +69,7 @@
 
 <?php require('navbar.php'); ?>
 <?php include_once("analyticstracking.php") ?>
+<?php include_once("session_handler.php") ?>
 
 <div class="contain-bin">
 <div class="container">

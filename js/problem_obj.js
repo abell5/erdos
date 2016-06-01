@@ -53,6 +53,22 @@ define(['jquery'], function($) {
 	}
 	
 	Problem.prototype.checkAnswer = function(ans,button=null) {
+		choice = findChoiceByLetter(ans, this.choiceSet);
+		
+		$.ajax({
+			type: 'POST',
+			url: 'post_response_data.php',
+			data: {
+				pid: this.id,
+				ptext: this.text,
+				response: ans,
+				response_text: choice['text']	
+			},
+			success: function() {
+				console.log('Succesfully called');
+			}
+		});
+		
 		if(this.answer == ans) {
 
 			//$(".button").find("[data-_form='problem"+this.id+"']").css("border","3px solid #000");

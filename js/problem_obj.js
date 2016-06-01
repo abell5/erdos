@@ -70,7 +70,10 @@ define(['jquery'], function($) {
 		});
 		
 		if(this.answer == ans) {
-
+			if(choice['assist_text'] != "") {
+				this.module.displayHelperText(0, choice['assist_text']);
+				console.log(choice['pid']);
+			}
 			//$(".button").find("[data-_form='problem"+this.id+"']").css("border","3px solid #000");
 			var $button = $(".button[name='problem"+this.id+"']")
 			$button.removeClass("btn-primary");
@@ -81,7 +84,6 @@ define(['jquery'], function($) {
 			$button.attr('disabled', true);
 			
 		} else {
-			choice = findChoiceByLetter(ans, this.choiceSet)
 			var instructions = choice['action'];
 			
 			if(instructions=="descend") {

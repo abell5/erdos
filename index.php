@@ -35,7 +35,7 @@
 						
 						var Module = mod.getModuleObject();
 						
-						var Fractions = new Module("Fractions", [1,4,6,8,9,11,13,16]);
+						var Fractions = new Module("Fractions", [4,6,8,9,11,13,16]);
 						Fractions.displayKeys();
 					});
 					

@@ -14,7 +14,7 @@
 				<span class="icon-bar"></span>
 			</button>
 			
-			<a class="navbar-brand brand-name" href="home.php">Erdos</a>
+			<a class="navbar-brand brand-name" href="home.php">Erdos <sup><font size="1">BETA</font></sup></a>
 		</div>
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

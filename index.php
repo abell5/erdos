@@ -8,82 +8,78 @@
 		</script>
 		<script src="js/config.js"></script>
 		
-		<link rel="stylesheet" href="css/bootstrap.css">
-		<link rel="stylesheet" href="css/magic-check.css">
-		<link rel="stylesheet" href="css/master.css">
-		
 		
 		<script data-main="js/main.js" src="js/lib/require.js"></script>
 		<script>
 		
 			require(['js/main'], function() {
 				require(['jquery', 'modules'], function($,mod) {
-					console.log("begin");
-					
-					var Module = mod.getModuleObject();
-					
-					var Fractions = new Module("Fractions", [1,4,6,8,9,11,13,16]);
-					Fractions.displayKeys();
-
+						$(document).ready(function(){    
+		
+						$("#send_feedback").on("click", function(e) {
+							e.preventDefault();
+							
+							$.ajax({
+								type: 'POST',
+								url: 'feedback.php',
+								data: $('#feedbackForm').serialize(),
+								success: function () {
+									$("#changeMe").html('Thanks!');
+								}
+							});
+							
+							$("#myModal").modal('hide');
+						});
+							
+						console.log("begin");
+						
+						var Module = mod.getModuleObject();
+						
+						var Fractions = new Module("Fractions", [1,4,6,8,9,11,13,16]);
+						Fractions.displayKeys();
+					});
 					
 				});
 			});
 		
 		</script>
+		
+		<link rel="stylesheet" href="css/magic-check.css">
+		<link rel="stylesheet" href="css/master.css">
+		
+		
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
+
 		<!--JQuery-->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 		<!-- Bootstrap Core JavaScript -->
 		<script src="js/bootstrap.min.js"></script>
 		
 		<script lanuage="Javascript">
-		$(document).ready(function(){    
-		
-			$("#send_feedback").on("click", function(e) {
-				e.preventDefault();
-				
-				$.ajax({
-					type: 'POST',
-					url: 'feedback.php',
-					data: $('#feedbackForm').serialize(),
-					success: function () {
-						$("#changeMe").html('Thanks!');
-					}
-				});
-				
-				$("#myModal").modal('hide');
 
-			});
-		
-		});
 		</script>
+		
 		
 	</head>
 
 
 
-	<body>
-	
+<body>
+
+<?php require('navbar.php'); ?>
+<?php include_once("analyticstracking.php") ?>
+
+<div class="contain-bin">
 <div class="container">
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-4">
 				<div id="keys"></div>
 			</div>
-		</div>
-		
-		<div class="row">
-			<div class="col-md-10">
-				<div id="mainTV">	
-					<h1>Let's begin!</h1>
-				</div>
-				<div id="helperTV">	
-					<h1>Let's begin!</h1>
-				</div>
-			</div>
-			
 			<div class="col-md-2">
 				<div id="feedback">
 					<div class="full-modal-wrapper">
-							<a href="#myModal" role="button" class="btn btn-success btn-large" data-toggle="modal"><div class="learn-more-font" id="changeMe">Not helpful?</div></a>
+							<a href="#myModal" role="button" class="btn btn-success nh-btn" data-toggle="modal"><div class="learn-more-font" id="changeMe">Not helpful?</div></a>
 							<!-- Modal -->
 							<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 								<div class="modal-dialog">
@@ -130,11 +126,21 @@
 				</div>
 			</div>
 		</div>
+		
+		<div class="row">
+			<div class="col-md-12">
+				<div id="mainTV">	
+					<h1>Let's begin!</h1>
+				</div>
+				<div id="helperTV">	
+				</div>
+			</div>
+			
 
+		</div>
+</div>
 </div>	
 	
-	</body>
-
-
+</body>
 
 </html>

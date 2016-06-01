@@ -1,6 +1,58 @@
+/*
 .container {
 	padding:5%;
 	margin:auto;
+}
+*/
+
+.contain-bin {
+	padding:5%;
+	margin:auto;
+}
+
+.nh-btn {
+	margin: 4px !important;
+	vertical-align: top !important;
+}
+
+.key-button {
+	margin: 3px;
+	padding: 3px;
+	border: 2px solid #bdc3c7;
+	display: inline-block;
+	padding-left: 6px;
+	padding-right: 6px;
+}
+	.key-button:hover {
+		background-color: #1px solid #bdc3c7;
+		cursor: pointer;
+	}
+
+	.pressed {
+		cursor: defualt !important;
+		background-color: #bdc3c7 !important;
+		color: #fff !important;
+	}
+	
+.kb-green {
+	border: 2px solid #5CB85C !important;
+	background-color: #DFF0D8 !important;
+	margin-left: 5px;
+}
+	.kb-green:hover {
+		background-color: #5CB85C !important;
+	}
+
+.key-font {
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 700;
+	font-size: 16px;
+	color: #2c3e50;
+}	
+
+#keys {
+	margin-left:2px;
+	display: inline-block;
 }
 
 #mainTV {
@@ -8,6 +60,7 @@
 	border-left: 4px solid #bdc3c7;
 	padding: 15px;
 	margin: 5px;
+	max-width: 75%;
 }
 
 #helperTV {
@@ -16,6 +69,7 @@
 	padding: 15px;
 	margin:5px;
 	display:none;
+	max-width:75%;
 }
 .northMargins {
 	margin-top:15px;

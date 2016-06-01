@@ -1,0 +1,105 @@
+.intro-message {
+	/*text-align: left;*/
+}
+
+.spacer {
+	display:block;
+	height:30px;	
+}
+
+.spacer-more {
+	display:block;
+	height:45px;	
+}
+
+
+.spacer-double {
+	display:block;
+	height:60px;	
+}
+
+.cut-out {
+	margin-top: 50px;
+	
+}
+/*
+.cut-out {
+	border: 4px dashed #ecf0f1;
+	padding: 10px;
+	border-radius:20px;
+	
+	position: relative;
+	width: 95%
+}
+*/
+.header-section {
+	background-image: url("../img/dos_pen.png");
+	background-position:right;
+	background-size:contain;
+	background-repeat:no-repeat;
+}
+
+
+.content-section {
+	margin-top: 60px;    
+	background-color: #f8f8f8;
+	border-top: 1px solid #e7e7e7;
+	
+	padding-bottom:60px;
+	
+}
+
+h1 {
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 700;
+	padding-top:20px;
+	padding-bottom:20px;
+	color: #2c3e50;
+}
+
+h2 {
+	font-size: 16px;
+	line-height: 120%;
+	font-weight:normal;
+	padding: 0;
+	margin: 0;
+	margin-bottom: 14px;
+}
+
+h3 {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 20px;
+	font-weight: 700;
+	color: #2c3e50;
+	padding:0;
+	margin:0;
+}
+
+.expander {
+	padding-left: 30px;
+	padding-right:30px;
+	padding-top:3px;
+	padding-bottom:3px;
+}
+
+footer {
+    padding: 30px 0;
+    background-color: #353C41;
+	color: #BDC3C7;
+	line-height: 125%;
+	
+}
+
+footer a {
+	color: #F2F1EF;
+	text-decoration: underline;
+	
+} 
+
+.footer-padding {
+	padding: 10px;
+}
+
+p.copyright {
+    margin: 15px 0 0;
+}

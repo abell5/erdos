@@ -108,7 +108,7 @@
 		
 		this.key_ids.forEach(function (entry) {
 			count = count+1;
-			var $slide = $("<button>", {class: "slide_button btn btn-primary"});
+			var $slide = $("<div>", {class: "slide_button key-button key-font"});
 			//var $slide = $("<div>", {class: "btn btn-default"});
 			$slide.append(count)
 			$slide.data("_problem", entry)
@@ -117,7 +117,10 @@
 			$slide.bind("click", function() {
 				if($slide.data("currentProblem") == false) {
 					$(".slide_button").data("currentProblem", false); //turn on all other slide keys
+					$(".slide_button").removeClass("pressed");
 					$slide.data("currentProblem", true); // make this slide the current problem
+					$slide.addClass("pressed");
+					
 					
 					$("#helperTV").html(""); //clear helperTV
 					$("#helperTV").hide();

@@ -4182,6 +4182,12 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     float: left;
   }
 }
+.navbar-header > img{
+	display: inline-block !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 1px solid #000 !important;
+}
 .navbar-collapse {
   padding-right: 15px;
   padding-left: 15px;

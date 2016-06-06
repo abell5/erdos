@@ -1,7 +1,7 @@
 .container-bin {
 	padding: 5%;
-	padding-left: 10%;
-	margin: auto;	
+	margin: auto;
+	min-height: 400px;
 }
 
 h4 {
@@ -37,7 +37,7 @@ h5 {
 	margin-top:5px;
 	padding-top:0px;
 	border-top: 1px solid #2980b9;
-	max-width: 75%;
+	max-width: 81%;
 	display:block;
 	overflow: hidden;
 }
@@ -53,27 +53,6 @@ h5 {
 	padding: 5px;
 }
 
-/*
-.module-button {
-	margin-top: 10px;
-	margin-bottom: 15px;
-	padding: 4px;
-	padding-left:10px;
-	height: 30px;
-	
-	background-color: #ecf0f1;
-	box-shadow: 2px 2px 0px #bdc3c7;
-}
-
-.module-button:hover {
-	position: relative;
-	background-color: #D7DEE2;
-	cursor: pointer;
-	top:-2;
-	left: -2;
-	box-shadow: 0;
-}
-*/
 .mod-img-box {
 	padding: 5px;
 	text-align: left;

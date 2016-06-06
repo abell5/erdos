@@ -81,25 +81,3 @@ h3 {
 	padding-top:3px;
 	padding-bottom:3px;
 }
-
-footer {
-    padding: 30px 0;
-    background-color: #353C41;
-	color: #BDC3C7;
-	line-height: 125%;
-	
-}
-
-footer a {
-	color: #F2F1EF;
-	text-decoration: underline;
-	
-} 
-
-.footer-padding {
-	padding: 10px;
-}
-
-p.copyright {
-    margin: 15px 0 0;
-}

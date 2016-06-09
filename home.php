@@ -102,29 +102,7 @@
 
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="row">
-				<div class="col-sm-3 col-sm-offset-1">
-					<div class="footer-padding">
-					Erdos<br>
-					New York, NY
-					</div>
-				</div>
-				<div class="col-sm-3">
-					<div class="footer-padding">
-					Copyright &copy; Erdos 2015.<br>All Rights Reserved
-					</div>
-				</div>
-				<div class="col-sm-3">
-					<div class="footer-padding">
-					abell5 (at) g.clemson.edu<br>
-					jonpaut (at) g.clemson.edu
-					</div>
-				</div>
-            </div>
-        </div>
-    </footer>
+<?php require('footer.php'); ?>
 
     <!--
     <script src="js/jquery.js"></script>

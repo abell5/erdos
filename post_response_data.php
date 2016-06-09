@@ -10,7 +10,7 @@ $response_text = $_POST['response_text'];
 echo "You can hear me?  Why are you listening?";
 
 
-$query = "INSERT INTO `response_data` (`user_id`, `pid`, `ptext`, `response`, `response_text`) VALUES (:user_id, :pid, :ptext, :response, :response_text)";
+$query = "INSERT INTO `response_data` (`user_id`, `datetime`,`pid`, `ptext`, `response`, `response_text`) VALUES (:user_id, Now(), :pid, :ptext, :response, :response_text)";
 $stmt = $DBH->prepare($query);
 
 $stmt->bindValue(':user_id', $user);
@@ -22,3 +22,4 @@ $stmt->execute();
 
 
 ?>
+	

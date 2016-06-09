@@ -12,7 +12,7 @@
     <title>Erdos</title>	
 	
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
 	<link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
 
 	<!--JQuery-->
@@ -28,6 +28,10 @@
 	$(document).ready(function(){  
 		$(".one").click(function() {
 			window.location = "index.php";
+			return false;
+		});
+		$(".two").click(function() {
+			window.location = "module2.php";
 			return false;
 		});
 	});
@@ -54,6 +58,14 @@
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
 					<div class="module-desc"><h5>Review problem set 1</h5></div>
 			</div>
+			<div class="module-link two">
+					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+					<div class="module-desc"><h5><div class="new">new</div>Review problem set 2</h5></div>
+			</div>
+			<div class="module-link">
+					<span style="font-size:22px;" class="glyphicon glyphicon-time" aria-hidden="true"></span>
+					<div class="module-desc"><h5>New module will be released next Thursday</h5></div>
+			</div>			 
 			<!--
 			<div class="module-link one">
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
@@ -64,6 +76,8 @@
 	</div>
 </div>
 </div>
+
+<?php require('footer.php'); ?>
 
 </body>
 

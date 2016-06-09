@@ -1,69 +1,48 @@
-
+<!DOCTYPE html>
 <html>
 	<head>
-
 		
 		<script type="text/javascript" async
 		  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-		</script>
-		<script src="js/config.js"></script>
-		
-		
-		<script data-main="js/main.js" src="js/lib/require.js"></script>
-		<script>
-		
-			require(['js/main'], function() {
-				require(['jquery', 'modules'], function($,mod) {
-						$(document).ready(function(){    
-		
-						$("#send_feedback").on("click", function(e) {
-							e.preventDefault();
-							
-							$.ajax({
-								type: 'POST',
-								url: 'feedback.php',
-								data: $('#feedbackForm').serialize(),
-								success: function () {
-									$("#changeMe").html('Thanks!');
-								}
-							});
-							
-							$("#myModal").modal('hide');
-						});
-							
-						console.log("begin");
-						
-						var Module = mod.getModuleObject();
-						
-						var Fractions = new Module("Fractions", [4,6,8,9,11,13,16]);
-						Fractions.displayKeys();
-					});
-					
-				});
-			});
-		
 		</script>
 		
 		<link rel="stylesheet" href="css/magic-check.css">
 		<link rel="stylesheet" href="css/master.css">
 		
 		
-		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/bootstrap.css" rel="stylesheet">
 		<link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
 
 		<!--JQuery-->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 		<!-- Bootstrap Core JavaScript -->
 		<script src="js/bootstrap.min.js"></script>
-		
-		<script lanuage="Javascript">
 
+		<script src="js/module_handler.js"></script>
+		<script language="Javascript">
+			$(document).ready(function() {
+				$("#send_feedback").on("click", function(e) {
+					e.preventDefault();
+					$.ajax({
+						type: 'POST',
+						url: 'feedback.php',
+						data: $('#feedbackForm').serialize(),
+						success: function () {
+							$("#changeMe").html('Thanks!');
+						}
+					});
+					
+					$("#myModal").modal('hide');
+				});
+				console.log("here1");
+				var Module = getModuleObject();
+		
+				var Fractions = new Module("Fractions", [4,6,8,9,11,13,16]);
+				Fractions.displayKeys();
+			});
 		</script>
-		
-		
+
 	</head>
-
-
 
 <body>
 
@@ -131,7 +110,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div id="mainTV">	
-					<h1>Let's begin!</h1>
+					<h1>Press 1 to begin.</h1>
 				</div>
 				<div id="helperTV">	
 				</div>

@@ -34,6 +34,10 @@
 			window.location = "module2.php";
 			return false;
 		});
+		$(".three").click(function() {
+			window.location = "module3.php";
+			return false;
+		});
 	});
 	</script>
 
@@ -60,7 +64,11 @@
 			</div>
 			<div class="module-link two">
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
-					<div class="module-desc"><h5><div class="new">new</div>Review problem set 2</h5></div>
+					<div class="module-desc"><h5>Review problem set 2</h5></div>
+			</div>
+			<div class="module-link three">
+					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+					<div class="module-desc"><h5><div class="new">new</div>Review problem set 3</h5></div>
 			</div>
 			<div class="module-link">
 					<span style="font-size:22px;" class="glyphicon glyphicon-time" aria-hidden="true"></span>

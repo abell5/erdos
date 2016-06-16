@@ -77,6 +77,14 @@ postResponse = function(pid,ptext,response,response_text) {
 	});	
 }
 
+function scroll_to(div){
+	setTimeout(function() {
+		$('html, body').animate({
+			scrollTop: $(div).offset().top
+		},1000);
+	}, 500);
+}
+
 Problem.prototype.checkAnswer = function(ans) {
 	var choice = findChoiceByLetter(ans, this.choiceSet);
 	var instructions = choice['action'];
@@ -186,7 +194,9 @@ Problem.prototype.displayMe = function(loc) {
 	
 	//Final append statement
 	$(loc).append( $_problemWrapper );
+	
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub]); //update MathJax
+	scroll_to($_problemWrapper);
 	
 }
 
@@ -292,6 +302,7 @@ Module.prototype.displayHelperText = function(id, text) {
 	$("#helperTV").append($textDiv);
 	mod.displayedHelperTextStrings.push(text);
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+	scroll_to($textDiv);
 }
 
 Module.prototype.displayKeys = function() {
@@ -323,6 +334,7 @@ Module.prototype.displayKeys = function() {
 				$("#mainTV").html(""); //clear the mainTV					
 				
 				mod.getProblem( $slide.data("_problem"), function(p) {
+					mod.displayedTree.push(p.id);
 					p.displayMe( $("#mainTV") );					
 				});
 			}

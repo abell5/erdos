@@ -42,7 +42,7 @@ Problem.prototype.build = function(pid, callback) {
 		data: {id: pid},
 		success: function(response) {
 			var data = $.parseJSON(response);
-			console.log(data);
+			//console.log(data);
 			
 			curr_prob.choiceSet = data['choices'];
 			curr_prob.id = data['problem']['id'];
@@ -51,7 +51,7 @@ Problem.prototype.build = function(pid, callback) {
 			curr_prob.type=data['problem']['type'];
 			
 			
-			console.log(curr_prob.choiceSet);
+			//console.log(curr_prob.choiceSet);
 			
 			if(callback !== null) { callback(curr_prob); }
 		},

@@ -1,0 +1,38 @@
+.container-bin {
+	padding: 5%;
+	margin: auto;	
+}
+
+h1 {
+	margin: 0;
+	padding: 0;
+	font-family: 'Slabo 27px', serif;
+	font-size: 40px;
+	color: #2ecc71;
+}
+
+h4 {
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 700;
+	padding:0;
+	margin:0;
+	color: #2c3e50;
+	margin-bottom: 5px;
+}
+
+.about-content {
+	margin-bottom: 40px;
+}
+	.about-content img {
+		overflow: hidden;
+		border-radius: 10px;
+	}
+
+.intro-quote {
+	margin-bottom:20px;
+}
+
+.founder-box {
+	padding: 10px;
+	margin-bottom: 10px;
+}

@@ -23,9 +23,19 @@
 			$(document).ready(function() {
 				console.log("here1");
 				var Module = getModuleObject();
-		
-				var Fractions = new Module("2", [17,20,23,27,32,35,30]);
+				var dataBinary = <?php if(!isset($_GET['noData'])) {
+												echo json_encode(false);
+											} else {
+												if($_GET['noData']==1) {
+													echo json_encode(true);
+												} else {
+													echo json_encode(false);
+												}
+											} ?>;
+				
+				var Fractions = new Module("4", [55,60,62,64,67,69,71],dataBinary);
 				Fractions.displayKeys();
+				
 				getLiveModule = function() {
 					return Fractions;
 				}
@@ -50,6 +60,7 @@
 					
 					$("#myModal").modal('hide');
 				});
+
 			});
 		</script>
 

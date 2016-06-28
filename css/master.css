@@ -107,3 +107,7 @@
   -moz-box-shadow: none !important;
   box-shadow: none !important;
 }
+
+.imageBox {
+	padding: 10px;
+}

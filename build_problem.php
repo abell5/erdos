@@ -26,7 +26,7 @@ try {
 			$problem_rows = $stmt->fetch(PDO::FETCH_ASSOC);
 			$choice_rows = $nstmt->fetchAll(PDO::FETCH_ASSOC); //this makes a 0 indexed array with 
 																							//0->a, 1->b, etc
-			
+			$problem_rows['image'] = base64_encode($problem_rows['image']);
 			//$data = $problem_rows;
 			$data = (object) ['problem' => $problem_rows, 'choices' => $choice_rows];
 			//var_dump($data);

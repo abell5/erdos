@@ -1,6 +1,6 @@
 jQuery(function ($) {
 	
-var Problem = function(id,callback, text,answer,branches,type, child, parent,onCorrect,choiceSet,module) {
+var Problem = function(id,callback, text,answer,branches,type, child, parent,onCorrect,choiceSet,module,image) {
 	if(typeof callback === "undefined"){callback=null;}
 	if(typeof text=== "undefined"){text=null;}
 	if(typeof answer=== "undefined"){answer=null;}
@@ -11,11 +11,13 @@ var Problem = function(id,callback, text,answer,branches,type, child, parent,onC
 	if(typeof onCorrect === "undefined"){onCorrect=null;}
 	if(typeof choiceSet === "undefined"){choiceSet=null;}
 	if(typeof module === "undefined"){module=null;}
-
+	if(typeof image === "undefined"){image=null;}
+	
 	this.id = id;
 	this.text = text;
 	this.answer = answer;
 	this.module = module;
+	this.image = image;
 	
 	this.choiceSet = choiceSet; //Going to place a number-of-choices-dimensional array with text and 
 										   //action
@@ -42,16 +44,14 @@ Problem.prototype.build = function(pid, callback) {
 		data: {id: pid},
 		success: function(response) {
 			var data = $.parseJSON(response);
-			//console.log(data);
+			//console.log(data);	
 			
 			curr_prob.choiceSet = data['choices'];
 			curr_prob.id = data['problem']['id'];
 			curr_prob.text = data['problem']['text'];
 			curr_prob.answer=data['problem']['answer'];
 			curr_prob.type=data['problem']['type'];
-			
-			
-			//console.log(curr_prob.choiceSet);
+			curr_prob.image=data['problem']['image'];
 			
 			if(callback !== null) { callback(curr_prob); }
 		},
@@ -61,7 +61,7 @@ Problem.prototype.build = function(pid, callback) {
 	});
 }
 
-postResponse = function(pid,ptext,response,response_text) {
+postResponse = function(pid,ptext,response,response_text,module,type,correct_answer,displayedTree) {
 	$.ajax({
 		type: 'post',
 		url: 'post_response_data.php',
@@ -69,7 +69,11 @@ postResponse = function(pid,ptext,response,response_text) {
 			pid: pid,
 			ptext: ptext,
 			response: response,
-			response_text: response_text	
+			response_text: response_text,
+			module: module,
+			type: type,
+			correct_answer: correct_answer,
+			displayedTree: displayedTree
 		},
 		success: function() {
 			console.log('Succesfully called');
@@ -89,8 +93,10 @@ Problem.prototype.checkAnswer = function(ans) {
 	var choice = findChoiceByLetter(ans, this.choiceSet);
 	var instructions = choice['action'];
 	var assist_text = choice['assist_text'];
-	postResponse(this.id,this.text,ans,choice['text']);
-	
+	console.log(this.module)
+	if(this.module.noData==false) {
+		postResponse(this.id,this.text,ans,choice['text'],this.module.name,this.type,this.answer,this.module.displayedTree);
+	}
 	if(this.answer==ans) { //if the answer is correct, disble the button and display correct
 		disableButtonOnCorrect(this.id);	
 	}
@@ -162,6 +168,13 @@ Problem.prototype.displayMe = function(loc) {
 	var $_problemWrapper = $("<div>", {class: "_problemWrapper"});
 	$_problemWrapper.data("_problem", this );
 	
+	if(curr_prob.image!="") {
+		var image = new Image();
+		image.src = 'data:image/png;base64,'+curr_prob.image;
+		$_imageBox = $("<div>", {class: "imageBox" })
+		$_imageBox.append(image).appendTo($_problemWrapper);
+	}
+	
 	var $problemTextbox = $("<div>", {class: "problemTextbox" });
 	$problemTextbox.append( this.text ).appendTo($_problemWrapper);
 	
@@ -205,11 +218,12 @@ getProblemObejct = function() {
 	return Problem;
 }
 
-var Module = function(name,key_ids) {
+var Module = function(name,key_ids,noData) {
 	this.name=name;
 	this.key_ids=key_ids; //key_ids should be an array
 	this.problems = [];
 	this.displayedTree = [];  //the tree of displayed problems... note that 2 main problems can never be displayed anyway.
+	this.noData = noData;
 	this.displayedHelperTextStrings = []; //ids to prevent lots of helper text.
 	
 	//Make a function that grabs all the problems by ids, and push them into an array of objects
@@ -334,6 +348,7 @@ Module.prototype.displayKeys = function() {
 				$("#mainTV").html(""); //clear the mainTV					
 				
 				mod.getProblem( $slide.data("_problem"), function(p) {
+					console.log("pushing id", p.id);
 					mod.displayedTree.push(p.id);
 					p.displayMe( $("#mainTV") );					
 				});

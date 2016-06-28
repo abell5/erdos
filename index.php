@@ -21,8 +21,25 @@
 		<script src="js/module_handler.js"></script>
 		<script language="Javascript">
 			$(document).ready(function() {
+				console.log("here1");
+				var Module = getModuleObject();
+		
+				var Fractions = new Module("Fractions", [4,6,8,9,11,13,16]);
+				Fractions.displayKeys();
+				
+				getLiveModule = function() {
+					return Fractions;
+				}
+				
 				$("#send_feedback").on("click", function(e) {
 					e.preventDefault();
+					console.log( $("input[name='displayedTree']").val() );
+					
+					liveModule = getLiveModule();
+					console.log(liveModule);
+					console.log(liveModule.displayedTree);
+					$("input[name='displayedTree']").val( liveModule.displayedTree );
+					console.log( $("input[name='displayedTree']").val() );
 					$.ajax({
 						type: 'POST',
 						url: 'feedback.php',
@@ -33,12 +50,7 @@
 					});
 					
 					$("#myModal").modal('hide');
-				});
-				console.log("here1");
-				var Module = getModuleObject();
-		
-				var Fractions = new Module("Fractions", [4,6,8,9,11,13,16]);
-				Fractions.displayKeys();
+				});				
 			});
 		</script>
 
@@ -87,6 +99,7 @@
 									
 													<label for="comments">Any additional comments?</label>
 													<input type="text" id="comments" class="form-control glow-no-mo inputlg" maxlength="200" placeholder="Comments" name="comments"/>
+													<input type="text" id="displayedTree" name="displayedTree" style='display: none' value="none"/>
 												
 												
 												

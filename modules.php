@@ -25,22 +25,13 @@
 	<link href="css/modules.css" rel="stylesheet">
 	
 	<script language="Javascript">
-	$(document).ready(function(){  
-		$(".one").click(function() {
-			window.location = "index.php";
-			return false;
-		});
-		$(".two").click(function() {
-			window.location = "module2.php";
-			return false;
-		});
-		$(".three").click(function() {
-			window.location = "module3.php";
-			return false;
-		});
-		$(".four").click(function() {
-			window.location = "module4.php";
-			return false;
+	$(document).ready(function(){ 
+		$(".module-link").click(function() {
+			var mid = escape($(this).attr("name"));
+			if(mid!=="next") {
+				window.location="lesson.php?mid="+mid;
+				return false;
+			}
 		});
 	});
 	</script>
@@ -62,23 +53,23 @@
 	<div class="module-main">
 		
 		<div class="row">
-			<div class="module-link one">
+			<div class="module-link" name=1>
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
 					<div class="module-desc"><h5>Review problem set 1</h5></div>
 			</div>
-			<div class="module-link two">
+			<div class="module-link" name=2>
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
 					<div class="module-desc"><h5>Review problem set 2</h5></div>
 			</div>
-			<div class="module-link three">
+			<div class="module-link" name=3>
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
 					<div class="module-desc"><h5>Review problem set 3</h5></div>
 			</div>
-			<div class="module-link four">
+			<div class="module-link four" name=4>
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
 					<div class="module-desc"><h5><div class="new">new</div>Review problem set 4</h5></div>
 			</div>
-			<div class="module-link">
+			<div class="module-link" name="next">
 					<span style="font-size:22px;" class="glyphicon glyphicon-time" aria-hidden="true"></span>
 					<div class="module-desc"><h5>New module will be released next Thursday</h5></div>
 			</div>			 

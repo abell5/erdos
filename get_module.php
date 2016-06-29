@@ -12,7 +12,7 @@ try {
 	require('include/db_connect.php'); //Creates $DBH
 	
 	//query is problem
-	$query = "SELECT `pid` FROM `module_problems` WHERE `mid` = :id";
+	$query = "SELECT `pid` FROM `module_problems` WHERE `mid` = :id ORDER BY `id`";
 	$stmt = $DBH->prepare($query);
 	$stmt->bindValue(':id',$id);
 	

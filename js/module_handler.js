@@ -93,7 +93,6 @@ Problem.prototype.checkAnswer = function(ans) {
 	var choice = findChoiceByLetter(ans, this.choiceSet);
 	var instructions = choice['action'];
 	var assist_text = choice['assist_text'];
-	console.log(this.module)
 	if(this.module.noData==false) {
 		postResponse(this.id,this.text,ans,choice['text'],this.module.name,this.type,this.answer,this.module.displayedTree);
 	}

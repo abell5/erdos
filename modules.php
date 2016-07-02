@@ -65,9 +65,13 @@
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
 					<div class="module-desc"><h5>Review problem set 3</h5></div>
 			</div>
-			<div class="module-link four" name=4>
+			<div class="module-link" name=4>
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
-					<div class="module-desc"><h5><div class="new">new</div>Review problem set 4</h5></div>
+					<div class="module-desc"><h5>Review problem set 4</h5></div>
+			</div>
+			<div class="module-link" name=5>
+					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+					<div class="module-desc"><h5><div class="new">new</div>Review problem set 5</h5></div>
 			</div>
 			<div class="module-link" name="next">
 					<span style="font-size:22px;" class="glyphicon glyphicon-time" aria-hidden="true"></span>

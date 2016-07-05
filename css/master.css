@@ -4,24 +4,126 @@
 	margin:auto;
 }
 */
+html, body {
+	background-color: #353C41;
+}
+
+
+
 
 .contain-bin {
-	padding:5%;
-	margin:auto;
+	float: right;
+	width: 90%;
+	background-color: #fff;
+	min-height: 800px;
 }
+
+.left-bar {
+	float:left;
+	width: 10%;
+	background-color: #353C41;
+	min-height: 100%;
+	background-image: url("../img/module-bg-new.png");
+	background-position:right;
+	background-size:contain;
+	background-repeat:y;
+	min-height:800px;
+	padding-top: 25px;
+}
+.right-bar {
+	
+}
+
+h2 {
+	font-family: 'Montserrat', sans-serif !important;
+	font-size: 16px !important;
+	font-weight:normal !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+.left-bar-logo {
+	float: right;
+	height: 50px;
+	width: 38px;
+	margin-right: 15px;
+	display: block;
+	margin-bottom: 45px;
+}
+
+.left-bar-divider {
+	border-bottom:1px solid #1B1F21;
+	float: right;
+	width: 100%;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	display:block;
+	height: 1px;
+}
+
+.left-bar-button {
+	padding: 15px;
+	padding-right: 25px;
+	color: #fff;
+	display: block;
+	float:right;
+	display: block;
+	width: 75%;
+	text-align: right;
+	margin-bottom: 5px;
+	display:block;
+}
+	.left-bar-button:hover {
+		background-image: url("../img/module-bg-light.png") !important;
+		border-left: 4px solid #2ECC71;
+	}
+
+.left-bar-sub-button {
+	padding: 4px;
+	padding-right: 15px;
+	color: #fff;
+	display: block;
+	float:right;
+	display: block;
+	width: 65%;
+	min-width: 75px;
+	text-align: right;
+	margin-bottom: 5px;
+	display:block;
+	font-family: 'Montserrat', sans-serif !important;
+	font-size: 10px !important;
+	font-weight:normal !important;
+}
+	.left-bar-sub-button:hover {
+		background-image: url("../img/module-bg-light.png") !important;
+		border-left: 4px solid #2ECC71;
+	}
 
 .nh-btn {
 	margin: 4px !important;
 	vertical-align: top !important;
 }
 
-.key-button {
-	margin: 3px;
-	padding: 3px;
-	border: 2px solid #bdc3c7;
+
+#keys {
+	margin: 10px;
 	display: inline-block;
-	padding-left: 6px;
-	padding-right: 6px;
+	border: 1px solid #bdc3c7;
+	/*border:1px solid #353C41;*/
+}
+
+.no-border {
+	border: none !important;
+}
+
+.key-button {
+	padding: 3px;
+	padding-top: 3px;
+	border-right: 2px solid #bdc3c7;
+	display: inline-block;
+	height: 27px;
+	width: 30px;
+	text-align: center;
 }
 	.key-button:hover {
 		background-color: #1px solid #bdc3c7;
@@ -50,10 +152,7 @@
 	color: #2c3e50;
 }	
 
-#keys {
-	margin-left:2px;
-	display: inline-block;
-}
+
 
 #mainTV {
 	border: 1px solid #bdc3c7;

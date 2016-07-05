@@ -18,8 +18,11 @@
 		<!-- Bootstrap Core JavaScript -->
 		<script src="js/bootstrap.min.js"></script>
 
+			<link href='https://fonts.googleapis.com/css?family=Montserrat:400,900' rel='stylesheet' type='text/css'>
+		
 		<script src="js/module_handler.js"></script>
 		<script language="Javascript">
+		
 			$(document).ready(function() {
 				var dataBinary = <?php
 										if(!isset($_GET['noData'])) {
@@ -82,7 +85,17 @@
 					$("#myModal").modal('hide');
 				});
 
+				$("#mod-list").on("click", function(e) {
+					console.log("clicked");
+					if($("#mod-list-container").is(":hidden")) {
+						$("#mod-list-container").show();
+					} else {
+						$("#mod-list-container").hide();
+					}
+				});
+				
 			});
+		
 		</script>
 
 	</head>
@@ -90,15 +103,28 @@
 <body>
 
 <?php require('navbar.php'); ?>
-<?php include_once("analyticstracking.php") ?>
-<?php include_once("session_handler.php") ?>
+<?php //include_once("analyticstracking.php") ?>
+<?php //include_once("session_handler.php") ?>
 
+<div class="left-bar">
+	<div class="left-bar-logo"><img src="img/module-logo.png"/></div>
+	<div class="left-bar-button"><h2><span style="font-size:18px;" class="glyphicon glyphicon-home" aria-hidden="true"></span></h2></div>
+	<div class="left-bar-button" id="mod-list"><h2><span style="font-size:18px;" class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h2></div>
+	<div id="mod-list-container" style="display: none">
+		<div class="left-bar-sub-button">Module 1</div>
+		<div class="left-bar-sub-button">Module 2</div>
+		<div class="left-bar-sub-button">Module 3</div>
+		<div class="left-bar-sub-button">Module 4</div>
+	</div>
+	<div class="left-bar-button"><h2><span style="font-size:18px;" class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></h2></div>
+</div>
 <div class="contain-bin">
 <div class="container">
 		<div class="row">
 			<div class="col-md-4">
 				<div id="keys"></div>
 			</div>
+
 			<div class="col-md-2">
 				<div id="feedback">
 					<div class="full-modal-wrapper">

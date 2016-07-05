@@ -8,14 +8,19 @@ html, body {
 	background-color: #353C41;
 }
 
-
-
-
-.contain-bin {
-	float: right;
-	width: 90%;
+.main-module{
+	float: left;
+	width: 70%;
 	background-color: #fff;
 	min-height: 800px;
+	padding: 10px;
+}
+
+.header-box {
+	margin: 10px;
+	max-width: 60%;
+	border-bottom: 1px solid #bdc3c7;
+	padding-bottom: 3px;
 }
 
 .left-bar {
@@ -30,8 +35,12 @@ html, body {
 	min-height:800px;
 	padding-top: 25px;
 }
+
 .right-bar {
-	
+	float:left;
+	width:20%;
+	background-color: #fff;
+	min-height: 800px;	
 }
 
 h2 {
@@ -104,11 +113,62 @@ h2 {
 	vertical-align: top !important;
 }
 
+.key-box {
+	margin: 10px;
+	margin-bottom:5px;
+	display: block;
+	height: 30px;
+}
+
+	.key-box a{
+		color: #353C41;
+	}
+	.key-box a:visited {
+		color: #353C41;
+		text-decoration: none;
+	}
+
+.flag-box {
+	float:right;
+	height: 28px;
+	display: block;
+	width: 120px;
+	border: 1px solid #353C41;
+}
+.flag-icon {
+	padding: 3px;
+	color: #fff;
+	display: block;
+	float:left;
+	background-color: #353C41;
+	font-family: 'Montserrat', sans-serif !important;
+	font-size: 10px !important;
+	font-weight:normal !important;	
+	width: 25px;
+}
+
+.flag-text {
+	padding: 3px;
+	padding-top: 3px;
+	display: inline-block;
+	height: 27px;
+	float:left;
+	width:93px;
+	font-family: 'Montserrat', sans-serif !important;
+	font-size: 14px !important;
+	font-weight:normal !important;	
+}
+	.flag-box:hover{
+		background-color: #353C41;
+		color: #fff;
+		cursor:pointer;
+	}
+
 
 #keys {
-	margin: 10px;
 	display: inline-block;
 	border: 1px solid #bdc3c7;
+	float:left;
 	/*border:1px solid #353C41;*/
 }
 
@@ -126,10 +186,9 @@ h2 {
 	text-align: center;
 }
 	.key-button:hover {
-		background-color: #1px solid #bdc3c7;
+		background-color: #bdc3c7;
 		cursor: pointer;
 	}
-
 	.pressed {
 		cursor: defualt !important;
 		background-color: #bdc3c7 !important;
@@ -158,18 +217,19 @@ h2 {
 	border: 1px solid #bdc3c7;
 	border-left: 4px solid #bdc3c7;
 	padding: 15px;
-	margin: 5px;
-	max-width: 75%;
+	margin: 10px;
+	margin-top: 0px;
+	max-width: 100%;
 }
-
 #helperTV {
 	border: 1px solid #f39c12;
 	border-left: 4px solid #f39c12;
 	padding: 15px;
-	margin:5px;
+	margin: 10px;
+	max-width:100%;
 	display:none;
-	max-width:75%;
 }
+
 .northMargins {
 	margin-top:15px;
 }

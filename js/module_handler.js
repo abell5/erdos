@@ -208,7 +208,7 @@ Problem.prototype.displayMe = function(loc) {
 	$(loc).append( $_problemWrapper );
 	
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub]); //update MathJax
-	scroll_to($_problemWrapper);
+	if(loc=="#helperTV") { scroll_to($_problemWrapper); }
 	
 }
 
@@ -321,9 +321,10 @@ Module.prototype.displayHelperText = function(id, text) {
 Module.prototype.displayKeys = function() {
 	var mod = this;
 	var count = 0;
-	
+	var lastKey = this.key_ids.length;
 	
 	this.key_ids.forEach(function (entry) {
+
 		count = count+1;
 		var $slide = $("<div>", {class: "slide_button key-button key-font"});
 		//var $slide = $("<div>", {class: "btn btn-default"});
@@ -355,6 +356,8 @@ Module.prototype.displayKeys = function() {
 		});
 		$("#keys").addClass("btn-group");
 		$("#keys").attr("role", "group");
+		
+		if(count==lastKey) { $slide.addClass("no-border") }
 		$("#keys").append($slide);
 	});
 	

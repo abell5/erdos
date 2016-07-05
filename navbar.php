@@ -14,6 +14,9 @@
 	object-fit: contain; 
 
 }
+.navbar {
+	margin-bottom: 0px !important;
+}
 </style>
 
 <!-- Navigation -->

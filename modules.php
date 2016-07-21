@@ -54,6 +54,7 @@
 	<div class="module-main">
 		
 		<div class="row">
+			<!--
 			<div class="module-link" name=1>
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
 					<div class="module-desc"><h5>Review problem set 1</h5></div>
@@ -62,17 +63,26 @@
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
 					<div class="module-desc"><h5>Review problem set 2</h5></div>
 			</div>
+			-->
 			<div class="module-link" name=3>
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
-					<div class="module-desc"><h5>Review problem set 3</h5></div>
+					<div class="module-desc"><h5>Review problem set 6/17/16</h5></div>
 			</div>
 			<div class="module-link" name=4>
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
-					<div class="module-desc"><h5>Review problem set 4</h5></div>
+					<div class="module-desc"><h5>Review problem set 6/26/16</h5></div>
 			</div>
 			<div class="module-link" name=5>
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
-					<div class="module-desc"><h5><div class="new">new</div>Review problem set 5</h5></div>
+					<div class="module-desc"><h5>Review problem set 7/1/16</h5></div>
+			</div>
+			<div class="module-link" name=6>
+					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+					<div class="module-desc"><h5>Review problem set 7/8/16</h5></div>
+			</div>
+			<div class="module-link" name=7>
+					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+					<div class="module-desc"><h5><div class="new">new</div>Review problem set 7/14/16</h5></div>
 			</div>
 			<div class="module-link" name="next">
 					<span style="font-size:22px;" class="glyphicon glyphicon-time" aria-hidden="true"></span>

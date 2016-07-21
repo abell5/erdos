@@ -128,6 +128,13 @@ h2 {
 		text-decoration: none;
 	}
 
+.next{
+	margin-left: 5px;
+	display: inline-block;
+	border: 1px solid #bdc3c7;
+	float:left;
+}	
+	
 .flag-box {
 	float:right;
 	height: 28px;
@@ -174,6 +181,7 @@ h2 {
 
 .no-border {
 	border: none !important;
+	margin: 0 !important;
 }
 
 .key-button {

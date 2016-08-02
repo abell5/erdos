@@ -82,11 +82,15 @@
 			</div>
 			<div class="module-link" name=7>
 					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
-					<div class="module-desc"><h5><div class="new">new</div>Review problem set 7/14/16</h5></div>
+					<div class="module-desc"><h5>Review problem set 7/14/16</h5></div>
+			</div>
+			<div class="module-link" name=8>
+					<span style="font-size:22px;" class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>
+					<div class="module-desc"><h5><div class="new">new</div>Review problem set 7/21/16</h5></div>
 			</div>
 			<div class="module-link" name="next">
 					<span style="font-size:22px;" class="glyphicon glyphicon-time" aria-hidden="true"></span>
-					<div class="module-desc"><h5>New module will be released next Thursday</h5></div>
+					<div class="module-desc"><h5>New module will be released next month!</h5></div>
 			</div>			 
 			<!--
 			<div class="module-link one">

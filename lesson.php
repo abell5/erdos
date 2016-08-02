@@ -103,6 +103,20 @@
 						$("#mod-list-container").hide();
 					}
 				});
+
+				$("#nav-mod-list").on("click", function(e) {
+					if($("#nav-mod-list-container").is(":hidden")) {
+						$("#nav-mod-list").html('<span style="font-size:16px;" class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>')
+						$("#nav-mod-list-container").slideDown( "fast", function() {
+						// Animation complete.
+					  });
+					} else {
+						$("#nav-mod-list").html('<span style="font-size:16px;" class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>')
+						$("#nav-mod-list-container").slideUp( "fast", function() {
+						// Animation complete.
+					  });
+					}
+				});				
 				
 				$(".left-bar-sub-button").click(function() {
 					var link_mid = escape($(this).attr("name"));
@@ -111,7 +125,13 @@
 						return false;
 					}
 				});
-				
+				$(".nav-mod-navigate").click(function() {
+					var link_mid = escape($(this).attr("name"));
+					if(link_mid!=="next") {
+						window.location="lesson.php?mid="+link_mid;
+						return false;
+					}
+				});				
 			});
 		
 		</script>
@@ -119,10 +139,10 @@
 	</head>
 
 <body>
-
+<?php include_once("session_handler.php") ?>
+<?php include_once("analyticstracking.php") ?>
 <?php require('navbar.php'); ?>
-<?php //include_once("analyticstracking.php") ?>
-<?php //include_once("session_handler.php") ?>
+
 
 <div class="left-bar">
 	<div class="left-bar-logo"><img src="img/module-logo.png"/></div>
@@ -134,13 +154,29 @@
 		<div class="left-bar-sub-button" name="5">Module 5</div>
 		<div class="left-bar-sub-button" name="6">Module 6</div>
 		<div class="left-bar-sub-button" name="7">Module 7</div>
+		<div class="left-bar-sub-button" name="8">Module 8</div>
 	</div>
 	<!--<div class="left-bar-button" id="next_prob" title="Next Problem"	><h2><span style="font-size:18px;" class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></h2></div>-->
 </div>
+<div class="header-bar">
+	<div class="module-box">
+		<h2>Module <div id="num" style="display:inline-block"></div></h2>
+	</div>
+	<div class="module-nav-button" id="nav-mod-list" title="Module List">
+		<span style="font-size:16px;" class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+	</div>
+<div id="nav-mod-list-container" style="display: none">
+	<div class="nav-mod-navigate" name="3">Module 3</div>
+	<div class="nav-mod-navigate" name="4">Module 4</div>
+	<div class="nav-mod-navigate" name="5">Module 5</div>
+	<div class="nav-mod-navigate" name="6">Module 6</div>
+	<div class="nav-mod-navigate" name="7">Module 7</div>
+	<div class="nav-mod-navigate no-border" name="8">Module 8</div>
+</div>
+	
+</div>
 
 <div class="main-module">
-
-		<div class="header-box"><h2>Module <div id="num" style="display:inline-block"></div></h2></div>
 		<div class="key-box">
 			<div id="keys"></div>
 			<div class="next btn-group group">

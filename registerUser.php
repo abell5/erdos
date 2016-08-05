@@ -9,9 +9,14 @@ $pass = $_POST['pass'];
 $confirmPass = $_POST['confirmPass'];
 
 $errors = [];
-/* check e-mail */
+/* Check e-mail */
 if(filter_var($email, FILTER_VALIDATE_EMAIL)!=$email) {
 	array_push($errors, "Please enter a valid e-mail address.");
+}
+
+/* Check username length */
+if(strlen($user) > 16 ) {
+	array_push($errors, "Username must be shorter than 16 characters.");
 }
 
 /*Check if passwords match */
@@ -31,20 +36,42 @@ if($stmt->rowCount() > 0) {
 
 /*** End checks ***/
 
+
+/**Begin main register function **/
 if(!empty($errors)) {
 	foreach ($errors as $e) {
 		echo $e . "<br>";
 	}
 } else {
-	$query = "INSERT INTO `users` (`username`, `password`)
-				VALUES (:username, :password)";
-	$encryptedPassword = password_encrypt($_POST['pass']);
-	$stmt = $DBH->prepare($query);
-	$stmt->execute(array(":username" => $_POST['user'], ":password"=>$encryptedPassword));
+	$confirmcode = md5($user . rand());
 	
-	echo "User created.";
-	$_SESSION['user'] = $_POST['user'];
-	return true;
+	$query = "INSERT INTO `users` (`username`, `password`,`email`,`confirmcode`)
+				VALUES (:username, :password, :email, :confirmcode)";
+	$encryptedPassword = password_encrypt($pass);
+	$stmt = $DBH->prepare($query);
+	if($stmt->execute(array(":username" => $user, ":password"=>$encryptedPassword, ":email"=>$email, ":confirmcode"=>$confirmcode))) {
+		sendConfirmationEmail($user,$email,$confirmcode);
+		echo "success";
+		return true;
+	} else {
+		echo "Crticial error that may or may not be related to your user activity.";
+		return false;
+	}
 }
+
+/**Send e-mail code, this will have the main message.
+I didn't want to crowd the main register function **/
+function sendConfirmationEmail($user,$email,$key) {
+	$message  = 
+	"Clicking the link below will confirm your email address, and begin your Erdos learning adventure:
+	http://localhost/erdos/confirmemail.php?user=$user&confirmcode=$key
+	";
+	
+	echo $message;
+	
+	mail($email,"Erdos Confirm Email", $message, "From: welcome@geterdos.com");
+}
+
+
 
 ?>

@@ -43,7 +43,7 @@ if(!empty($errors)) {
 		echo $e . "<br>";
 	}
 } else {
-	$confirmcode = md5($user . rand());
+	$confirmcode = md5($email . rand());
 	
 	$query = "INSERT INTO `users` (`username`, `password`,`email`,`confirmcode`)
 				VALUES (:username, :password, :email, :confirmcode)";

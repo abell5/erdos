@@ -18,10 +18,9 @@ Password:  <input type="password" name="pass"/><br/>
 
 <form method="POST" action="registerUser.php">
 <input type="hidden" name="type" value=1/>
-Username:  <input type="text" name="user"/><br/>
+E-mail:  <input type="text" name="email"/><br/>
 Password:  <input type="password" name="pass"/><br/>
 Confirm Password:  <input type="password" name="confirmPass"/><br/>
-E-mail:  <input type="text" name="email"/><br/>
 <input type="submit">
 </form>
 

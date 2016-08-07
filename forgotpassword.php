@@ -1,5 +1,6 @@
 <?php
 require_once('include/db_connect.php');
+require_once('encryptionFunctions.php');
 
 
 if(!isset($_GET['email'])) {
@@ -21,11 +22,18 @@ if(!empty($confirmkey)) {
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
 	if(!empty($row['id'])) {
 		echo "Found a matching, unexpired row.";
-		
-		$query = "UPDATE `password_change_requests`SET `expired`=1 WHERE (`id`) = :id LIMIT 1";
-		$stmt = $DBH->prepare($query);
-		$stmt->bindValue(':id',$row['id']);
-		if($stmt->execute()) {
+	
+			echo 'Please enter your new password. <br>
+			<form method="POST" action="changePassword.php">
+			New Password:  <input type="password" name="pass"/><br/>
+			Confirm Password:  <input type="password" name="confirmPass"/><br/>
+			<input type="hidden" name="confirmkey" value="' . $confirmkey . '"/>
+			<input type="hidden" name="email" value="' . $email . '"/>
+			<input type="submit">
+			</form>';
+			
+			
+			/*
 			$newPass = sprintf("%06d", mt_rand(1, 999999));
 			
 			$query = "UPDATE `users`SET `password`= :newPass WHERE (`email`) = :email LIMIT 1";
@@ -39,11 +47,8 @@ if(!empty($confirmkey)) {
 				mail($email,"Your latest Erdos password", $message, "From: welcome@geterdos.com");	
 			} else {
 				echo "Database query failed.";
-			}		
-		} else {
-			echo "Database query failed.";
-			die();
-		}
+			}
+			*/
 		
 	} else {
 		echo "Incorrect email or confirmation key.";

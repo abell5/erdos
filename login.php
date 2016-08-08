@@ -6,23 +6,12 @@
 ?>
 
 <html>
-<!--
-<form method="POST" action="">
-<input type="hidden" name="type" value=0/>
-Username:  <input type="text" name="user"/><br/>
+<form method="POST" action="authorize.php">
+Email:  <input type="text" name="email"/><br/>
 Password:  <input type="password" name="pass"/><br/>
 <input type="submit">
 </form>
--->
-<br/>
 
-<form method="POST" action="registerUser.php">
-<input type="hidden" name="type" value=1/>
-E-mail:  <input type="text" name="email"/><br/>
-Password:  <input type="password" name="pass"/><br/>
-Confirm Password:  <input type="password" name="confirmPass"/><br/>
-<input type="submit">
-</form>
 
 
 </html>

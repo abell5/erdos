@@ -29,11 +29,10 @@ function openSession() {
 }
 
 function sessionPersist() {
+	session_start();
 	if(!isset($_SESSION['canary'])) {
 		openSession();
-	} else {
-		session_start();
-	
+	} else {	
 		if($_SESSION['canary']['loggedin'] === true && isset($_SESSION['email'])) {
 			
 			if ($_SESSION['canary']['IP'] !== $_SERVER['REMOTE_ADDR']) {

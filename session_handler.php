@@ -2,6 +2,7 @@
 ini_set('session.cookie_httponly',true);
 require_once('include/db_connect.php');
 
+
 function sessionDestroy() {
 	session_unset();
 	session_destroy();
@@ -18,7 +19,6 @@ function sessionLogin($email, $premium) {
 }
 
 function openSession() {
-	session_start(); //Begin the session
 	$_SESSION['canary'] = [
 		'birth' => time(),
 		'IP' => $_SERVER['REMOTE_ADDR'],

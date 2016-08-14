@@ -178,7 +178,7 @@ class Dashboard
 		}
 		else
 		{
-			return "We haven't practiced this topic yet.";
+			return "";
 		}
 	}
 	
@@ -229,7 +229,21 @@ class Dashboard
 <!--Main page stylesheets-->
 <link rel="stylesheet" href="css/profile.css">
 
-
+	<script language="Javascript">
+	$(document).ready(function(){ 
+		refreshDom = function() {
+			$("#left-sidebar").height($(document).height());
+		}
+	
+		$(".expand-button").click(function() {
+			var expand_id = escape($(this).attr("name"));
+			$(".widget-subtopic-container[name="+expand_id+"]").slideToggle("fast", function() {
+					refreshDom();
+			});
+		});
+	});
+	
+	</script>
 </head>
 <body>
 <div id="topbar">
@@ -245,10 +259,10 @@ class Dashboard
 	</div>
 	<div class="left-sidebar-menu">
 		<div class="left-sidebar-item selected">
-			<h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span>Dashboard</h4>
+			<h4><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>Dashboard</h4>
 		</div>
 		<div class="left-sidebar-item">
-			<h4><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>Settings</h4>
+			<h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span>Settings</h4>
 		</div>
 		<div class="left-sidebar-item">
 			<h4><span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>Premium</h4>
@@ -260,27 +274,124 @@ class Dashboard
 	<div class="widget">
 		<div class="widget-header"><h6>Progress</h6></div>
 		<div class="widget-body">
+		
+		<?php
+		$mainTopics = ["Basic Algebra", "Advanced Algebra", "Problem Solving and Data Analysis", "Additional Topics in Math"];
+		$algebraSubtopics = ["Solving linear equations",
+										 "Interpreting linear functions",
+										 "Linear inequality and equation problems",
+										 "Graphing linear equations",
+										 "Linear function word problems",
+										 "Systems of lienar inequatlities",
+										 "Solving systems of linear equations",
+										];
+		$advancedAlgebraSubtopics = ["Solving quadratic equations",
+													   "Interpreting nonlinear expression",
+													    "Quadratic and exponentials",
+														"Radicals and rational exponents",
+														"Operations with radicals and polynomials",
+														"Polynomial factors and graphs",
+														"Nonlinear equation graphs",
+														"Linear and quadratic systems",
+														"Structure in expressions",
+														"Isolating quantities",
+														"Functions"
+													   ];
+		$psdaSubtopics = ["Ratios, rates, and proportions",
+								    "Percents",
+									"Units",
+									"Table data",
+									"Scatterplots",
+									"Key feature of graphs",
+									"Linear and exponential growth",
+									"Data inferences",
+									"Center, spread, and shape of distributions",
+									"Data collection and conclusions"
+									];
+		$atmSubtopics = ["Volume word problems",
+								    "Right triangle word problems",
+									"Congruence and similarity",
+									"Right triangle geometry",
+									"Angles, arc lengths, and trig functions",
+									"Circle theorems",
+									"Circle equations",
+									"Complex numbers"
+									];
+									
+		$topicStructure = (object) array("Basic Algerba" => $algebraSubtopics,
+														  "Advanced Algebra" => $advancedAlgebraSubtopics,
+														  "Problem Solving and Data Analysis" => $psdaSubtopics,
+														  "Additional Topics in Math" => $atmSubtopics);
+		
+		$dashboard = new Dashboard($user, $DBH);
+		$listOfTypes = $dashboard->getListofTypes();
+		
+		/*
+		foreach($listOfTypes as $type) {
+			
+			if($perc) {
+				echo "<tr>";
+					echo "<th>" . $type . "</th>";
+					echo "<th>" . $perc . "</th>";
+					echo "<th>" . $dashboard->getNumberByType($type) . "</th>";
+					echo "<th>" . $dashboard->softResponse($perc) . "</th>";
+				echo "</tr>";
+			}
+		}
+		*/
+		
+		foreach($topicStructure as $main => $sub) {
+			echo "<div class='widget-main-item'>
+						<div class='expand-button' name='".str_replace(' ', '', $main)."'>+</div>".$main."
+					</div>";
+			echo "<div class='widget-subtopic-container' name='".str_replace(' ', '', $main)."'>";
+				for($i = 0; $i < sizeof($sub); $i++) {
+					$perc = $dashboard->getPercentageByType($sub[$i]);
+					if( $i & 1 ) {
+						echo "<div class='widget-subtopic-item grey-bg'>";
+					} else {
+						echo "<div class='widget-subtopic-item'>";
+					}
+					echo	 $sub[$i]."<span>". $dashboard->softResponse($perc) . "</span>";
+					echo "</div>";
+				}
+			echo "</div>";
+		}
+		
+		
+		
+		?>
+		
+		
+		<!--
 			<div class="widget-main-item">
-				<div class="expand-button">+</div>Basic Algebra<span class="grey">We haven't practiced this topic yet.</span>
+				<div class="expand-button" name="1">+</div>Basic Algebra<span class="grey">We haven't practiced this topic yet.</span>
 			</div>
-			<div class="widget-subtopic-item">
-				Solving linear equations<span class="grey">We haven't practiced this topic yet.</span>
+			<div class="widget-subtopic-container" name="1">
+				<div class="widget-subtopic-item">
+					Solving linear equations<span class="grey">We haven't practiced this topic yet.</span>
+				</div>
+				<div class="widget-subtopic-item">
+					Interpreting linear functions<span class="grey">We haven't practiced this topic yet.</span>
+				</div>
+				<div class="widget-subtopic-item">
+					Equation word problems<span class="grey">We haven't practiced this topic yet.</span>
+				</div>
+				<div class="widget-subtopic-item">
+					Graphing linear equations<span class="grey">We haven't practiced this topic yet.</span>
+				</div>
+				<div class="widget-subtopic-item">
+					Linear function word problems<span class="grey">We haven't practiced this topic yet.</span>
+				</div>
 			</div>
-			<div class="widget-subtopic-item">
-				Interpreting linear functions<span class="grey">We haven't practiced this topic yet.</span>
-			</div>
-			<div class="widget-subtopic-item">
-				Equation word problems<span class="grey">We haven't practiced this topic yet.</span>
-			</div>
-			<div class="widget-subtopic-item">
-				Graphing linear equations<span class="grey">We haven't practiced this topic yet.</span>
-			</div>
-			<div class="widget-subtopic-item">
-				Linear function word problems<span class="grey">We haven't practiced this topic yet.</span>
-			</div>			
-			<div class="widget-main-item">Advanced Algebra<span class="grey">We haven't practiced this topic yet.</span></div>
+			<div class="widget-main-item">
+				<div class="expand-button" name="1">
+					Advanced Algebra<span class="grey">We haven't practiced this topic yet.</span></div>
+				</div>
 			<div class="widget-main-item">Problem Solving and Data Analysis<span class="grey">We haven't practiced this topic yet.</span></div>
 			<div class="widget-main-item">Additional Topics in Math<span class="grey">We haven't practiced this topic yet.</span></div>
+		-->
+		
 		</div>
 	</div>
 </div>

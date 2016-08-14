@@ -107,7 +107,6 @@
 	margin: 15px;
 	border: 1px solid #ecf0f1;
 	padding: 15px;
-	height: 400px;
 	width: 650px;
 	background-color: #fff;
 	
@@ -133,7 +132,7 @@
 
 .widget-main-item {
 	padding-left:10px;
-	padding-bottom: 10px;	
+	padding-bottom: 8px;	
 	
 	font-family: 'Montserrat', sans-serif !important;
 	font-size: 14px;
@@ -167,8 +166,8 @@
 		}
 		
 .widget-subtopic-item {
-	margin-left: 25px;
-	margin-bottom: 5px;
+	margin-bottom: 3px;
+	padding: 2px;
 	font-family: 'Montserrat', sans-serif !important;
 	font-size: 14px;
 	font-weight: 300;
@@ -178,7 +177,17 @@
 		margin-right: 25px;
 		font-weight: 300;
 	}
+
+.widget-subtopic-container {
+	padding-left: 25px;
+	padding-bottom: 5px;
 	
+	display:none;
+}
+	.grey-bg {
+		background-color: #ecf0f1;
+	}
+
 h6 {
 	padding: 0;
 	margin: 0;

@@ -2,6 +2,17 @@
 require_once('session_handler.php');
 sessionPersist();
 
+$msgText = "";
+if(isset($_GET['msg'])) {
+	$msg = filter_var($_GET['msg'], FILTER_SANITIZE_STRING);
+	if ($msg = 1) {
+		$msgText = "Password succesfully reset.<br> You may now sign in and get to learning!";
+	} else {
+		$msg = 0;
+	}
+} else {
+	$msg=0;
+}
 
 
 ?>
@@ -29,13 +40,25 @@ sessionPersist();
 	<script language="Javascript">
 	$(document).ready(function(){ 
 		
-
+		var msgText = "<?php echo $msgText ?>";
+		console.log("test", msgText);
+		if (msgText) {
+			console.log("here");
+			$('.note').html(msgText);
+			$('.note').show();
+		}
 		
 	});
 	
 	</script>
 </head>
 <body>
+<?php require('navbar.php'); ?>
+
+<div id="main-container">
+
+<div class="note" style='display:none'>
+</div>
 
 <div class="form-container">
 
@@ -44,7 +67,7 @@ sessionPersist();
 		<div class="logo">
 			<h6>Erdos</h6>
 		</div>
-		<h6>User login</h6>
+		<h6>Login</h6>
 	</div>
 	<div class="inner-addon left-addon">
 		<i class="glyphicon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></i>      
@@ -62,10 +85,10 @@ sessionPersist();
 		<div class="sub-right">
 			<table>
 			<tr><th>
-				<div class="forgot-password-btn">lost password?</div>
+				<a href="lostpassword.php"><div class="forgot-password-btn">lost password?</div></a>
 			</th></tr>
 			<tr><th>
-				<div class="register-btn">need to register?</div>
+				<a href="register.php"><div class="register-btn">need to register?</div></a>
 			</th></tr>
 			</table>
 		</div>
@@ -73,5 +96,5 @@ sessionPersist();
 </form>
 
 </div>
-
+</div>
 </html>

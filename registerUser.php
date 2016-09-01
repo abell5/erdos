@@ -13,6 +13,12 @@ if(filter_var($email, FILTER_VALIDATE_EMAIL)!=$email) {
 	array_push($errors, "Please enter a valid e-mail address.");
 }
 
+/*Check RegEx for e-mail*/
+$pattern = "/[a-zA-Z0-9._^%$#!~@-]{5,17}$/";
+if(!preg_match($pattern, $pass)) {
+	array_push($errors, "Password is invalid");
+}
+
 /* Check username length */
 /*
 if(strlen($user) > 16 ) {
@@ -40,9 +46,12 @@ if($stmt->rowCount() > 0) {
 
 /**Begin main register function **/
 if(!empty($errors)) {
+	header("Location: register.php?error=1");
+	/*
 	foreach ($errors as $e) {
 		echo $e . "<br>";
 	}
+	*/
 } else {
 	$confirmcode = md5($email . rand());
 	
@@ -69,8 +78,8 @@ function sendConfirmationEmail($email,$key) {
 	";
 	
 	echo $message;
-	
 	mail($email,"Erdos Confirm Email", $message, "From: welcome@geterdos.com");
+	
 }
 
 

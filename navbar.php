@@ -1,55 +1,109 @@
-<?php
-?>
+<?php ?>
 <style type="text/css">
-.navbar-brand>img {
-	max-height: 100%;
-	height: 100%;
-	width: auto;
-	margin: 0 auto;
-	display: inline-block;
-	margin-right: 15px;
+ #topbar {
+	 height: 55px !important;
+	 width: 100%;
+	 
+	 padding: 6px !important;
+	 padding-bottom: 15px !important;
+	 background-color: #fff;
 
-	/* probably not needed anymore, but doesn't hurt */
-	-o-object-fit: contain;
-	object-fit: contain; 
+	 display:block;
+	 float:left;
+	 
+	 border-bottom: 1px solid #ecf0f1;
+	
+ }
+ 
+  .topbar-inset {
+	 position: relative;
+	 width: 75%;
+	 height: 100%;
+	 margin: auto;
+ }
+ .topbar-left-logo {
+	 float:left;
+	 padding-top: 8px;
+	 padding-left: 10px;
+	 color: #27ae60;
+ }
+	.topbar-left-logo a {
+		text-decoration: none;
+		color: #27ae60;
+	}
+ 
+ .topbar-right-links {
+	 float:right;
+	 padding-top: 10px;
+	 color: #34495e;
+ }
+ 
+	.topbar-right-links a {
+		padding: 5px;
+		padding-top: 4px;
+		padding-left: 7px;
+		padding-right: 7px;
+		margin-left: 10px;
+		margin-right: 10px;
+		
+		text-decoration: none;
+		
+		display: inline-block;
+	}
+	
+	.topbar-right-links a:hover {
+		cursor: pointer;
+		
+		/*
+		border-radius: 3px;
+		background-color: #e67e22;
+		*/
+	}
+	
+	.sign-up-button {
+		border-radius: 3px;
+		background-color: #f39c12;
+		color: #fff;
+	}
+		.sign-up-button:hover {
+			border-radius: 3px;
+			background-color: #e67e22;
+			color: #fff;
+		}
+ 
+h3 {
+	margin: 0;
+	padding: 0;
+	
+	font-size: 30px;
+	font-family: 'Montserrat', sans-serif !important;
+	font-weight: 700;
+	
+	color: inherit;
+}
 
-}
-.navbar {
-	margin-bottom: 0px !important;
-}
+ h4 {
+	 font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+	 padding: 0;
+	 margin: 0;
+	 color: inherit;
+	 font-size: 16px;
+	 font-weight: 300;
+	 text-transform: uppercase;
+ }
 </style>
 
 <!-- Navigation -->
-<nav class="navbar navbar-default topnav" role="navigation">
-	<div class="container topnav">
-		<!-- Brand and toggle get grouped for better mobile display -->
-		<div class="navbar-header">
-		
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand brand-name" href="home.php">Erdos <sup><font size="1">BETA</font></sup></a>
+<div id="topbar">
+	<div class="topbar-inset">
+		<div class="topbar-left-logo">
+			<a href="newhome.php"><h3>Erdos</h3></a>
 		</div>
-		<!-- Collect the nav links, forms, and other content for toggling -->
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav navbar-right navbar-font-size">
-				<li>
-					<a href="modules.php">Learn</a>
-				</li>
-				<li>
-					<a href="about.php">About</a>
-				</li>
-				<!--
-				<li>
-					<a href="https://www.youtube.com/watch?v=9r8Sf6ravXQ">About</a>
-				</li>
-				-->
-			</ul>
+		<div class="topbar-right-links">
+			<a href="about.php"><h4>About</h3></a>
+			<a href="profile.php"><h4>Learn</h4></a>
+			<a href="login.php"><h4>Sign in</h4></a>
+			<a href ="register.php" class="sign-up-button"><h4>Sign up</h4></a>
 		</div>
-		<!-- /.navbar-collapse -->
 	</div>
-	<!-- /.container -->
-</nav>
+</div>

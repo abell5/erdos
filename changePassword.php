@@ -2,6 +2,8 @@
 require_once('include/db_connect.php');
 require_once('encryptionFunctions.php');
 
+echo "PASS" . $_POST['confirmPass'];
+
 $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
 $pass = filter_var($_POST['pass'], FILTER_SANITIZE_STRING);
 $confirmPass = filter_var($_POST['confirmPass'], FILTER_SANITIZE_STRING);
@@ -16,6 +18,7 @@ $errors = [];
 */
 /*Check if anything is empty */
 if(empty($pass) || empty($confirmPass) || empty($email) || empty($confirmkey)){
+	echo $pass . $confirmPass . $email . $confirmkey;
 	array_push($errors, "You must enter both a new password and a confirmation password.");
 }
 
@@ -47,14 +50,12 @@ if(empty($errors)) {
 	$query = "UPDATE `users` SET `password` = :password
 				WHERE (`email`) = :email LIMIT 1";
 	$stmt = $DBH->prepare($query);
-	if($stmt->execute(array(":password"=>$encryptedPassword, ":email"=>$email))) {
-		echo "Password succesfully canged.";
-		
+	if($stmt->execute(array(":password"=>$encryptedPassword, ":email"=>$email))) {	
 		$query = "UPDATE `password_change_requests`SET `expired`=1 WHERE (`id`) = :id LIMIT 1";
 		$stmt = $DBH->prepare($query);
 		$stmt->bindValue(':id',$row['id']);
 		if($stmt->execute()){
-			//Hopefully this never happens...
+			header('Location: login.php?msg=1');
 		} else {
 			//Error handling
 		}

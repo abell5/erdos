@@ -1,6 +1,9 @@
 <?php
 include_once( dirname( __FILE__ ) . '/include/db_connect.php' );
 include_once("session_handler.php");
+sessionPersist();
+
+$user = getUserId();
 
 $pid = $_POST['pid'];
 $ptext = $_POST['ptext'];

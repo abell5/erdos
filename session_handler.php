@@ -1,6 +1,6 @@
 <?php
 ini_set('session.cookie_httponly',true);
-require_once('encryptionFunctions.php');
+//require_once('encryptionFunctions.php');
 
 
 
@@ -65,6 +65,14 @@ function sessionLogin($email, $premium) {
 	$_SESSION['canary']['premium'] = $premium;
 	
 	var_dump($_SESSION['canary']);
+}
+
+function getUserID() {
+	if(!isset($_SESSION['canary'])) {
+		sessionPersist();
+	} else {
+		return $_SESSION['canary']['id']; 
+	}
 }
 
 

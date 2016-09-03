@@ -1,10 +1,25 @@
 <?php
-require_once('include/db_connect.php');
+
+
+require_once('session_handler.php');
+sessionPersist();
 
 global $user;
-$user = getUserID();
-/*I will move these dashboard functions to their own file later*/
 
+if(isset($_SESSION['canary']['email'])) {
+	$user = $_SESSION['canary']['email'];
+} elseif(isset($_SESSION['canary']['id'])) {
+	$user = $_SESSION['canary']['id'];
+}
+
+/********THIS IS A TEST STATEMENT, REMOVE THIS LATER************/
+$user = 'ef82ad19df592dd26dc9e1e2b4563a63';
+
+//echo $user;
+//echo "<br><br>";
+
+/*I will move these dashboard functions to their own file later*/
+require_once('include/db_connect.php');
 
 class Dashboard
 {
@@ -223,9 +238,17 @@ class Dashboard
 <html>
 <head>
 
+<!--Favicon-->
+<link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
 
-<!-- d3js -->
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<!--MathJax-->
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<!--JQuery-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<!-- Bootstrap Core JavaScript and CSS -->
+<script src="js/bootstrap.min.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet">
 
 <!--Google Font-->
 <link href='https://fonts.googleapis.com/css?family=Montserrat:400,900' rel='stylesheet' type='text/css'>
@@ -235,7 +258,13 @@ class Dashboard
 
 	<script language="Javascript">
 	$(document).ready(function(){ 
-			
+		
+		var user="mickey"
+		
+		refreshDom = function() {
+			$("#left-sidebar").height($(document).height());
+		}
+	
 		$(".expand-button").click(function() {
 			var expand_id = escape($(this).attr("name"));
 			$(".widget-subtopic-container[name="+expand_id+"]").slideToggle("fast", function() {
@@ -243,45 +272,68 @@ class Dashboard
 			});
 		});
 		
-		/*D3js widget*/
-		var dataArray = [20,40,60];
-		var width = ($("#chart").width() - 20) /*20 is padding on both sides */
-		console.log(width);
-		console.log(Math.max.apply(Math,dataArray));
-		var height = 200;
-		
-		var widthScale = d3.scaleLinear()
-									.domain([0, Math.max.apply(Math,dataArray)])
-									.range([0,width])
-		
-		var canvas = d3.select("#chart")
-								.append("svg")
-								.attr("width", width)
-								.attr("height", height);
-		
-		var bars = canvas.selectAll("rect")
-							.data(dataArray)
-							.enter()
-								.append("rect")
-								.attr("width", function(d) {
-										return widthScale(d);
-									})
-								.attr("height", 50)
-								.attr("fill", "green")
-								.attr("y", function(d,i) {
-									return i * 60; //The number here should be height + desired gap distance
-								});
+		$(".save-edits-btn").on("click", function(e) {
+			var goalPackage = new Object();
+			goalPackage["user"] = user;
+			var dataLink = escape($(this).attr("data-link"));
+			console.log(dataLink);
+			
+			$("input[data-link="+dataLink+"]").each(function(index) {
+				if($(this).attr("name") == "goal") {
+					goalPackage["goal"] = escape($(this).val());
+				} else if($(this).attr("name") == "goalDays") {
+					goalPackage["goalDays"] = escape($(this).val());
+				}
+			});
+			
+			console.log(goalPackage);
 
-		refreshDom();
+			$.ajax({
+				type: 'POST',
+				url: 'saveGoals.php',
+				data: goalPackage,
+				success: function () {
+					alert('saved');
+				}
+			});
+
+		});
+		
 	});
 	
-
-					
 	</script>
 </head>
 <body>
+<div id="topbar">
 
-	<?php
+</div>
+
+<div id="left-sidebar" class="shadow">
+	<div class="left-sidebar-header">
+		<div class="left-sidebar-logo">
+			<img src="img/module-logo.png"/>
+		</div>
+		<h3>abell5@g.clemson.edu</h3>
+	</div>
+	<div class="left-sidebar-menu">
+		<div class="left-sidebar-item selected">
+			<h4><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>Dashboard</h4>
+		</div>
+		<div class="left-sidebar-item">
+			<h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span>Account</h4>
+		</div>
+		<div class="left-sidebar-item">
+			<h4><span style="color: #f1c40f" class="glyphicon glyphicon-leaf" aria-hidden="true"></span>Premium</h4>
+		</div>	
+	</div>
+</div>
+
+<div id="content">
+	<div class="widget">
+		<div class="widget-header"><h6>Progress</h6></div>
+		<div class="widget-body">
+		
+		<?php
 		$mainTopics = ["Basic Algebra", "Advanced Algebra", "Problem Solving and Data Analysis", "Additional Topics in Math"];
 		$algebraSubtopics = ["Solving linear equations",
 										 "Interpreting linear functions",
@@ -332,34 +384,19 @@ class Dashboard
 		$dashboard = new Dashboard($user, $DBH);
 		$listOfTypes = $dashboard->getListofTypes();
 		
-		
-	?>
-
-	<!--
-	<div class="widget">
-		<div class="widget-header"><h6>Progress</h6></div>
-		<div class="widget-body">
-		</div>
-	</div>
-	-->
-	
-	<div class="widget">
-		<div class="widget-header"><h6>D3js Test</h6></div>
-		<div class="widget-body">	
-			<div id="chart">
-			  
-			</div>
-		</div>
-		
-		
-		
-	</div>
-	
-	<div class="widget">
-		<div class="widget-header"><h6>Progress</h6></div>
-		<div class="widget-body">
-		
-		<?php
+		/*
+		foreach($listOfTypes as $type) {
+			
+			if($perc) {
+				echo "<tr>";
+					echo "<th>" . $type . "</th>";
+					echo "<th>" . $perc . "</th>";
+					echo "<th>" . $dashboard->getNumberByType($type) . "</th>";
+					echo "<th>" . $dashboard->softResponse($perc) . "</th>";
+				echo "</tr>";
+			}
+		}
+		*/
 		
 		foreach($topicStructure as $main => $sub) {
 			echo "<div class='widget-main-item'>
@@ -379,8 +416,41 @@ class Dashboard
 			echo "</div>";
 		}
 		
+		
+		
 		?>
-			
+		
+		
+		</div>
+	</div>
+	
+	<div class="widget">
+		<div class="widget-header"><h6>Goals</h6></div>
+			<div class="widget-body">
+					<?php
+					$goalDash = new Dashboard("mickey", $DBH);
+					
+					?>
+				<div class="light-weight-font">
+					<table>
+						<tr>
+							<th><h7>Target score:</h7>
+							<input type="text" name='goal' data-link="goals" value="<?php echo $goalDash->getGoal(); ?>" maxlength="4" style="width: 65px; margin-left: 8px;"></th>
+						</tr>
+						<tr>
+							<th><h7>I will practice</h7>
+							<input type="text" class="center" data-link="goals" name='goalDays' value="<?php echo $goalDash->getGoalDays(); ?>" maxlength="1" style="width: 30px">
+							<h7>days a week</h7><th>
+						</tr>
+						<tr>
+							<th>
+							<div class="save-edits-btn" data-link="goals">Save edits</div>
+							</th>
+						</tr>
+					</table>
+				</div>
+				
+			</div>
 		</div>
 	</div>
 	
@@ -389,205 +459,207 @@ class Dashboard
 		<div class="widget-header"><h6>Problem Calendar</h6></div>
 		<div class="widget-body">
 			<?php
-				
-			class Calendar
-			{
-				protected $relativeTo;
-				protected $dayTable;
-				protected $user;
-				protected $DBH;
-				protected $n;
-				
-				public function __construct($user, $DBH, $n) {
-					$this->user = $user;
-					$this->DBH = $DBH;
-					$this->n = $n;
+	
+class Calendar
+{
+	protected $relativeTo;
+	protected $dayTable;
+	protected $user;
+	protected $DBH;
+	protected $n;
+	
+	public function __construct($user, $DBH, $n) {
+		$this->user = $user;
+		$this->DBH = $DBH;
+		$this->n = $n;
+	}
+	
+	public function getNumberByDay() {
+		$query = "SELECT B.date, C.Num
+						FROM 
+						(
+						select * from (
+						select date_add('2003-01-01 00:00:00.000', INTERVAL n5.num*10000+n4.num*1000+n3.num*100+n2.num*10+n1.num DAY ) as date from
+						(select 0 as num
+						   union all select 1
+						   union all select 2
+						   union all select 3
+						   union all select 4
+						   union all select 5
+						   union all select 6
+						   union all select 7
+						   union all select 8
+						   union all select 9) n1,
+						(select 0 as num
+						   union all select 1
+						   union all select 2
+						   union all select 3
+						   union all select 4
+						   union all select 5
+						   union all select 6
+						   union all select 7
+						   union all select 8
+						   union all select 9) n2,
+						(select 0 as num
+						   union all select 1
+						   union all select 2
+						   union all select 3
+						   union all select 4
+						   union all select 5
+						   union all select 6
+						   union all select 7
+						   union all select 8
+						   union all select 9) n3,
+						(select 0 as num
+						   union all select 1
+						   union all select 2
+						   union all select 3
+						   union all select 4
+						   union all select 5
+						   union all select 6
+						   union all select 7
+						   union all select 8
+						   union all select 9) n4,
+						(select 0 as num
+						   union all select 1
+						   union all select 2
+						   union all select 3
+						   union all select 4
+						   union all select 5
+						   union all select 6
+						   union all select 7
+						   union all select 8
+						   union all select 9) n5
+						) A
+						where date >=DATE_SUB(NOW(), INTERVAL 90 DAY) and date < NOW()
+						order by date
+						) B
+						LEFT JOIN
+						(
+							SELECT count(`id`) as Num, CAST(`datetime` AS DATE) AS trueDate
+							FROM `response_data`
+							WHERE `user_id` = :user AND `datetime`>=DATE_SUB(Now(), INTERVAL :n DAY)
+							GROUP BY CAST(`datetime` AS DATE) 
+						) C
+						ON B.date = C.trueDate
+						";
+		$stmt = $this->DBH->prepare($query);
+		if($stmt->execute(array(":user"=>$this->user, ":n"=>$this->n))) {
+				$rows = $stmt->fetchAll(PDO::FETCH_BOTH);
+				if(empty($rows)) {
+					return false;
+				} else {					
+					$this->dayTable = $rows;
+					return true;
 				}
-				
-				public function getNumberByDay() {
-					$query = "SELECT B.date, C.Num
-									FROM 
-									(
-									select * from (
-									select date_add('2003-01-01 00:00:00.000', INTERVAL n5.num*10000+n4.num*1000+n3.num*100+n2.num*10+n1.num DAY ) as date from
-									(select 0 as num
-									   union all select 1
-									   union all select 2
-									   union all select 3
-									   union all select 4
-									   union all select 5
-									   union all select 6
-									   union all select 7
-									   union all select 8
-									   union all select 9) n1,
-									(select 0 as num
-									   union all select 1
-									   union all select 2
-									   union all select 3
-									   union all select 4
-									   union all select 5
-									   union all select 6
-									   union all select 7
-									   union all select 8
-									   union all select 9) n2,
-									(select 0 as num
-									   union all select 1
-									   union all select 2
-									   union all select 3
-									   union all select 4
-									   union all select 5
-									   union all select 6
-									   union all select 7
-									   union all select 8
-									   union all select 9) n3,
-									(select 0 as num
-									   union all select 1
-									   union all select 2
-									   union all select 3
-									   union all select 4
-									   union all select 5
-									   union all select 6
-									   union all select 7
-									   union all select 8
-									   union all select 9) n4,
-									(select 0 as num
-									   union all select 1
-									   union all select 2
-									   union all select 3
-									   union all select 4
-									   union all select 5
-									   union all select 6
-									   union all select 7
-									   union all select 8
-									   union all select 9) n5
-									) A
-									where date >=DATE_SUB(NOW(), INTERVAL 90 DAY) and date < NOW()
-									order by date
-									) B
-									LEFT JOIN
-									(
-										SELECT count(`id`) as Num, CAST(`datetime` AS DATE) AS trueDate
-										FROM `response_data`
-										WHERE `user_id` = :user AND `datetime`>=DATE_SUB(Now(), INTERVAL :n DAY)
-										GROUP BY CAST(`datetime` AS DATE) 
-									) C
-									ON B.date = C.trueDate
-									";
-					$stmt = $this->DBH->prepare($query);
-					if($stmt->execute(array(":user"=>$this->user, ":n"=>$this->n))) {
-							$rows = $stmt->fetchAll(PDO::FETCH_BOTH);
-							if(empty($rows)) {
-								return false;
-							} else {					
-								$this->dayTable = $rows;
-								return true;
-							}
-				
-					}				
-				}
-				
-				public function createCalendarArray() {
-					if(!isset($this->dayTable)) {
-						if(!$this->getNumberByDay()) {
-							return false;
-						}
-					}
-					
-					$firstDay = date('w', strtotime($this->dayTable[0]["date"]));
-					$calendarWidth = ceil($this->n / 7)+1;
-					$calendarArray = [];
-					$calendarValueArray = [];
-					$headerRows = [];
-					
-					$k = 0; //This is the counter on the dayTable array
-					for($j=0; $j<$calendarWidth; $j++) {
-						for($i=0; $i<7; $i++) {
-							if($k==0) {
-								$i = $firstDay;
-								for($q=0; $q<$i; $q++) {
-									$calendarArray[$j][$q] = NULL;
-									$calendarValueArray[$j][$q] = -1;
-								}
-							} 
-							if($k < $this->n) {
-							//echo $i . "<br>";
-								$calendarArray[$j][$i] = substr($this->dayTable[$k]['date'],0,10);
-								$calendarValueArray[$j][$i] = $this->dayTable[$k]['Num'];
-								if (is_null($this->dayTable[$k]['Num'])) {
-									$calendarValueArray[$j][$i] = 0;
-								}
-								$k=$k+1;
-							} else {
-								$calendarValueArray[$j][$i] = 0;
-								$calendarArray[$j][$i] = NULL;
-							}
-						}
-					}
-					
-					//echo $calendarArray[0][0] . "<br><br>";
-					//echo $calendarArray[1][0] . "<br><br>";
-					//echo $calendarArray[2][0] . "<br><br>";
-					//var_dump($calendarArray);
-					
-					$highTopLevel = [];
-					foreach($calendarValueArray as $topLevel) {
-						array_push($highTopLevel, max($topLevel));
-					}
-					$highestValue = max($highTopLevel);
-					if($highestValue != 0) {
-						//Normalize all values in the table.
-						for($a=0; $a < sizeOf($calendarValueArray); $a++) {
-							for($b=0; $b < 7; $b++) {
-								$norm = ($calendarValueArray[$a][$b] - 0) / ($highestValue);
-								$calendarValueArray[$a][$b] = $norm;
-							}
-						}		
-					
-						echo "<table>";
-					
-						$dayLabels = ["Su","M","Tu","W","Th","F","Sa"];
-						
-						$k2 = 0; //Count of placed boxes.  Can maybe use this to leverage month labels.
-						for($m=0; $m<7; $m++) {
-							//Row actions
-							echo "<tr>";
-								echo "<th class='center'>" . $dayLabels[$m] . "</th>";
-								for($n=0; $n < sizeOf($calendarArray); $n++) {
-										//echo "<th>" . $calendarArray[$n][$m] . "</th>";
-										//echo $calendarArray[$n][$m] . "<br>";
-											if($calendarValueArray[$n][$m] == 0 && isset($calendarArray[$n][$m])) {
-												echo "<th>" . "<div class='square' title='" . $calendarArray[$n][$m] . "'
-																	  style='background-color: #ecf0f1 !important'
-																	></div>" . "</th>";
-												$k2 = $k2+1;
-											} else {
-												
-												echo "<th>" . "<div class='square' title='" . $calendarArray[$n][$m] . "'
-																		  style='opacity: " . $calendarValueArray[$n][$m] . "'
-																		></div>" . "</th>";
-												$k2 = $k2+1;
-											}
-											//echo "($m,$n)<br>";
-
-
-								}			
-							echo "</tr>";
-						}
-						
-						echo "</table>";
-					
-					} else {
-						echo "You haven't done any problems yet!  Start learning!";
-					}
-				}
-				
+	
+		}				
+	}
+	
+	public function createCalendarArray() {
+		if(!isset($this->dayTable)) {
+			if(!$this->getNumberByDay()) {
+				return false;
 			}
-						
-			$cal = new Calendar($user, $DBH, 90);
-			$cal->createCalendarArray();
+		}
+		
+		$firstDay = date('w', strtotime($this->dayTable[0]["date"]));
+		$calendarWidth = ceil($this->n / 7)+1;
+		$calendarArray = [];
+		$calendarValueArray = [];
+		$headerRows = [];
+		
+		$k = 0; //This is the counter on the dayTable array
+		for($j=0; $j<$calendarWidth; $j++) {
+			for($i=0; $i<7; $i++) {
+				if($k==0) {
+					$i = $firstDay;
+					for($q=0; $q<$i; $q++) {
+						$calendarArray[$j][$q] = NULL;
+						$calendarValueArray[$j][$q] = -1;
+					}
+				} 
+				if($k < $this->n) {
+				//echo $i . "<br>";
+					$calendarArray[$j][$i] = substr($this->dayTable[$k]['date'],0,10);
+					$calendarValueArray[$j][$i] = $this->dayTable[$k]['Num'];
+					if (is_null($this->dayTable[$k]['Num'])) {
+						$calendarValueArray[$j][$i] = 0;
+					}
+					$k=$k+1;
+				} else {
+					$calendarValueArray[$j][$i] = 0;
+					$calendarArray[$j][$i] = NULL;
+				}
+			}
+		}
+		
+		//echo $calendarArray[0][0] . "<br><br>";
+		//echo $calendarArray[1][0] . "<br><br>";
+		//echo $calendarArray[2][0] . "<br><br>";
+		//var_dump($calendarArray);
+		
+		$highTopLevel = [];
+		foreach($calendarValueArray as $topLevel) {
+			array_push($highTopLevel, max($topLevel));
+		}
+		$highestValue = max($highTopLevel);
+
+		for($a=0; $a < sizeOf($calendarValueArray); $a++) {
+			for($b=0; $b < 7; $b++) {
+				$norm = ($calendarValueArray[$a][$b] - 0) / ($highestValue);
+				$calendarValueArray[$a][$b] = $norm;
+			}
+		}		
+		
+		//Normalize all values in the table.
+
+		
+		echo "<table>";
+		
+		$dayLabels = ["Su","M","Tu","W","Th","F","Sa"];
+		
+		$k2 = 0; //Count of placed boxes.  Can maybe use this to leverage month labels.
+		for($m=0; $m<7; $m++) {
+			//Row actions
+			echo "<tr>";
+				echo "<th class='center'>" . $dayLabels[$m] . "</th>";
+				for($n=0; $n < sizeOf($calendarArray); $n++) {
+						//echo "<th>" . $calendarArray[$n][$m] . "</th>";
+						//echo $calendarArray[$n][$m] . "<br>";
+							if($calendarValueArray[$n][$m] == 0 && isset($calendarArray[$n][$m])) {
+								echo "<th>" . "<div class='square' title='" . $calendarArray[$n][$m] . "'
+													  style='background-color: #ecf0f1 !important'
+													></div>" . "</th>";
+								$k2 = $k2+1;
+							} else {
+								
+								echo "<th>" . "<div class='square' title='" . $calendarArray[$n][$m] . "'
+														  style='opacity: " . $calendarValueArray[$n][$m] . "'
+														></div>" . "</th>";
+								$k2 = $k2+1;
+							}
+							//echo "($m,$n)<br>";
+
+
+				}			
+			echo "</tr>";
+		}
+		
+		echo "</table>";
+		
+	}
+	
+	
+}
+			
+$cal = new Calendar('2d91c27926e158e1e39d0aa07a21ac5a', $DBH, 90);
+$cal->createCalendarArray();
 			
 			?>
 		</div>
+	
+	</div>
 
 </body>
 </html>

@@ -39,21 +39,4 @@ try {
 	echo "Uh-oh";
 }
 
-
-/*
-function get_mc($mc_id, $DB) {
-
-	$query = "SELECT `value` FROM `mc` WHERE `q_id` = :qid";
-	$stmt = $DB->prepare($query);
-	$stmt->bindValue(':qid',$mc_id);
-	//Get rows
-	if($stmt->execute()) {
-		$options = $stmt->fetchAll(PDO::FETCH_COLUMN);
-		$length = sizeof($options);
-		$options['num_of_response'] = $length;
-		return $options;
-	}
-	
-}
-*/
 ?>

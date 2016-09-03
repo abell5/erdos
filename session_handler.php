@@ -1,6 +1,7 @@
 <?php
 ini_set('session.cookie_httponly',true);
-require_once('include/db_connect.php');
+require_once('encryptionFunctions.php');
+
 
 
 function sessionDestroy() {
@@ -8,25 +9,30 @@ function sessionDestroy() {
 	session_destroy();
 }
 
-function sessionLogin($email, $premium) {
-	sessionPersist();
-	
-	$_SESSION['canary']['loggedin'] = true;
-	$_SESSION['canary']['email'] = $email;
-	$_SESSION['canary']['premium'] = $premium;
-	
-	var_dump($_SESSION['canary']);
-}
-
 function openSession() {
+	$userId = md5(session_id() . rand() . time() );
 	$_SESSION['canary'] = [
 		'birth' => time(),
 		'IP' => $_SERVER['REMOTE_ADDR'],
 		'loggedin' => false,
-		'id' => md5(session_id() . rand() . time() ),
+		'id' => $userId,
 		'premium' => 0
 	];
+	addUnregisteredUser($userId);
 }
+
+function addUnregisteredUser($id) {
+	require_once('include/db_connect.php');
+
+	$query = "INSERT INTO `users` (`userId`,`datetimeCreated`) VALUES (:user, Now())";
+	$stmt = $DBH->prepare($query);	
+	if($stmt->execute(array(":user"=>$id))) {
+		return true;
+	} else {
+		//Error handling
+	}
+}
+
 
 function sessionPersist() {
 	session_start();
@@ -50,6 +56,17 @@ function sessionPersist() {
 		}
 	}
 }
+
+function sessionLogin($email, $premium) {
+	sessionPersist();
+	
+	$_SESSION['canary']['loggedin'] = true;
+	$_SESSION['canary']['email'] = $email;
+	$_SESSION['canary']['premium'] = $premium;
+	
+	var_dump($_SESSION['canary']);
+}
+
 
 
 /*

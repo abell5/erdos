@@ -71,6 +71,7 @@ if(isset($_GET['error'])) {
 			var elem = $("input[name=confirmPass]");
 			if( $("input[name=pass]").val() == elem.val() && elem.val() != "") {
 				$("input[type=submit]").removeAttr('disabled');
+				$("input[type=submit]").removeClass('register-disabled');
 				$('.sub-right').hide();
 				console.log("entered");
 			} else {

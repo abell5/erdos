@@ -101,7 +101,7 @@ h3 {
 		</div>
 		<div class="topbar-right-links">
 			<a href="about.php"><h4>About</h3></a>
-			<a href="profile.php"><h4>Learn</h4></a>
+			<a href="app.php"><h4>Learn</h4></a>
 			<a href="login.php"><h4>Sign in</h4></a>
 			<a href ="register.php" class="sign-up-button"><h4>Sign up</h4></a>
 		</div>

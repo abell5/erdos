@@ -1,6 +1,8 @@
 <?php
 require_once('include/db_connect.php');
 require_once('encryptionFunctions.php');
+require_once('session_handler.php');
+sessionPersist();
 
 /**Retrieve posted variables **/
 $email = $_POST['email'];
@@ -8,6 +10,15 @@ $pass = $_POST['pass'];
 $confirmPass = $_POST['confirmPass'];
 
 $errors = [];
+
+/*Check that private key was generated-- if it wasn't, may be a case of session hijacking*/
+if(!isset($_SESSION['canary']['id'])) {
+	array_push($errors, "An error occured and user session could not be retrieved");
+} else {
+	$user = $_SESSION['canary']['id'];
+}
+
+
 /* Check e-mail */
 if(filter_var($email, FILTER_VALIDATE_EMAIL)!=$email) {
 	array_push($errors, "Please enter a valid e-mail address.");
@@ -18,6 +29,7 @@ $pattern = "/[a-zA-Z0-9._^%$#!~@-]{5,17}$/";
 if(!preg_match($pattern, $pass)) {
 	array_push($errors, "Password is invalid");
 }
+
 
 /* Check username length */
 /*
@@ -41,6 +53,8 @@ if($stmt->rowCount() > 0) {
 	array_push($errors, "Someone with that e-mail address is already learning on Erdos!");
 }
 
+
+
 /*** End checks ***/
 
 
@@ -55,11 +69,12 @@ if(!empty($errors)) {
 } else {
 	$confirmcode = md5($email . rand());
 	
-	$query = "INSERT INTO `users` (`password`,`email`,`confirmcode`)
-				VALUES (:password, :email, :confirmcode)";
+	$query = "UPDATE `users`
+					SET `password`=:password,`email`=:email,`confirmcode`=:confirmcode
+					WHERE `userId`=:user";
 	$encryptedPassword = password_encrypt($pass);
 	$stmt = $DBH->prepare($query);
-	if($stmt->execute(array(":password"=>$encryptedPassword, ":email"=>$email, ":confirmcode"=>$confirmcode))) {
+	if($stmt->execute(array(":password"=>$encryptedPassword, ":email"=>$email, ":confirmcode"=>$confirmcode,":user"=>$user))) {
 		sendConfirmationEmail($email,$confirmcode);
 		echo "success";
 		return true;

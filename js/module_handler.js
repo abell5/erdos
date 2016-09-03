@@ -53,7 +53,7 @@ Problem.prototype.build = function(pid, callback) {
 			curr_prob.type=data['problem']['type'];
 			curr_prob.image=data['problem']['image'];
 			
-			if(callback !== null) { callback(curr_prob); }
+			if(callback) { callback(curr_prob); }
 		},
 		error: function(xhr) {
 			console.log("error");

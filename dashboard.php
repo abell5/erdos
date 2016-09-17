@@ -332,7 +332,61 @@ class Dashboard
 		$topicStructure = $dashboard->getTopicStructure();
 		
 	?>
+	
+	<!-- d3js style -->
+	<style>
+	.bar {
+		fill: #3498db;
+	}
+		.bar:hover {
+			fill:#2980b9	;
+		}
+		
+	.title {
+	  font: bold 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	}
 
+	.x-axis {
+		font-size: 14px;
+		font-family: 'Montserrat', sans-serif !important;
+	}
+		.x-axis path {
+			display:none;
+		}
+		.x-axis .tick line {
+			display: none;
+		}
+
+	.y-axis {
+		font-size: 14px;
+		font-family: 'Montserrat', sans-serif !important;
+		text-align: right !important;
+	}
+	
+	.y-axis .tick line {
+		stroke: #777;
+		stroke-dasharray: 2,2;
+	}
+		.y-axis path {
+			display: none;
+		}
+	
+	.y-axis path {
+	}
+
+	
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+
+	.x.axis path {
+	  display: none;
+	}
+	</style>
+	
 	<script language="Javascript">
 	$(document).ready(function(){ 
 			
@@ -343,8 +397,15 @@ class Dashboard
 			});
 		});
 		
-		/*D3js widget*/
+		$(".square").mouseover(function() {
+			$(this).children(".arrow_box").show();
+		}).mouseout(function() {
+			$(this).children(".arrow_box").hide();
+		});
+
 		
+		/*D3js widget*/
+		/*
 		var dataArray = <?php
 								$percentageData = array();
 								
@@ -358,6 +419,106 @@ class Dashboard
 								
 								//var_dump($percentageData);
 								?>;
+		console.log(dataArray);
+		*/
+		
+		var dataArray = [
+								{"major_topic": "Problem Solving and Data Analysis", "percentage": 0.59},
+								{"major_topic": "Problem Solving2", "percentage": 0.4},
+								{"major_topic": "Problem Solving3", "percentage": 0.8}
+								]
+		dataArrayMax = function(dataArray) {
+			var percs = [];
+			dataArray.forEach(function(d) {
+				percs.push(d.percentage)
+			});
+			return Math.max.apply(Math,percs);
+		}
+		
+		function wrap(text, width) {
+		  text.each(function() {
+			var text = d3.select(this),
+				words = text.text().split(/\s+/).reverse(),
+				word,
+				line = [],
+				lineNumber = 0,
+				lineHeight = 1.1, // ems
+				y = text.attr("y"),
+				dy = parseFloat(text.attr("dy")),
+				tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+			while (word = words.pop()) {
+			  line.push(word);
+			  tspan.text(line.join(" "));
+			  if (tspan.node().getComputedTextLength() > width) {
+				line.pop();
+				tspan.text(line.join(" "));
+				line = [word];
+				tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+			  }
+			}
+		  });
+		}
+
+		var margin = {top: 20, right: 20, bottom: 50, left: 50},
+			  width = 600 - margin.left - margin.right,
+			  height = 300 - margin.top - margin.bottom;
+			  
+		var x = d3.scaleBand()
+							.rangeRound([0,width])
+							.domain(dataArray.map(function(d) { return d.major_topic; }))
+							.paddingInner(0.15)
+							.paddingOuter(0.25);
+		
+		var y = d3.scaleLinear().domain([1,0])
+											.range([0,height]);
+		
+		var xAxis = d3.axisBottom(x);
+		
+		var yAxis = d3.axisRight(y).ticks(5, "%")
+											   .tickSize(width);
+		
+		var svg = d3.select("#chart").append("svg")
+							.attr("width", width+margin.left+margin.right)
+							.attr("height",height+margin.top+margin.bottom)
+							.append("g")
+								.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		
+		/*Title example
+		svg.append("text")
+		      .attr("class", "title")
+			  .attr("x", x(dataArray[0].name))
+			  .attr("y", -26)
+			  .text("Why Are We Leaving Facebook?"); */
+		  
+		svg.append("g")
+				.attr("class", "x-axis")
+				.attr("transform", "translate(0," + height + ")")
+				.call(xAxis)
+					.selectAll(".tick text")
+					.call(wrap, x.bandwidth())
+					.attr("transform", "translate(18,0)");
+		
+		var gy = svg.append("g")
+						.attr("class", "y-axis")
+						.call(yAxis);
+
+		gy.selectAll("text")
+			.attr("x", 0)
+			.attr("dy", -4);
+						
+		svg.selectAll(".bar")
+			 .data(dataArray)
+			 .enter().append("rect")
+					.attr("class","bar")
+					.attr("x", function(d) {return x(d.major_topic); })
+					.attr("width", x.bandwidth())
+					.attr("y", function(d) { return y(d.percentage); })
+					.attr("height", function(d) {return height - y(d.percentage) })
+					.attr("transform", "translate(18,0)"); //Inner margin
+			
+		
+
+		/*
 		//console.log("hello");
 		console.log(dataArray);
 		getData = function(dataArray) {						
@@ -431,7 +592,7 @@ class Dashboard
 			.call(Yaxis)
 			
 		refreshDom();
-	
+		*/
 	
 	});
 	
@@ -635,6 +796,8 @@ class Dashboard
 					//echo $calendarArray[2][0] . "<br><br>";
 					//var_dump($calendarArray);
 					
+					$unnormalizedCalendarValueArray = $calendarValueArray;
+					
 					$highTopLevel = [];
 					foreach($calendarValueArray as $topLevel) {
 						array_push($highTopLevel, max($topLevel));
@@ -662,15 +825,15 @@ class Dashboard
 										//echo "<th>" . $calendarArray[$n][$m] . "</th>";
 										//echo $calendarArray[$n][$m] . "<br>";
 											if($calendarValueArray[$n][$m] == 0 && isset($calendarArray[$n][$m])) {
-												echo "<th>" . "<div class='square' title='" . $calendarArray[$n][$m] . "'
+												echo "<th>" . "<div class='square'
 																	  style='background-color: #ecf0f1 !important'
-																	></div>" . "</th>";
+																	><div class='arrow_box'>" . $unnormalizedCalendarValueArray[$n][$m] . " problems answered on " . $calendarArray[$n][$m] . "</div></div>" . "</th>";
 												$k2 = $k2+1;
 											} else {
 												
-												echo "<th>" . "<div class='square' title='" . $calendarArray[$n][$m] . "'
+												echo "<th>" . "<div class='square'
 																		  style='opacity: " . $calendarValueArray[$n][$m] . "'
-																		></div>" . "</th>";
+																		><div class='arrow_box'>" . $unnormalizedCalendarValueArray[$n][$m] . " problems answered on " . $calendarArray[$n][$m] . "</div>" . "</th>";
 												$k2 = $k2+1;
 											}
 											//echo "($m,$n)<br>";

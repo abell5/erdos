@@ -19,21 +19,12 @@ require_once('session_handler.php');
 sessionPersist();
 
 global $user;
-
-if(isset($_SESSION['canary']['email'])) {
-	$user = $_SESSION['canary']['email'];
-} elseif(isset($_SESSION['canary']['id'])) {
-	$user = $_SESSION['canary']['id'];
-}
-
-/********THIS IS A TEST STATEMENT, REMOVE THIS LATER************/
-$user = 'ef82ad19df592dd26dc9e1e2b4563a63';
-
-//echo $user;
-//echo "<br><br>";
+$user = getUserID();
 
 /*I will move these dashboard functions to their own file later*/
 require_once('include/db_connect.php');
+
+
 
 
 
@@ -50,7 +41,11 @@ require_once('include/db_connect.php');
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 <!--JQuery-->
+<!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+-->
+
+<script src="js/jquery.js"></script>
 <!-- Bootstrap Core JavaScript and CSS -->
 <script src="js/bootstrap.min.js"></script>
 <link href="css/bootstrap.css" rel="stylesheet">
@@ -77,22 +72,34 @@ require_once('include/db_connect.php');
 			$("#left-sidebar").height($(document).height());
 		}
 		
+		$(".notice").on("click", ".app-notice-close-btn",function(e) {
+			$(this).parents(".app-notice").hide();
+		});
+		
 		refreshDom()
 		
 	});
 	</script>
-	
+<?php include_once("analyticstracking.php") ?>	
 </head>
 <body>
 <div id="topbar">
+	<div class="topbar-inset">
+		<div class="topbar-menu-right">
+			
+			<?php if(isset($_SESSION['canary']['email'])) {
+								echo '<a href="logout.php"><div class="topbar-button topbar-button-rightborder">Sign out</div></a>';
+								echo '<a href="app.php?p=profile"><div class="topbar-button">' . $_SESSION['canary']['email'] . '</div></a>';
+						} else {
+							echo '<a href="register.php"><div class="topbar-button  topbar-button-rightborder ">Register</div></a>';
+							echo '<a href="login.php"><div class="topbar-button">Sign in</div></a>';
+						} ?>
 
+		</div>
+	</div>
 </div>
 
 <div id="left-sidebar" class="shadow">
-	<div class="left-sidebar-header">
-
-		<h3>abell5@g.clemson.edu</h3>
-	</div>
 	<div class="left-sidebar-menu">
 		<div class="left-sidebar-item" name="practice">
 			<h4><span class="glyphicon glyphicon-apple" aria-hidden="true"></span>Practice</h4>
@@ -110,7 +117,6 @@ require_once('include/db_connect.php');
 </div>
 
 <div id="content">
-<?php include_once("analyticstracking.php") ?>
 
 <?php include_once($page . ".php"); ?>
 	

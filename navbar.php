@@ -25,11 +25,11 @@
 	 float:left;
 	 padding-top: 8px;
 	 padding-left: 10px;
-	 color: #27ae60;
+	 color: #2980b9;
  }
 	.topbar-left-logo a {
 		text-decoration: none;
-		color: #27ae60;
+		color: #2980b9;
 	}
  
  .topbar-right-links {
@@ -97,7 +97,7 @@ h3 {
 <div id="topbar">
 	<div class="topbar-inset">
 		<div class="topbar-left-logo">
-			<a href="newhome.php"><h3>Erdos</h3></a>
+			<a href="newhome.php"><h3>Bright</h3></a>
 		</div>
 		<div class="topbar-right-links">
 			<a href="about.php"><h4>About</h3></a>

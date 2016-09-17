@@ -1,11 +1,12 @@
 jQuery(function ($) {
 	
-var Problem = function(id,callback, text,answer,branches,type, child, parent,onCorrect,choiceSet,module,image) {
+var Problem = function(id,callback, text,answer,branches,major_topic,subtopic,child, parent,onCorrect,choiceSet,module,image) {
 	if(typeof callback === "undefined"){callback=null;}
 	if(typeof text=== "undefined"){text=null;}
 	if(typeof answer=== "undefined"){answer=null;}
 	if(typeof branches === "undefined"){branches=null;}
-	if(typeof type === "undefined"){type=null;}
+	if(typeof major_topic === "undefined"){major_topic=null;}
+	if(typeof subtopic === "undefined"){subtopic=null;}
 	if(typeof child=== "undefined"){child=null;}
 	if(typeof parent === "undefined"){parent=null;}
 	if(typeof onCorrect === "undefined"){onCorrect=null;}
@@ -24,7 +25,8 @@ var Problem = function(id,callback, text,answer,branches,type, child, parent,onC
 	
 	this.branches = branches; //Branches are stored as an array of 2 dimensional arrays... a pointer
 										 //and an action. Ex. [ [pointer1,action1], [pointer2,action2] ... ]
-	this.type = type;
+	this.major_topic=major_topic;
+	this.subtopic = subtopic;
 	this.child = child;
 	this.parent = parent;
 	this.onCorrect = onCorrect;
@@ -50,7 +52,8 @@ Problem.prototype.build = function(pid, callback) {
 			curr_prob.id = data['problem']['id'];
 			curr_prob.text = data['problem']['text'];
 			curr_prob.answer=data['problem']['answer'];
-			curr_prob.type=data['problem']['type'];
+			curr_prob.major_topic=data['problem']['major_topic'];
+			curr_prob.subtopic=data['problem']['subtopic'];
 			curr_prob.image=data['problem']['image'];
 			
 			if(callback) { callback(curr_prob); }
@@ -61,7 +64,7 @@ Problem.prototype.build = function(pid, callback) {
 	});
 }
 
-postResponse = function(pid,ptext,response,response_text,module,type,correct_answer,displayedTree) {
+postResponse = function(pid,ptext,response,response_text,module,major_topic,subtopic,correct_answer,displayedTree) {
 	$.ajax({
 		type: 'post',
 		url: 'post_response_data.php',
@@ -71,7 +74,8 @@ postResponse = function(pid,ptext,response,response_text,module,type,correct_ans
 			response: response,
 			response_text: response_text,
 			module: module,
-			type: type,
+			major_topic: major_topic,
+			subtopic: subtopic,
 			correct_answer: correct_answer,
 			displayedTree: displayedTree
 		},
@@ -89,15 +93,39 @@ function scroll_to(div){
 	}, 500);
 }
 
+function newNotice(text) {
+	var $notice = $("<div>", {class: "app-notice"});	
+	var $header = $("<div>", {class: "app-notice-header-box"});
+		$header.html('<div class="app-notice-header"><h6>Notice</h6></div><div class="app-notice-close-btn"><span style="" class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>');		
+	var $body  = $("<div>", {class: "app-notice-body"});
+		$body.html(text);
+	
+	$notice.append($header);
+	$notice.append($body);
+	
+	return $notice;
+}
+
+function redirectToDashboard() {
+	var text = "Awesome job finishing another module!<br><br>We have updated your progress in <a href='app.php?p=dashboard'>your dashboard</a>.";
+	$notice = newNotice(text);
+	$(".Notice").append($notice);
+	$notice.show();
+}
+
 Problem.prototype.checkAnswer = function(ans) {
 	var choice = findChoiceByLetter(ans, this.choiceSet);
 	var instructions = choice['action'];
 	var assist_text = choice['assist_text'];
 	if(this.module.noData==false) {
-		postResponse(this.id,this.text,ans,choice['text'],this.module.name,this.type,this.answer,this.module.displayedTree);
+		postResponse(this.id,this.text,ans,choice['text'],this.module.name,this.major_topic,this.subtopic,this.answer,this.module.displayedTree);
 	}
 	if(this.answer==ans) { //if the answer is correct, disble the button and display correct
-		disableButtonOnCorrect(this.id);	
+		disableButtonOnCorrect(this.id);
+		if(this.id == this.module.key_ids[this.module.key_ids.length-1]) {
+			console.log("last question");
+			redirectToDashboard();	
+		}
 	}
 	if(assist_text != "") {
 		this.module.displayHelperText(this.id, assist_text);

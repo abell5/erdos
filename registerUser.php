@@ -76,7 +76,9 @@ if(!empty($errors)) {
 	$stmt = $DBH->prepare($query);
 	if($stmt->execute(array(":password"=>$encryptedPassword, ":email"=>$email, ":confirmcode"=>$confirmcode,":user"=>$user))) {
 		sendConfirmationEmail($email,$confirmcode);
-		echo "success";
+		sessionLogin($user,$email,0);
+		header("Location: app.php?p=practice");
+		die();
 		return true;
 	} else {
 		echo "Crticial error that may or may not be related to your user activity.";
@@ -94,6 +96,7 @@ function sendConfirmationEmail($email,$key) {
 	
 	echo $message;
 	mail($email,"Erdos Confirm Email", $message, "From: welcome@geterdos.com");
+
 	
 }
 

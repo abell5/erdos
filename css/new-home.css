@@ -25,7 +25,7 @@
 	float:left;
 	margin-top: 55px;
 	width: 100%;
-	height: 480px;
+	height: 540px;
 	 background: url("../img/paint.png") no-repeat fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -69,6 +69,13 @@
 		font-size: 24px;
 	}
  
+	.home-content-negative {
+		background-color: #ecf0f1;
+		border-top: 1px solid #bdc3c7;
+		border-bottom: 1px solid #bdc3c7;
+		margin-bottom: 50px;
+	}
+	
  .topbar-inset {
 	 position: relative;
 	 width: 75%;
@@ -250,8 +257,9 @@ h6 {
 	.home-content-img-tracking {
 		display:inline-block;
 		float:right;
-		height: 460px;
+		height: 380px;
 		width: 500px;
+		margin-top: 40px;
 		
 		background: url(../img/home/progress1.png) no-repeat;
 		background-size: contain;	
@@ -260,7 +268,7 @@ h6 {
 	.home-content-img-ai {
 		display:inline-block;
 		float:right;
-		height: 600px;
+		height: 550px;
 		width: 500px;
 		
 		background: url(../img/home/home-gif-v1.gif) no-repeat;

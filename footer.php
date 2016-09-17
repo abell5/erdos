@@ -1,14 +1,16 @@
     <style type="text/css">
-	footer {
+	#footer {
 		width: 100%;
 		padding: 30px 0;
-		background-color: #353C41;
+		background-color: #34495e;
 		color: #BDC3C7;
 		line-height: 125%;
+		float: left;
+		border-top: 1px solid #2c3e50;
 
 	}
 
-	footer a {
+	$footer a {
 		color: #F2F1EF;
 		text-decoration: underline;
 		
@@ -24,14 +26,14 @@
 	</style>
 	
 	
-	<footer>
+	<div id="footer">
         <div class="container">
 			<div class="row">
 			<div class="col-sm-11 col-sm-offset-1">
 				<!-- Begin MailChimp Signup Form -->
 				<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
 				<style type="text/css">
-					#mc_embed_signup{background:#353C41; clear:left; font:14px Helvetica,Arial,sans-serif;}
+					#mc_embed_signup{background:#34495e; clear:left; font:14px Helvetica,Arial,sans-serif;}
 					/* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
 					   We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
 					
@@ -74,4 +76,4 @@
 				</div>
             </div>
         </div>
-    </footer>
+    </div>

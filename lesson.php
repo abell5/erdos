@@ -66,6 +66,11 @@
 					return liveModule;
 				}
 				
+				
+				
+				$(".menu-minimized").on("click", function(e) {
+					
+				});
 				$("#next_prob").on("click", function(e) {
 					console.log("clicked");
 					$(".slide_button.pressed").next().trigger("click");

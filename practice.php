@@ -1,17 +1,25 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		
+
 		<script type="text/javascript" async
 		  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
 		</script>
 		
 		<link rel="stylesheet" href="css/magic-check.css">
-		<link rel="stylesheet" href="css/master.css">
+		<link rel="stylesheet" href="css/practice.css">
 
 		
 		<script src="js/module_handler.js"></script>
 		<script language="Javascript">
+		
+		/*
+				var mid = <?php
+								if(isset($_GET['mid'])) {
+									echo json_encode($_GET['mid']);
+								} else {
+									echo json_encode(3);
+								}
+								?>;
+				$("#num").append(mid);		
+		*/
 		
 			$(document).ready(function() {
 				var dataBinary = <?php
@@ -25,36 +33,57 @@
 											}
 										}
 										?>;
-				var mid = <?php
-								if(isset($_GET['mid'])) {
-									echo json_encode($_GET['mid']);
-								} else {
-									echo json_encode(3);
-								}
-								?>;
-				$("#num").append(mid);
-								
-				var Module = getModuleObject();
-				var liveModule;
-				$.ajax({
-					url: "get_module.php",
-					type: "get",
-					data: {mid: mid},
-					success: function(response) {
-						var problem_array= $.parseJSON(response);
-						liveModule = new Module(mid, problem_array,dataBinary);
-						liveModule.displayKeys();
-						$("#not-helpful-button-display").show();
-						$( ".slide_button:first" ).trigger( "click" );
-					},
-					error: function(xhr) {
-						console.log("error");
-					}
-				});
 
+				console.log(dataBinary);	
+				
+				
+				openModule = function(mid) {
+					$.ajax({
+						url: "get_module.php",
+						type: "get",
+						data: {mid: mid},
+						success: function(response) {
+							var problem_array= $.parseJSON(response);
+							liveModule = new Module(mid, problem_array,dataBinary);
+							liveModule.displayKeys();
+							$("#not-helpful-button-display").show();
+							$( ".slide_button:first" ).trigger( "click" );		
+						},
+						error: function(xhr) {
+							console.log("error");
+						}
+					});				
+				}
+				
 				getLiveModule = function() {
 					return liveModule;
 				}
+				
+				var liveModule
+				var Module = getModuleObject();
+				//openModule(3);
+
+				collapseMenu = function() {
+					$(".full-menu").hide();
+					$(".menu-minimized").show();
+					refreshDom();
+					/*
+					$(".full-menu").slideUp( "fast", function() {
+						$(".menu-minimized").show();
+					 });
+					 */
+				}
+				
+				clearModule = function() {
+					$("#keys").html("");
+					$("#main-TV").html("");
+					$("#helper-TV").html("");
+				}
+
+				$(".menu-minimized").on("click", function(e) {
+					//$(".menu-minimized").hide();
+					$(".full-menu").toggle();
+				});
 				
 				$("#next_prob").on("click", function(e) {
 					console.log("clicked");
@@ -65,6 +94,25 @@
 					$(".slide_button.pressed").prev().trigger("click");
 				});
 				
+
+
+				$("#mod-list").on("click", function(e) {
+					if($("#mod-list-container").is(":hidden")) {
+						$("#mod-list-container").show();
+					} else {
+						$("#mod-list-container").hide();
+					}
+				});		
+				
+				$(".menu-box").click(function() {
+					var mid = escape($(this).attr("name"));
+					clearModule();
+					openModule(mid);
+					collapseMenu();
+					$(".main-module").show();
+					refreshDom();
+				});
+
 				$("#send_feedback").on("click", function(e) {
 					e.preventDefault();
 					console.log( $("input[name='displayedTree']").val() );
@@ -85,50 +133,10 @@
 					
 					$("#myModal").modal('hide');
 				});
-
-				$("#mod-list").on("click", function(e) {
-					if($("#mod-list-container").is(":hidden")) {
-						$("#mod-list-container").show();
-					} else {
-						$("#mod-list-container").hide();
-					}
-				});
-
-				$("#nav-mod-list").on("click", function(e) {
-					if($("#nav-mod-list-container").is(":hidden")) {
-						$("#nav-mod-list").html('<span style="font-size:16px;" class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>')
-						$("#nav-mod-list-container").slideDown( "fast", function() {
-						// Animation complete.
-					  });
-					} else {
-						$("#nav-mod-list").html('<span style="font-size:16px;" class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>')
-						$("#nav-mod-list-container").slideUp( "fast", function() {
-						// Animation complete.
-					  });
-					}
-				});				
 				
-				$(".left-bar-sub-button").click(function() {
-					var link_mid = escape($(this).attr("name"));
-					if(link_mid!=="next") {
-						window.location="lesson.php?mid="+link_mid;
-						return false;
-					}
-				});
-				$(".nav-mod-navigate").click(function() {
-					var link_mid = escape($(this).attr("name"));
-					if(link_mid!=="next") {
-						window.location="lesson.php?mid="+link_mid;
-						return false;
-					}
-				});				
 			});
 		
 		</script>
-
-	</head>
-
-<body>
 
 <!--
 <div class="left-bar">
@@ -146,6 +154,7 @@
 </div>
 -->
 
+<!--
 <div class="header-bar">
 	<div class="module-box">
 		<h2>Module <div id="num" style="display:inline-block"></div></h2>
@@ -163,8 +172,54 @@
 </div>
 	
 </div>
+-->
+<div class="menu">
+	<div class="menu-minimized">
+		<span class="glyphicon glyphicon-th" aria-hidden="true"></span>Module menu
+	</div>
 
-<div class="main-module">
+	<div class="full-menu">
+		<div class="menu-header">Problem Solving and Data Analysis</div>
+		<div class="menu-content">	
+			<table>
+				<tr>
+					<th>
+						<div class="menu-box" name="3">
+						Module 1:
+						<br>Inspiration, move me brightly
+						</div>
+					</th>
+								<th>
+						<div class="menu-box" name="4">
+						Module 2:
+						<br>Big Bertha
+						</div>
+					</th>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+</div>
+
+<div class="Notice">
+
+<!--
+	<div class="app-notice">
+		<div class="app-notice-header-box">
+			<div class="app-notice-header">
+				<h6>Notice</h6>
+			</div>
+			<div class="app-notice-close-btn">
+				<span style="" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+			</div>
+		</div>
+		<div class="app-notice-body">
+		</div>	
+	</div>
+-->
+</div>
+<div class="main-module" style="display: none">
 		<div class="key-box">
 			<div id="keys"></div>
 			<div class="next btn-group group">
@@ -226,10 +281,4 @@
 <div class="right-bar">
 
 </div>
-	
-</body>
-
-
-
-</html>
 

@@ -5,12 +5,13 @@ global $user;
 $user = getUserID();
 /*I will move these dashboard functions to their own file later*/
 
-
+/*****NOTE:  In the response_data table, the user ID is stored in `user_id`, but in the `users` table it is stored in userId.  This could be a problem in the future, and definitely not clean code.*/
 class Dashboard
 {
 	protected $user;
 	protected $DBH;
-	protected $types;
+	protected $major_topics;
+	protected $subtopics;
 	protected $goal;
 	protected $goalDays;
 	
@@ -19,6 +20,7 @@ class Dashboard
 		$this->DBH = $DBH;
 	}
 	
+	/*
 	public function getProblemsByType($type) {
 		$query = "SELECT *
 						FROM `response_data`
@@ -29,18 +31,30 @@ class Dashboard
 				var_dump($rows);
 		}
 	}
+	*/
 
-	public function getCorrectByType($type) {
+	public function getCorrectByMajorTopic($topic) {
 		$query = "SELECT *
 						FROM `response_data`
-						WHERE `user_id` = :user AND `type` = :type AND `response` = `correct_answer`";
+						WHERE `user_id` = :user AND `major_topic` = :major_topic AND `response` = `correct_answer`";
 		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":type"=>$type))) {
+		if($stmt->execute(array(":user"=>$this->user, ":major_topic"=>$topic))) {
 				$rows = $stmt->fetchAll();
 				var_dump($rows);
 		}
 	}
 
+	public function getCorrectBySubopic($topic) {
+		$query = "SELECT *
+						FROM `response_data`
+						WHERE `user_id` = :user AND `subtopic` = :subtopic AND `response` = `correct_answer`";
+		$stmt = $this->DBH->prepare($query);
+		if($stmt->execute(array(":user"=>$this->user, ":subtopic"=>$topic))) {
+				$rows = $stmt->fetchAll();
+				var_dump($rows);
+		}
+	}
+	
 	public function getProblemsByDiff($diff) {
 		$query = "SELECT A.*, B.difficulty FROM `response_data` as A LEFT JOIN `sat_problems` as B
 						ON A.pid = B.id
@@ -97,13 +111,13 @@ class Dashboard
 		}
 	}
 	
-	public function getNumberByType($type) {
+	public function getNumberByMajorTopic($topic) {
 		$query = "SELECT count(`id`) as Num
 						FROM `response_data`
-						WHERE `user_id` = :user AND `type` = :type
-						GROUP BY `type`";
+						WHERE `user_id` = :user AND `major_topic` = :major_topic
+						GROUP BY `major_topic`";
 		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":type"=>$type))) {
+		if($stmt->execute(array(":user"=>$this->user, ":major_topic"=>$topic))) {
 				$rows = $stmt->fetch();
 				if(empty($rows)) {
 					return 0;
@@ -113,13 +127,45 @@ class Dashboard
 		}		
 	}
 	
-	public function getNumberCorrectByType($type) {
+	public function getNumberBySubtopic($topic) {
 		$query = "SELECT count(`id`) as Num
 						FROM `response_data`
-						WHERE `user_id` = :user AND `type` = :type AND `response` = `correct_answer`
-						GROUP BY `type`";
+						WHERE `user_id` = :user AND `subtopic` = :subtopic
+						GROUP BY `subtopic`";
 		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":type"=>$type))) {
+		if($stmt->execute(array(":user"=>$this->user, ":subtopic"=>$topic))) {
+				$rows = $stmt->fetch();
+				if(empty($rows)) {
+					return 0;
+				} else {
+					return $rows['Num'];
+				}
+		}		
+	}
+	
+	public function getNumberCorrectByMajorTopic($topic) {
+		$query = "SELECT count(`id`) as Num
+						FROM `response_data`
+						WHERE `user_id` = :user AND `major_topic` = :major_topic AND `response` = `correct_answer`
+						GROUP BY `major_topic`";
+		$stmt = $this->DBH->prepare($query);
+		if($stmt->execute(array(":user"=>$this->user, ":major_topic"=>$topic))) {
+				$rows = $stmt->fetch();
+				if(empty($rows)) {
+					return 0;
+				} else {
+					return $rows['Num'];
+				}
+		}				
+	}
+
+	public function getNumberCorrectBySubtopic($topic) {
+		$query = "SELECT count(`id`) as Num
+						FROM `response_data`
+						WHERE `user_id` = :user AND `subtopic` = :subtopic AND `response` = `correct_answer`
+						GROUP BY `subtopic`";
+		$stmt = $this->DBH->prepare($query);
+		if($stmt->execute(array(":user"=>$this->user, ":subtopic"=>$topic))) {
 				$rows = $stmt->fetch();
 				if(empty($rows)) {
 					return 0;
@@ -129,9 +175,9 @@ class Dashboard
 		}				
 	}
 	
-	public function getPercentageByType($type) {
-			$denominator = $this->getNumberByType($type);
-			$numerator = $this->getNumberCorrectByType($type);
+	public function getPercentageByMajorTopic($topic) {
+			$denominator = $this->getNumberByMajorTopic($topic);
+			$numerator = $this->getNumberCorrectByMajorTopic($topic);
 			
 			if($denominator!=0) {
 				$percentage = $numerator/$denominator;
@@ -141,6 +187,18 @@ class Dashboard
 			return $percentage;	
 	}
 
+	public function getPercentageBySubtopic($topic) {
+			$denominator = $this->getNumberBySubtopic($topic);
+			$numerator = 1; $this->getNumberCorrectBySubtopic($topic);
+			
+			if($denominator!=0) {
+				$percentage = $numerator/$denominator;
+			} else {
+				return -1;
+			}
+			return $percentage;	
+	}
+	
 	public function getPercentageByDiff($diff) {
 			$denominator = $this->getNumberByDiff($diff);
 			$numerator = $this->getNumberCorrectByDiff($diff);
@@ -169,9 +227,10 @@ class Dashboard
 		}
 	}
 	
-	public function getListOfTypes() {
-		$query = "SELECT DISTINCT `type`
-						FROM `sat_problems`";
+	public function getListOfMajorTopics() {
+		$query = "SELECT DISTINCT `major_topic`
+						FROM `sat_problems`
+						WHERE `major_topic` != ''";
 		$stmt = $this->DBH->prepare($query);
 		if($stmt->execute()) {
 			$rows=$stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -179,6 +238,16 @@ class Dashboard
 		}			
 	}
 
+	public function getListOfSubtopics() {
+		$query = "SELECT DISTINCT `subtopic`
+						FROM `sat_problems`";
+		$stmt = $this->DBH->prepare($query);
+		if($stmt->execute()) {
+			$rows=$stmt->fetchAll(PDO::FETCH_COLUMN);
+			return $rows;
+		}			
+	}
+	
 	public function getListOfDiffs() {
 		$query = "SELECT DISTINCT `difficulty`
 						FROM `sat_problems`";
@@ -212,6 +281,34 @@ class Dashboard
 			return $rows['goalDays'];
 		}
 	}
+	
+	public function getSubtopicsByMajorTopic($topic) {
+		$query = "SELECT distinct `subtopic`
+						FROM `sat_problems`
+						WHERE `major_topic`= :major_topic";
+		$stmt = $this->DBH->prepare($query);
+		if($stmt->execute(array("major_topic"=>$topic))) {
+			$rows=$stmt->fetchAll(PDO::FETCH_COLUMN);
+			return $rows;
+		}	
+	}
+	
+	public function getTopicStructure() {
+		$topicStructure = (object) null;
+		
+		
+		$majorTopics = $this->getListOfMajorTopics();
+		//var_dump($majorTopics);
+		foreach($majorTopics as $major) {
+			$temp = (array)$topicStructure;
+			$temp[$major] = $this->getSubtopicsByMajorTopic($major);
+			$topicStructure = (object)$temp;
+		}
+		
+		//var_dump($topicStructure);	
+		return $topicStructure;
+		
+	}
 
 	
 }
@@ -219,11 +316,6 @@ class Dashboard
 //$dashboard = new Dashboard($user, $DBH);
 //var_dump($dashboard->getListOfDiffs());
 ?>
-
-<html>
-<head>
-
-
 <!-- d3js -->
 <script src="https://d3js.org/d3.v4.min.js"></script>
 
@@ -232,6 +324,14 @@ class Dashboard
 
 <!--Main page stylesheets-->
 <link rel="stylesheet" href="css/profile.css">
+
+	<?php
+			
+		$dashboard = new Dashboard($user, $DBH);
+		$listOfMajorTopics = $dashboard->getListOfMajorTopics();
+		$topicStructure = $dashboard->getTopicStructure();
+		
+	?>
 
 	<script language="Javascript">
 	$(document).ready(function(){ 
@@ -244,96 +344,102 @@ class Dashboard
 		});
 		
 		/*D3js widget*/
-		var dataArray = [20,40,60];
-		var width = ($("#chart").width() - 20) /*20 is padding on both sides */
-		console.log(width);
-		console.log(Math.max.apply(Math,dataArray));
+		
+		var dataArray = <?php
+								$percentageData = array();
+								
+								foreach($listOfMajorTopics as $major) {
+									$temp = (object) array("major_topic" => $major, "percentage" => $dashboard->getPercentageByMajorTopic($major));
+									array_push($percentageData, $temp);
+									
+									//array_push($percentageData, $dashboard->getPercentageByMajorTopic($major));
+								}
+								echo json_encode($percentageData, JSON_PRETTY_PRINT);
+								
+								//var_dump($percentageData);
+								?>;
+		//console.log("hello");
+		console.log(dataArray);
+		getData = function(dataArray) {						
+			for(var propName in dataArray) {
+				if(dataArray.hasOwnProperty(propName)) {
+					return dataArray[propName];
+					// do something with each element here
+				}
+			}
+		}
+
+		var width = ($("#chart").width() - 20); 
+		//console.log(width);
+		//console.log(Math.max.apply(Math,dataArray));
 		var height = 200;
 		
-		var widthScale = d3.scaleLinear()
-									.domain([0, Math.max.apply(Math,dataArray)])
-									.range([0,width])
+		dataArrayMax = function(dataArray) {
+			var percs = [];
+			dataArray.forEach(function(d) {
+				percs.push(d.percentage)
+			});
+			return Math.max.apply(Math,percs);
+		}
 		
+		var widthScale = d3.scaleLinear()
+									.domain([0, dataArrayMax(dataArray)])
+									.range([0,width]);
+		
+		//var Xaxis = d3.axisLeft(widthScale);
+		var Xaxis = d3.axisBottom(widthScale)
+							  .ticks(5);
+		var Yaxis = d3.axisLeft( d3.scaleLinear().range([0,width]) )
+							  .ticks(5);
+							  
 		var canvas = d3.select("#chart")
 								.append("svg")
 								.attr("width", width)
-								.attr("height", height);
+								.attr("height", height)
+								.append("g")
+								.attr("transform", "translate(30,30)");				
+		
+		console.log(dataArray);
 		
 		var bars = canvas.selectAll("rect")
 							.data(dataArray)
 							.enter()
-								.append("rect")
-								.attr("width", function(d) {
-										return widthScale(d);
-									})
-								.attr("height", 50)
-								.attr("fill", "green")
-								.attr("y", function(d,i) {
-									return i * 60; //The number here should be height + desired gap distance
-								});
-
+							.append("rect")
+							.append("text");
+		
+		var rectAttributes = bars
+									  .attr("width", function(d) {
+												return widthScale( d.percentage );
+											})
+										.attr("height", 50)
+										.attr("fill", "green")
+										.attr("y", function(d,i) {
+											return i * 60; //The number here should be height + desired gap distance
+										});
+		var textAttributes = text
+									  .attr("fill", "white")
+									  .attr("y", function(d,i) {return i * 60; })
+									  .text( function (d) { return d.name; });
+									  
+		
+		
+		canvas.append("g")
+			.attr("transform","translate(0,150)")
+			.call(Xaxis);
+		
+		canvas.append("g")
+			.call(Yaxis)
+			
 		refreshDom();
+	
+	
 	});
 	
 
 					
 	</script>
-</head>
-<body>
 
-	<?php
-		$mainTopics = ["Basic Algebra", "Advanced Algebra", "Problem Solving and Data Analysis", "Additional Topics in Math"];
-		$algebraSubtopics = ["Solving linear equations",
-										 "Interpreting linear functions",
-										 "Linear inequality and equation problems",
-										 "Graphing linear equations",
-										 "Linear function word problems",
-										 "Systems of linear inequatlities",
-										 "Solving systems of linear equations",
-										];
-		$advancedAlgebraSubtopics = ["Solving quadratic equations",
-													   "Interpreting nonlinear expression",
-													    "Quadratic and exponentials",
-														"Radicals and rational exponents",
-														"Operations with radicals and polynomials",
-														"Polynomial factors and graphs",
-														"Nonlinear equation graphs",
-														"Linear and quadratic systems",
-														"Structure in expressions",
-														"Isolating quantities",
-														"Functions"
-													   ];
-		$psdaSubtopics = ["Ratios, rates,  and proportions",
-								    "Percents",
-									"Units",
-									"Table data",
-									"Scatterplots",
-									"Key feature of graphs",
-									"Linear and exponential growth",
-									"Data inferences",
-									"Center, spread, and shape of distributions",
-									"Data collection and conclusions"
-									];
-		$atmSubtopics = ["Volume word problems",
-								    "Right triangle word problems",
-									"Congruence and similarity",
-									"Right triangle geometry",
-									"Angles, arc lengths, and trig functions",
-									"Circle theorems",
-									"Circle equations",
-									"Complex numbers"
-									];
-									
-		$topicStructure = (object) array("Basic Algerba" => $algebraSubtopics,
-														  "Advanced Algebra" => $advancedAlgebraSubtopics,
-														  "Problem Solving and Data Analysis" => $psdaSubtopics,
-														  "Additional Topics in Math" => $atmSubtopics);
-		
-		$dashboard = new Dashboard($user, $DBH);
-		$listOfTypes = $dashboard->getListofTypes();
-		
-		
-	?>
+
 
 	<!--
 	<div class="widget">
@@ -367,7 +473,7 @@ class Dashboard
 					</div>";
 			echo "<div class='widget-subtopic-container' name='".str_replace(' ', '', $main)."'>";
 				for($i = 0; $i < sizeof($sub); $i++) {
-					$perc = $dashboard->getPercentageByType($sub[$i]);
+					$perc = $dashboard->getPercentageBySubtopic($sub[$i]);
 					if( $i & 1 ) {
 						echo "<div class='widget-subtopic-item grey-bg'>";
 					} else {
@@ -588,46 +694,53 @@ class Dashboard
 			
 			?>
 		</div>
-
-</body>
-</html>
-
-
-
 <?php
-/*
-$dashboard = new Dashboard($user, $DBH);
-
-$listOfDiffs = $dashboard->getListofDiffs();
-
-foreach($listOfDiffs as $diff) {
-	$perc = $dashboard->getPercentageByDiff($diff);
-	if($perc!=-1) {
-		echo "<tr>";
-			echo "<th>" . $diff . "</th>";
-			echo "<th>" . $perc . "</th>";
-			echo "<th>" . $dashboard->getNumberByDiff($diff) . "</th>";
-			echo "<th>" . $dashboard->softResponse($diff) . "</th>";
-		echo "</tr>";
-	}
-}
-*/
-
-/*
-$dashboard = new Dashboard($user, $DBH);
-
-$listOfTypes = $dashboard->getListofTypes();
-
-foreach($listOfTypes as $type) {
-	$perc = $dashboard->getPercentageByType($type);
-	if($perc) {
-		echo "<tr>";
-			echo "<th>" . $type . "</th>";
-			echo "<th>" . $perc . "</th>";
-			echo "<th>" . $dashboard->getNumberByType($type) . "</th>";
-			echo "<th>" . $dashboard->softResponse($perc) . "</th>";
-		echo "</tr>";
-	}
-}
-*/
-?>
+		/*
+		$mainTopics = ["Basic Algebra", "Advanced Algebra", "Problem Solving and Data Analysis", "Additional Topics in Math"];
+		$algebraSubtopics = ["Solving linear equations",
+										 "Interpreting linear functions",
+										 "Linear inequality and equation word problems",
+										 "Graphing linear equations",
+										 "Linear function word problems",
+										 "Systems of linear inequatlities",
+										 "Solving systems of linear equations",
+										];
+		$advancedAlgebraSubtopics = ["Solving quadratic equations",
+													   "Interpreting nonlinear expression",
+													    "Quadratic and exponentials",
+														"Radicals and rational exponents",
+														"Operations with radicals and polynomials",
+														"Polynomial factors and graphs",
+														"Nonlinear equation graphs",
+														"Linear and quadratic systems",
+														"Structure in expressions",
+														"Isolating quantities",
+														"Functions"
+													   ];
+		$psdaSubtopics = ["Ratios, rates,  and proportions",
+								    "Percents",
+									"Units",
+									"Table data",
+									"Scatterplots",
+									"Key feature of graphs",
+									"Linear and exponential growth",
+									"Data inferences",
+									"Center, spread, and shape of distributions",
+									"Data collection and conclusions"
+									];
+		$atmSubtopics = ["Volume word problems",
+								    "Right triangle word problems",
+									"Congruence and similarity",
+									"Right triangle geometry",
+									"Angles, arc lengths, and trig functions",
+									"Circle theorems",
+									"Circle equations",
+									"Complex numbers"
+									];
+									
+		$topicStructure = (object) array("Basic Algerba" => $algebraSubtopics,
+														  "Advanced Algebra" => $advancedAlgebraSubtopics,
+														  "Problem Solving and Data Analysis" => $psdaSubtopics,
+														  "Additional Topics in Math" => $atmSubtopics);
+		*/
+?>	

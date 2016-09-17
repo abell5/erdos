@@ -2,6 +2,7 @@
 require_once('include/db_connect.php');
 require_once('encryptionFunctions.php');
 require_once('session_handler.php');
+sessionPersist();
 
 $errors = [];
 
@@ -27,8 +28,8 @@ if(empty($errors)) {
 			$input_password = crypt($pass,$set_password);
 			
 			if($input_password == $set_password) {
-				sessionLogin($email, $row['premium']);
-				echo "Logged in";
+				sessionLogin($row['userId'], $email, $row['premium']);
+				header("Location: app.php?p=practice");
 			} else {
 				echo "Incorrect info was entered.";
 			}

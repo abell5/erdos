@@ -40,7 +40,6 @@ function sessionPersist() {
 		openSession();
 	} else {	
 		if($_SESSION['canary']['loggedin'] === true && isset($_SESSION['email'])) {
-			
 			if ($_SESSION['canary']['IP'] !== $_SERVER['REMOTE_ADDR']) {
 				//Unset the logged information
 				unset($_SESSION['canary']['email']);
@@ -57,14 +56,11 @@ function sessionPersist() {
 	}
 }
 
-function sessionLogin($email, $premium) {
-	sessionPersist();
-	
+function sessionLogin($userId, $email,$premium) {
+	$_SESSION['canary']['id'] = $userId;
 	$_SESSION['canary']['loggedin'] = true;
 	$_SESSION['canary']['email'] = $email;
 	$_SESSION['canary']['premium'] = $premium;
-	
-	var_dump($_SESSION['canary']);
 }
 
 function getUserID() {

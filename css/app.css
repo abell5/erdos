@@ -329,6 +329,16 @@ input[type=submit]:hover {
 	*/
 }
 
+.widget-body-left {
+	float: left;
+	display: inline-block;
+}
+.widget-body-right {
+	float: left;
+	display:inline-block;
+}
+
+
 .app-notice-header-box {
 	padding:5px;
 	padding-top:0px;

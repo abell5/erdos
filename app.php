@@ -6,6 +6,7 @@ $directory = ["practice",
 					"dashboard",
 					"profile",
 					"premium",
+					"lessons"
 					];
 
 $page = $defaultPage; /*Set the page to the default */					
@@ -106,6 +107,9 @@ require_once('include/db_connect.php');
 		</div>		
 		<div class="left-sidebar-item" name="dashboard">
 			<h4><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>Dashboard</h4>
+		</div>
+		<div class="left-sidebar-item" name="lessons">
+			<h4><span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span>Lessons</h4>
 		</div>
 		<div class="left-sidebar-item" name="profile">
 			<h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span>Profile</h4>

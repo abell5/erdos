@@ -5,316 +5,8 @@ global $user;
 $user = getUserID();
 /*I will move these dashboard functions to their own file later*/
 
-/*****NOTE:  In the response_data table, the user ID is stored in `user_id`, but in the `users` table it is stored in userId.  This could be a problem in the future, and definitely not clean code.*/
-class Dashboard
-{
-	protected $user;
-	protected $DBH;
-	protected $major_topics;
-	protected $subtopics;
-	protected $goal;
-	protected $goalDays;
-	
-	public function __construct($user, $DBH) {
-		$this->user = $user;
-		$this->DBH = $DBH;
-	}
-	
-	/*
-	public function getProblemsByType($type) {
-		$query = "SELECT *
-						FROM `response_data`
-						WHERE `user_id` = :user AND `type` = :type";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":type"=>$type))) {
-				$rows = $stmt->fetchAll();
-				var_dump($rows);
-		}
-	}
-	*/
+require_once('include/dashboardClass.php');
 
-	public function getCorrectByMajorTopic($topic) {
-		$query = "SELECT *
-						FROM `response_data`
-						WHERE `user_id` = :user AND `major_topic` = :major_topic AND `response` = `correct_answer`";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":major_topic"=>$topic))) {
-				$rows = $stmt->fetchAll();
-				var_dump($rows);
-		}
-	}
-
-	public function getCorrectBySubopic($topic) {
-		$query = "SELECT *
-						FROM `response_data`
-						WHERE `user_id` = :user AND `subtopic` = :subtopic AND `response` = `correct_answer`";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":subtopic"=>$topic))) {
-				$rows = $stmt->fetchAll();
-				var_dump($rows);
-		}
-	}
-	
-	public function getProblemsByDiff($diff) {
-		$query = "SELECT A.*, B.difficulty FROM `response_data` as A LEFT JOIN `sat_problems` as B
-						ON A.pid = B.id
-						WHERE `user_id` = :user AND `difficulty` = :diff";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":diff"=>$diff))) {
-				$rows = $stmt->fetchAll();
-				var_dump($rows);
-		}
-	}
-
-	public function getCorrectByDiff($diff) {
-		$query = "SELECT A.*, B.difficulty FROM `response_data` as A LEFT JOIN `sat_problems` as B
-						ON A.pid = B.id
-						WHERE `user_id` = :user AND `difficulty` = :diff AND `response` = `correct_answer`";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":diff"=>$diff))) {
-				$rows = $stmt->fetchAll();
-				var_dump($rows);
-		}
-	}
-	
-	public function getNumberByDiff($diff) {
-		$query = "SELECT count(`A`.`id`) as Num
-						FROM `response_data` as A LEFT JOIN `sat_problems` as B
-						ON A.pid = B.id
-						WHERE `user_id` = :user AND `difficulty` = :diff
-						GROUP BY `difficulty`";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":diff"=>$diff))) {
-				$rows = $stmt->fetch();
-				if(empty($rows)) {
-					return 0;
-				} else {
-					return $rows['Num'];
-				}
-		}
-	}
-
-		public function getNumberCorrectByDiff($diff) {
-		$query = "SELECT count(`A`.`id`) as Num
-						FROM `response_data` as A LEFT JOIN `sat_problems` as B
-						ON A.pid = B.id
-						WHERE `user_id` = :user AND `difficulty` = :diff AND `response` = `correct_answer`
-						GROUP BY `difficulty`";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":diff"=>$diff))) {
-				$rows = $stmt->fetch();
-				if(empty($rows)) {
-					return 0;
-				} else {
-					return $rows['Num'];
-				}
-		}
-	}
-	
-	public function getNumberByMajorTopic($topic) {
-		$query = "SELECT count(`id`) as Num
-						FROM `response_data`
-						WHERE `user_id` = :user AND `major_topic` = :major_topic
-						GROUP BY `major_topic`";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":major_topic"=>$topic))) {
-				$rows = $stmt->fetch();
-				if(empty($rows)) {
-					return 0;
-				} else {
-					return $rows['Num'];
-				}
-		}		
-	}
-	
-	public function getNumberBySubtopic($topic) {
-		$query = "SELECT count(`id`) as Num
-						FROM `response_data`
-						WHERE `user_id` = :user AND `subtopic` = :subtopic
-						GROUP BY `subtopic`";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":subtopic"=>$topic))) {
-				$rows = $stmt->fetch();
-				if(empty($rows)) {
-					return 0;
-				} else {
-					return $rows['Num'];
-				}
-		}		
-	}
-	
-	public function getNumberCorrectByMajorTopic($topic) {
-		$query = "SELECT count(`id`) as Num
-						FROM `response_data`
-						WHERE `user_id` = :user AND `major_topic` = :major_topic AND `response` = `correct_answer`
-						GROUP BY `major_topic`";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":major_topic"=>$topic))) {
-				$rows = $stmt->fetch();
-				if(empty($rows)) {
-					return 0;
-				} else {
-					return $rows['Num'];
-				}
-		}				
-	}
-
-	public function getNumberCorrectBySubtopic($topic) {
-		$query = "SELECT count(`id`) as Num
-						FROM `response_data`
-						WHERE `user_id` = :user AND `subtopic` = :subtopic AND `response` = `correct_answer`
-						GROUP BY `subtopic`";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=>$this->user, ":subtopic"=>$topic))) {
-				$rows = $stmt->fetch();
-				if(empty($rows)) {
-					return 0;
-				} else {
-					return $rows['Num'];
-				}
-		}				
-	}
-	
-	public function getPercentageByMajorTopic($topic) {
-			$denominator = $this->getNumberByMajorTopic($topic);
-			$numerator = $this->getNumberCorrectByMajorTopic($topic);
-			
-			if($denominator!=0) {
-				$percentage = $numerator/$denominator;
-			} else {
-				return -1;
-			}
-			return $percentage;	
-	}
-
-	public function getPercentageBySubtopic($topic) {
-			$denominator = $this->getNumberBySubtopic($topic);
-			$numerator = 1; $this->getNumberCorrectBySubtopic($topic);
-			
-			if($denominator!=0) {
-				$percentage = $numerator/$denominator;
-			} else {
-				return -1;
-			}
-			return $percentage;	
-	}
-	
-	public function getPercentageByDiff($diff) {
-			$denominator = $this->getNumberByDiff($diff);
-			$numerator = $this->getNumberCorrectByDiff($diff);
-			
-			if($denominator!=0) {
-				$percentage = $numerator/$denominator;
-			} else {
-				return -1;
-			}
-			return $percentage;	
-	}
-	
-	public function softResponse($p) {
-		if($p>=0 && $p < 0.67) {
-			return "We should work on this topic.";
-		}
-		elseif($p>= 0.67 && $p < 0.80) {
-			return "You are on the road to mastery!";
-		}
-		elseif($p>=0.8) {
-			return "You rock this topic.";
-		}
-		else
-		{
-			return "";
-		}
-	}
-	
-	public function getListOfMajorTopics() {
-		$query = "SELECT DISTINCT `major_topic`
-						FROM `sat_problems`
-						WHERE `major_topic` != ''";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute()) {
-			$rows=$stmt->fetchAll(PDO::FETCH_COLUMN);
-			return $rows;
-		}			
-	}
-
-	public function getListOfSubtopics() {
-		$query = "SELECT DISTINCT `subtopic`
-						FROM `sat_problems`";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute()) {
-			$rows=$stmt->fetchAll(PDO::FETCH_COLUMN);
-			return $rows;
-		}			
-	}
-	
-	public function getListOfDiffs() {
-		$query = "SELECT DISTINCT `difficulty`
-						FROM `sat_problems`";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute()) {
-			$rows=$stmt->fetchAll(PDO::FETCH_COLUMN);
-			return $rows;
-		}			
-	}
-	
-	public function getGoal() {
-		$query = "SELECT `goal`
-					   FROM `users`
-					   WHERE `username`= :user
-					   LIMIT 1";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=> $this->user))) {
-			$rows = $stmt->fetch();
-			return $rows['goal'];
-		}
-	}
-	
-	public function getGoalDays() {
-		$query = "SELECT `goalDays`
-					   FROM `users`
-					   WHERE `username`= :user
-					   LIMIT 1";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array(":user"=> $this->user))) {
-			$rows = $stmt->fetch();
-			return $rows['goalDays'];
-		}
-	}
-	
-	public function getSubtopicsByMajorTopic($topic) {
-		$query = "SELECT distinct `subtopic`
-						FROM `sat_problems`
-						WHERE `major_topic`= :major_topic";
-		$stmt = $this->DBH->prepare($query);
-		if($stmt->execute(array("major_topic"=>$topic))) {
-			$rows=$stmt->fetchAll(PDO::FETCH_COLUMN);
-			return $rows;
-		}	
-	}
-	
-	public function getTopicStructure() {
-		$topicStructure = (object) null;
-		
-		
-		$majorTopics = $this->getListOfMajorTopics();
-		//var_dump($majorTopics);
-		foreach($majorTopics as $major) {
-			$temp = (array)$topicStructure;
-			$temp[$major] = $this->getSubtopicsByMajorTopic($major);
-			$topicStructure = (object)$temp;
-		}
-		
-		//var_dump($topicStructure);	
-		return $topicStructure;
-		
-	}
-
-	
-}
-
-//$dashboard = new Dashboard($user, $DBH);
-//var_dump($dashboard->getListOfDiffs());
 ?>
 <!-- d3js -->
 <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -516,7 +208,7 @@ class Dashboard
 					.attr("height", function(d) {return height - y(d.percentage) })
 					.attr("transform", "translate(18,0)"); //Inner margin
 			
-		
+		refreshDom();
 
 		/*
 		//console.log("hello");
@@ -654,8 +346,9 @@ class Dashboard
 	
 	<div class="widget">
 		<div class="widget-header"><h6>Problem Calendar</h6></div>
-		<div class="widget-body">
-			<?php
+		<div class="widget-body" style="height: 170px">
+
+				<?php
 				
 			class Calendar
 			{
@@ -664,11 +357,21 @@ class Dashboard
 				protected $user;
 				protected $DBH;
 				protected $n;
+				protected $highestValue;
+				protected $highestValueDay;
 				
 				public function __construct($user, $DBH, $n) {
 					$this->user = $user;
 					$this->DBH = $DBH;
 					$this->n = $n;
+				}
+				
+				public function getHighestValue() {
+					return $this->highestValue;
+				}
+				
+				public function getHighestValueDay() {
+					return $this->highestValueDay;
 				}
 				
 				public function getNumberByDay() {
@@ -803,15 +506,23 @@ class Dashboard
 						array_push($highTopLevel, max($topLevel));
 					}
 					$highestValue = max($highTopLevel);
+					$highestValueDay;
 					if($highestValue != 0) {
 						//Normalize all values in the table.
 						for($a=0; $a < sizeOf($calendarValueArray); $a++) {
 							for($b=0; $b < 7; $b++) {
+								if($calendarValueArray[$a][$b] == $highestValue) {
+									$highestValueDay = $calendarArray[$a][$b];
+								}
 								$norm = ($calendarValueArray[$a][$b] - 0) / ($highestValue);
 								$calendarValueArray[$a][$b] = $norm;
 							}
-						}		
-					
+						}
+						
+						$this->highestValue = $highestValue;
+						$this->highestValueDay = $highestValueDay;
+						
+						echo "<div class='widget-body-left'>";
 						echo "<table>";
 					
 						$dayLabels = ["Su","M","Tu","W","Th","F","Sa"];
@@ -827,14 +538,24 @@ class Dashboard
 											if($calendarValueArray[$n][$m] == 0 && isset($calendarArray[$n][$m])) {
 												echo "<th>" . "<div class='square'
 																	  style='background-color: #ecf0f1 !important'
-																	><div class='arrow_box'>" . $unnormalizedCalendarValueArray[$n][$m] . " problems answered on " . $calendarArray[$n][$m] . "</div></div>" . "</th>";
+																	><div class='arrow_box'>" . $unnormalizedCalendarValueArray[$n][$m] . " problems answered on<br>" . $calendarArray[$n][$m] . "</div></div>" . "</th>";
 												$k2 = $k2+1;
-											} else {
+											} elseif($unnormalizedCalendarValueArray[$n][$m] == 1) {
 												
 												echo "<th>" . "<div class='square'
-																		  style='opacity: " . $calendarValueArray[$n][$m] . "'
-																		><div class='arrow_box'>" . $unnormalizedCalendarValueArray[$n][$m] . " problems answered on " . $calendarArray[$n][$m] . "</div>" . "</th>";
+																		  style='background-color: rgba(39,174,96," . $calendarValueArray[$n][$m] . ")'
+																		><div class='arrow_box'>" . $unnormalizedCalendarValueArray[$n][$m] . " problem answered on<br>" . $calendarArray[$n][$m] . "</div>" . "</th>";
 												$k2 = $k2+1;
+											} elseif($unnormalizedCalendarValueArray[$n][$m] > 0) {
+												echo "<th>" . "<div class='square'
+																		  style='background-color: rgba(39,174,96," . $calendarValueArray[$n][$m] . ")'
+																		><div class='arrow_box'>" . $unnormalizedCalendarValueArray[$n][$m] . " problems answered on<br>" . $calendarArray[$n][$m] . "</div>" . "</th>";
+												$k2 = $k2+1;
+											} else {
+												echo "<th>" . "<div class='square2'
+																		  style='background-color: rgba(39,174,96," . $calendarValueArray[$n][$m] . ")'
+																		></th>";
+												$k2 = $k2+1;												
 											}
 											//echo "($m,$n)<br>";
 
@@ -844,6 +565,20 @@ class Dashboard
 						}
 						
 						echo "</table>";
+						
+						echo "</div>";
+						
+						echo "<div class='widget-body-right'>";
+							echo "<div class='calendar-right-inset'>
+										<div class='calendar-right-header'>
+											Record Practice Day
+										</div>
+										<div class='calendar-right-body'>
+											<div class='calendar-bold calendar-bold-number'>" . $this->getHighestValue() . "</div><br> problems on <br><div class='calendar-bold'>". $this->getHighestValueDay() ."</div>
+										</div>
+									</div>";
+						
+						echo "</div>";
 					
 					} else {
 						echo "You haven't done any problems yet!  Start learning!";
@@ -856,6 +591,9 @@ class Dashboard
 			$cal->createCalendarArray();
 			
 			?>
+		
+
+
 		</div>
 <?php
 		/*

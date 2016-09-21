@@ -1,0 +1,44 @@
+	.videos table {
+		width: 100%;
+	}
+	
+	.videos tr {
+		max-width: 100%;
+		word-wrap: normal;
+		
+		display: flex;
+		flex-wrap: flex;
+	}
+
+.img-box {
+	height: 180px;
+	width: 150px;
+	background-color: #34495e;
+	border-bottom: 3px solid #2980b9;
+	margin: 10px;
+	dispaly: inline-block !important;
+}
+	.img-box a {
+		text-decoration: none;
+	}
+	.img-box:hover {
+		background-color: #2c3e50;
+		cursor: pointer;
+	}
+	.img-box img {
+		width: 150px;
+		float:left;
+		display: block;
+	}
+	.img-box-caption {
+		float: left;
+		text-align: center;
+		display:block;
+		width: 150px;
+		padding: 5px;
+		color: #fff;
+		text-transform: uppercase;
+		font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+		font-size: 16px;
+		font-weight: 300;	
+	}

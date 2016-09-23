@@ -21,12 +21,13 @@ function getRecs($userId,$DBH) {
 //Niave algorithm:  (1/(recommendations + 1)) + perc	
 function createRecVector($subtopicScores, $recScores) {	
 	$decisionVector =  array();
-	//for($i = 0; $i < sizeOf($subtopicScores); $i++) {
 	foreach($subtopicScores as $sub) {
 		$numRecs = 0;
 		$perc = 1;
-		if(isset($recScores[$sub->subtopic])) {
-			$numRecs = $recScores[$sub->subtopic]['Sum_of_value'];
+		foreach($recScores as $r) {
+			if($r["subtopic"] == $sub->subtopic) {
+				$numRecs = $r['Sum_of_value'];
+			}
 		}
 		if($sub->percentage != -1) {
 			$perc = $sub->percentage;

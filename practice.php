@@ -184,7 +184,7 @@
 			<table>
 				<tr>
 					<th>
-						<div class="menu-box" name="3">
+						<div class="menu-box" name="9">
 						Module 1:
 						<br>Inspiration, move me brightly
 						</div>

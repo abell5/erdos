@@ -85,6 +85,22 @@ postResponse = function(pid,ptext,response,response_text,module,major_topic,subt
 	});	
 }
 
+postRecommendation = function(pid, major_topic, subtopic, displayed_tree) {
+	$.ajax({
+		type: 'post',
+		url: 'post_recommendation_data.php',
+		data: {
+			pid: pid,
+			major_topic: major_topic,
+			subtopic: subtopic,
+			displayed_tree: displayed_tree
+		},
+		success: function() {
+				console.log("Succesfully caleld");
+		}
+	});
+}
+
 function scroll_to(div){
 	setTimeout(function() {
 		$('html, body').animate({
@@ -123,7 +139,7 @@ Problem.prototype.checkAnswer = function(ans) {
 	if(this.answer==ans) { //if the answer is correct, disble the button and display correct
 		disableButtonOnCorrect(this.id);
 		if(this.id == this.module.key_ids[this.module.key_ids.length-1]) {
-			console.log("last question");
+			//console.log("last question");
 			redirectToDashboard();	
 		}
 	}
@@ -131,9 +147,13 @@ Problem.prototype.checkAnswer = function(ans) {
 		this.module.displayHelperText(this.id, assist_text);
 	}
 	if(instructions == "correct_step" || instructions == "descend") {
-		console.log("descending");
-		console.log(choice['action_to']);
+		//console.log("descending");
+		//console.log(choice['action_to']);
 		this.descend(choice['action_to']);
+	}
+	if(instructions == "recommend") {
+		console.log("here");
+		postRecommendation(this.id, this.major_topic, this.subtopic,this.module.displayedTree);
 	}
 	
 /*

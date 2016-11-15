@@ -1,15 +1,18 @@
  * html body{
 	overflow:hidden;
-
  } 
+ 
+body {
+	background-color: #fff !important;
+	/*
+	background-color: #D4DAE6 !important;
+	*/
+}
+ 
 #content{
 	margin:0;
 	padding:40 0 0 200;
-	background-color: #fff;
- }
- 
- body{
-
+	height: 100%;
  }
  
 #left-sidebar{
@@ -364,8 +367,66 @@ input[type=submit]:hover {
 	font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
 	font-size: 16px;
 	font-weight: 400;
-	
 	padding-top: 15px;
 }
 
+.tool-tip {
+	position: absolute;
+	/*
+	top: -65;
+	left: -94;
+	*/
+	background: #88b7d5;
+	border: 4px solid #c2e1f5;
+	font-size: 12px;
+	font-family: 'Montserrat', sans-serif !important;
+	text-align: left;
+	padding: 4px;
+	color: #fff;
+	width: 200px;
+	opacity: 1;
+	display:none;
+	height: 65px;
+	
+	display: none;
+}
+	.tool-tip-left {
+		float: left;
+		width: 83%;
+		position: relative;
+		padding-left: 10px;
+	}
+	.tool-tip-right {
+		float:right;
+		text-align: right;
+		padding-right: 5px;
+		width: 15%;
+		position: relative;
+	}
+		.tool-tip-right:hover{
+			cursor:pointer;
+		}
+	.tool-tip:after, .tool-tip:before {
+		left: 100%;
+		top: 50%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+	}
+
+	.tool-tip:after {
+		border-color: rgba(136, 183, 213, 0);
+		border-left-color: #88b7d5;
+		border-width: 10px;
+		margin-top: -10px;
+	}
+	.tool-tip:before {
+		border-color: rgba(194, 225, 245, 0);
+		border-left-color: #c2e1f5;
+		border-width: 16px;
+		margin-top: -16px;
+	}
 

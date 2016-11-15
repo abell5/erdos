@@ -33,6 +33,7 @@ if(isset($_GET['msg'])) {
 
 <!--Google Font-->
 <link href='https://fonts.googleapis.com/css?family=Montserrat:400,900' rel='stylesheet' type='text/css'>
+<link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
 
 <!--Main page stylesheets-->
 <link rel="stylesheet" href="css/login.css">
@@ -65,7 +66,7 @@ if(isset($_GET['msg'])) {
 <form method="POST" action="authorize.php">
 	<div class="form-header-box">
 		<div class="logo">
-			<h6>Erdos</h6>
+			<h7>Uclid</h7>
 		</div>
 		<h6>Login</h6>
 	</div>

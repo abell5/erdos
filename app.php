@@ -26,10 +26,6 @@ $user = getUserID();
 require_once('include/db_connect.php');
 
 
-
-
-
-
 ?>
 
 <html>
@@ -75,14 +71,28 @@ require_once('include/db_connect.php');
 		
 		$(".notice").on("click", ".app-notice-close-btn",function(e) {
 			$(this).parents(".app-notice").hide();
-		});
+		});		
 		
-		refreshDom()
+		refreshDom();
+		
+		$(".tool-tip-right").on("click", function(e) {
+			$(this).parents(".tool-tip").hide();
+			var tipName  = $(this).parents(".tool-tip").attr('name');
+			$.ajax({
+				type: 'POST',
+				url: 'tooltip_cookie.php',
+				data: {name: tipName},
+				success: function (res) {
+					console.log("success");
+				}
+			});
+		});
 		
 	});
 	</script>
 <?php include_once("analyticstracking.php") ?>	
 </head>
+
 <body>
 <div id="topbar">
 	<div class="topbar-inset">

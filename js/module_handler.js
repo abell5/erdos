@@ -1,6 +1,6 @@
 jQuery(function ($) {
 	
-var Problem = function(id,callback, text,answer,branches,major_topic,subtopic,child, parent,onCorrect,choiceSet,module,image) {
+var Problem = function(id,callback, text,answer,branches,major_topic,subtopic,child, parent,onCorrect,choiceSet,module,image,difficulty) {
 	if(typeof callback === "undefined"){callback=null;}
 	if(typeof text=== "undefined"){text=null;}
 	if(typeof answer=== "undefined"){answer=null;}
@@ -13,7 +13,9 @@ var Problem = function(id,callback, text,answer,branches,major_topic,subtopic,ch
 	if(typeof choiceSet === "undefined"){choiceSet=null;}
 	if(typeof module === "undefined"){module=null;}
 	if(typeof image === "undefined"){image=null;}
+	if(typeof difficulty === "undefined"){image=null;}
 	
+	this.difficulty = difficulty;
 	this.id = id;
 	this.text = text;
 	this.answer = answer;
@@ -54,6 +56,7 @@ Problem.prototype.build = function(pid, callback) {
 			curr_prob.answer=data['problem']['answer'];
 			curr_prob.major_topic=data['problem']['major_topic'];
 			curr_prob.subtopic=data['problem']['subtopic'];
+			curr_prob.difficulty=data['problem']['difficulty'];
 			curr_prob.image=data['problem']['image'];
 			
 			if(callback) { callback(curr_prob); }
@@ -85,7 +88,7 @@ postResponse = function(pid,ptext,response,response_text,module,major_topic,subt
 	});	
 }
 
-postRecommendation = function(pid, major_topic, subtopic, displayed_tree) {
+postRecommendation = function(pid, major_topic, subtopic, displayed_tree,n) {
 	$.ajax({
 		type: 'post',
 		url: 'post_recommendation_data.php',
@@ -93,7 +96,8 @@ postRecommendation = function(pid, major_topic, subtopic, displayed_tree) {
 			pid: pid,
 			major_topic: major_topic,
 			subtopic: subtopic,
-			displayed_tree: displayed_tree
+			displayed_tree: displayed_tree,
+			n: n
 		},
 		success: function() {
 				console.log("Succesfully caleld");
@@ -137,7 +141,7 @@ Problem.prototype.checkAnswer = function(ans) {
 		postResponse(this.id,this.text,ans,choice['text'],this.module.name,this.major_topic,this.subtopic,this.answer,this.module.displayedTree);
 	}
 	if(this.answer==ans) { //if the answer is correct, disble the button and display correct
-		disableButtonOnCorrect(this.id);
+		disableButtonOnCorrect(this.id, ans);
 		if(this.id == this.module.key_ids[this.module.key_ids.length-1]) {
 			//console.log("last question");
 			redirectToDashboard();	
@@ -153,7 +157,13 @@ Problem.prototype.checkAnswer = function(ans) {
 	}
 	if(instructions == "recommend") {
 		console.log("here");
-		postRecommendation(this.id, this.major_topic, this.subtopic,this.module.displayedTree);
+		var n = 1;
+		if(this.difficulty=="medium") {
+			n = 2;
+		} else if (this.difficulty=="easy") {
+			n = 3;
+		}
+		postRecommendation(this.id, this.major_topic, this.subtopic,this.module.displayedTree, n);
 	}
 	
 /*
@@ -182,13 +192,18 @@ Problem.prototype.checkAnswer = function(ans) {
 */
 }
 
-disableButtonOnCorrect = function(id) {
+disableButtonOnCorrect = function(id, ans) {
+		var $form = $(".magic-radio[name=problem"+id+"][value="+ans+"]").parent(".choice_buffer");
+		$form.css("background-color", "#B1EAC2");
+		$form.children("label").append('<span class="glyphicon glyphicon-ok" aria-hidden="true" style="margin-left: 10px"></span>');
+		/*
 		var $button = $(".button[name='problem"+id+"']")
 		$button.removeClass("btn-primary");
 		$button.addClass("btn-success");
 		$button.html("Correct!");
 		$button.css("cursor", "default");
 		$button.attr('disabled', true);
+		*/
 }
 
 findChoiceByLetter = function(ans, set) {
@@ -239,7 +254,7 @@ Problem.prototype.displayMe = function(loc) {
 	$choiceForm.append("</form>");
 	$choiceForm.appendTo($choiceBox);
 	
-	var $checkAnswerButton = $("<div>", {class: "button btn btn-primary", name: "problem"+this.id });
+	var $checkAnswerButton = $("<div>", {class: "go-btn", name: "problem"+this.id });
 	$checkAnswerButton.data("_form", "problem"+this.id);
 	$checkAnswerButton.append("Go").appendTo($_problemWrapper);	
 	
@@ -405,7 +420,7 @@ Module.prototype.displayKeys = function() {
 		$("#keys").addClass("btn-group");
 		$("#keys").attr("role", "group");
 		
-		if(count==lastKey) { $slide.addClass("no-border") }
+		//if(count==lastKey) { $slide.addClass("no-border") }
 		$("#keys").append($slide);
 	});
 	

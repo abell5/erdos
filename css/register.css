@@ -4,13 +4,13 @@
  }  
  
  body {
-	padding: 0;
 	margin: 0;
-	background: #2ecc71; /* For browsers that do not support gradients */
-	background: -webkit-radial-gradient(circle, #2ecc71, #27ae60); /* Safari */
-	background: -o-radial-gradient(circle, #2ecc71, #27ae60); /* Opera 11.6 to 12.0 */
-	background: -moz-radial-gradient(circle, #2ecc71, #27ae60); /* Firefox 3.6 to 15 */
-	background: radial-gradient(circle, #48F28F, #27ae60); /* Standard syntax */
+	padding: 0;
+	background: #3498db; /* For browsers that do not support gradients */
+	background: -webkit-radial-gradient(circle, #3498db, #2473A0); /* Safari */
+	background: -o-radial-gradient(circle, #3498db, #2473A0); /* Opera 11.6 to 12.0 */
+	background: -moz-radial-gradient(circle, #3498db, #2473A0); /* Firefox 3.6 to 15 */
+	background: radial-gradient(circle, #3498db, #2473A0); /* Standard syntax */
  }
  
  #main-container {
@@ -47,7 +47,7 @@
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	border: 5px solid #27ae60;
+	border: 5px solid #2473A0;
 	background-color: #fff;
 	-webkit-box-shadow: 0px 2px 2px -2px #000000;
     -moz-box-shadow: 0px 2px 2px -2px #000000;
@@ -104,7 +104,7 @@ input[type=submit] {
 
 	.register-btn-style {
 		color: #fff;
-		background-color: #2ecc71;
+		background-color: #2473A0;
 		font-weight: 700;
 	}
 
@@ -167,11 +167,19 @@ h6 {
 			padding: 0;
 			margin: 0;
 		}
-	
+		
+h7 {
+	padding: 0;
+	margin: 0;
+	font-family: 'Slabo 27px', serif;
+	font-size: 30px;
+	font-weight: 700;
+}
+
  .logo {
 	 text-align: center;
 	 margin-bottom: 20px;
-	 color: #27ae60 !important;
+	 color: #2473A0 !important;
  }
  
  .register-disabled {

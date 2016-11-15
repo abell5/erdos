@@ -94,10 +94,10 @@ require_once('include/dashboardClass.php');
 		}).mouseout(function() {
 			$(this).children(".arrow_box").hide();
 		});
+		
 
 		
 		/*D3js widget*/
-		/*
 		var dataArray = <?php
 								$percentageData = array();
 								
@@ -111,14 +111,15 @@ require_once('include/dashboardClass.php');
 								
 								//var_dump($percentageData);
 								?>;
-		console.log(dataArray);
-		*/
+		console.log("dataArray", dataArray);
 		
+		/*
 		var dataArray = [
 								{"major_topic": "Problem Solving and Data Analysis", "percentage": 0.59},
 								{"major_topic": "Problem Solving2", "percentage": 0.4},
 								{"major_topic": "Problem Solving3", "percentage": 0.8}
 								]
+		*/
 		dataArrayMax = function(dataArray) {
 			var percs = [];
 			dataArray.forEach(function(d) {
@@ -208,6 +209,38 @@ require_once('include/dashboardClass.php');
 					.attr("height", function(d) {return height - y(d.percentage) })
 					.attr("transform", "translate(18,0)"); //Inner margin
 			
+		//Progress tooltip	
+			var p = $(".widget[name=progress]").offset();
+			$(".tool-tip[name=progress]").css("left",p.left-188);
+			$(".tool-tip[name=progress]").css("top",p.top+34);
+		//Calendar tooltip
+			var c = $(".widget[name=calendar]").offset();
+			$(".tool-tip[name=calendar]").css("left",c.left-155);
+			$(".tool-tip[name=calendar]").css("top",c.top+80);
+		
+		
+		
+		
+		//$(".tool-tip[name=progress]").show();		
+		
+		var displayCookies = 
+		<?php
+			$toolTipList = ["progress","calendar"];
+			$show = [];
+			foreach($toolTipList as $tooltip) {
+				if(!isset($_COOKIE["{$tooltip}"])) {
+					array_push($show,$tooltip);				
+				} elseif ($_COOKIE["{$tooltip}"] == 1) {
+					array_push($show,$tooltip);	
+				}
+			}
+			echo json_encode($show);
+		?>;
+		for(i=0; i<displayCookies.length;i++) {
+			var temp = displayCookies[i];
+			$(".tool-tip[name="+displayCookies[i]+"]").show();
+		}
+		
 		refreshDom();
 
 		/*
@@ -303,7 +336,7 @@ require_once('include/dashboardClass.php');
 	-->
 	
 	<div class="widget">
-		<div class="widget-header"><h6>D3js Test</h6></div>
+		<div class="widget-header"><h6>Mastery of Core Topics</h6></div>
 		<div class="widget-body">	
 			<div id="chart">
 			  
@@ -314,9 +347,21 @@ require_once('include/dashboardClass.php');
 		
 	</div>
 	
-	<div class="widget">
-		<div class="widget-header"><h6>Progress</h6></div>
+	<div class="tool-tip" name="progress">	
+		<div class="tool-tip-left">
+			Click to expand, and<br>
+			see where you stand<br>
+			on each SAT subtopic.
+		</div>
+		<div class="tool-tip-right">
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		</div>
+	</div>			
+
+	<div class="widget" name="progress">
+		<div class="widget-header"><h6>Detailed Breakdown of My Knowledge</h6></div>
 		<div class="widget-body">
+		
 		
 		<?php
 		
@@ -343,8 +388,17 @@ require_once('include/dashboardClass.php');
 		</div>
 	</div>
 	
-	
-	<div class="widget">
+	<div class="tool-tip" name="calendar">	
+		<div class="tool-tip-left">
+			Mouseover any<br>
+			square to see your<br>
+			work on that day.
+		</div>
+		<div class="tool-tip-right">
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		</div>
+	</div>	
+	<div class="widget" name="calendar">
 		<div class="widget-header"><h6>Problem Calendar</h6></div>
 		<div class="widget-body" style="height: 170px">
 

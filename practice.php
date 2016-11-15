@@ -30,7 +30,7 @@
 												echo json_encode(true);
 											} else {
 												echo json_encode(false);
-											}
+											}	
 										}
 										?>;
 
@@ -47,7 +47,10 @@
 							liveModule = new Module(mid, problem_array,dataBinary);
 							liveModule.displayKeys();
 							$("#not-helpful-button-display").show();
-							$( ".slide_button:first" ).trigger( "click" );		
+							$( ".slide_button:first" ).trigger( "click" );	
+							if((displayCookies).indexOf("helpful")>0) {
+								showHelpfulTooltip();
+							}							
 						},
 						error: function(xhr) {
 							console.log("error");
@@ -59,12 +62,13 @@
 					return liveModule;
 				}
 				
-				var liveModule
+				var liveModule;
 				var Module = getModuleObject();
 				//openModule(3);
 
-				collapseMenu = function() {
-					$(".full-menu").hide();
+				collapseMenu = function(mid,modName) {
+					$(".menu").hide();
+					$("#mod-name").html("Module "+mid+": "+modName);
 					$(".menu-minimized").show();
 					refreshDom();
 					/*
@@ -106,11 +110,18 @@
 				
 				$(".menu-box").click(function() {
 					var mid = escape($(this).attr("name"));
+					var modName = $(this).attr("mod-name");
+					$(".tool-tip[name=menu]").hide()
 					clearModule();
 					openModule(mid);
-					collapseMenu();
+					collapseMenu(mid, modName);
 					$(".main-module").show();
 					refreshDom();
+				});
+				
+				$("body").on("change", ".magic-radio", function() { 
+					var prob = $(this).attr("name");
+					$(".go-btn[name="+prob+"]").click();
 				});
 
 				$("#send_feedback").on("click", function(e) {
@@ -133,6 +144,39 @@
 					
 					$("#myModal").modal('hide');
 				});
+				
+				var m = $(".full-menu[name=menu]").offset();
+				$(".tool-tip[name=menu]").css("left",m.left-197);
+				$(".tool-tip[name=menu]").css("top",m.top+60);
+			
+				function showHelpfulTooltip() {
+					$(".tool-tip[name=helpful]").show();
+					console.log("here");
+					var h = $(".flag-box[name=helpful]").offset();
+					console.log(h);
+					$(".tool-tip[name=helpful]").css("left",h.left-213);
+					$(".tool-tip[name=helpful]").css("top",h.top-20);
+				}
+			//$(".tool-tip[name=progress]").show();		
+			
+				var displayCookies = 
+				<?php
+					$toolTipList = ["menu", "helpful"];
+					$show = [];
+					foreach($toolTipList as $tooltip) {
+						if(!isset($_COOKIE["{$tooltip}"])) {
+							array_push($show,$tooltip);				
+						} elseif ($_COOKIE["{$tooltip}"] == 1) {
+							array_push($show,$tooltip);	
+						}
+					}
+					echo json_encode($show);
+				?>;
+				for(i=0; i<displayCookies.length;i++) {
+					var temp = displayCookies[i];
+					$(".tool-tip[name="+displayCookies[i]+"]").show();
+				}
+				$(".tool-tip[name=helpful]").hide();				
 				
 			});
 		
@@ -173,24 +217,39 @@
 	
 </div>
 -->
+<div class="menu-minimized">
+	<div id="mod-name">k</div>
+	<!--
+	<span class="glyphicon glyphicon-th" aria-hidden="true"></span>Module menu
+	-->
+</div>
+	
 <div class="menu">
-	<div class="menu-minimized">
-		<span class="glyphicon glyphicon-th" aria-hidden="true"></span>Module menu
-	</div>
 
-	<div class="full-menu">
+	<div class="tool-tip" name="menu">	
+		<div class="tool-tip-left">
+			Click to open<br>
+			the first module to<br>
+			begin learning.
+		</div>
+		<div class="tool-tip-right">
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		</div>
+	</div>
+	
+	<div class="full-menu" name="menu">
 		<div class="menu-header">Problem Solving and Data Analysis</div>
 		<div class="menu-content">	
 			<table>
 				<tr>
 					<th>
-						<div class="menu-box" name="9">
+						<div class="menu-box" name="9" mod-name="Inspiration, move me brightly">
 						Module 1:
 						<br>Inspiration, move me brightly
 						</div>
 					</th>
 								<th>
-						<div class="menu-box" name="4">
+						<div class="menu-box" name="Big Bertha">
 						Module 2:
 						<br>Big Bertha
 						</div>
@@ -221,15 +280,30 @@
 </div>
 <div class="main-module" style="display: none">
 		<div class="key-box">
+			<div class="key-box-text">
+			Problem:
+			</div>
 			<div id="keys"></div>
-			<div class="next btn-group group">
+			
+			<div class="next">
 				<div class="key-button key-font" id="prev_prob" title="Previous Problem"><span style="font-size:16px;" class="glyphicon glyphicon-triangle-left" aria-hidden="true"></div>
 				<div class="key-button key-font no-border" id="next_prob" title="Next Problem"><span style="font-size:16px;" class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></div>
 			</div>
 			
+				<div class="tool-tip" name="helpful">	
+					<div class="tool-tip-left">
+						If the practice isn't<br>
+						helping, let us know!<br>
+						It'll help the beta.
+					</div>
+					<div class="tool-tip-right">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</div>
+				</div>
+			
 				<div class="full-modal-wrapper">
 					<a href="#myModal" role="button" id="not-helpful-button-display" data-toggle="modal" style='display:none'>
-						<div class="flag-box">
+						<div class="flag-box" name="helpful">
 							<div class="flag-icon"><h2><span style="font-size:18px;" class="glyphicon glyphicon-flag" aria-hidden="true"></span></h2></div>
 							<div class="flag-text">Not helpful?</div>
 						</div>
@@ -277,8 +351,8 @@
 		<div id="helperTV">	</div>
 	
 </div>
-
+<!--
 <div class="right-bar">
 
 </div>
-
+-->

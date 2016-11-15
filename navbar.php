@@ -1,4 +1,5 @@
 <?php ?>
+<link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
 <style type="text/css">
  #topbar {
 	 height: 55px !important;
@@ -75,8 +76,8 @@ h3 {
 	margin: 0;
 	padding: 0;
 	
+	font-family: 'Slabo 27px', serif;
 	font-size: 30px;
-	font-family: 'Montserrat', sans-serif !important;
 	font-weight: 700;
 	
 	color: inherit;
@@ -97,10 +98,12 @@ h3 {
 <div id="topbar">
 	<div class="topbar-inset">
 		<div class="topbar-left-logo">
-			<a href="newhome.php"><h3>Bright</h3></a>
+			<a href="app.php"><h3>Uclid</h3></a>
 		</div>
 		<div class="topbar-right-links">
+			<!--
 			<a href="about.php"><h4>About</h3></a>
+			-->
 			<a href="app.php"><h4>Learn</h4></a>
 			<a href="login.php"><h4>Sign in</h4></a>
 			<a href ="register.php" class="sign-up-button"><h4>Sign up</h4></a>

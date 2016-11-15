@@ -27,6 +27,7 @@ if(isset($_GET['error'])) {
 
 <!--Google Font-->
 <link href='https://fonts.googleapis.com/css?family=Montserrat:400,900' rel='stylesheet' type='text/css'>
+<link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
 
 <!--Main page stylesheets-->
 <link rel="stylesheet" href="css/register.css">
@@ -167,7 +168,7 @@ if(isset($_GET['error'])) {
 	<form method="POST" action="registerUser.php">
 		<div class="form-header-box">
 			<div class="logo">
-				<h6>Erdos</h6>
+				<h7>Uclid</h7>
 			</div>
 			<h6>Sign up</h6>
 		</div>

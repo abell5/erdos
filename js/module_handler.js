@@ -194,8 +194,26 @@ Problem.prototype.checkAnswer = function(ans) {
 
 disableButtonOnCorrect = function(id, ans) {
 		var $form = $(".magic-radio[name=problem"+id+"][value="+ans+"]").parent(".choice_buffer");
-		$form.css("background-color", "#B1EAC2");
-		$form.children("label").append('<span class="glyphicon glyphicon-ok" aria-hidden="true" style="margin-left: 10px"></span>');
+		if( !$form.hasClass("correct")) {
+			$form.addClass("correct");
+			$form.css("background-color", "#B1EAC2");
+			$form.children("label").append('<span class="glyphicon glyphicon-ok" aria-hidden="true" style="margin-left: 10px"></span>');
+
+			if($form.parents("div#mainTV").length > 0) {
+				console.log("here");
+				var $nextButton = $("<div>", {class: "correctNext" })
+				$nextButton.on("click", function(e) {
+						console.log("clicked");
+						$(".slide_button.pressed").next().trigger("click");
+				});
+				$nextButton.append("next problem");
+				$form.children("label").append($nextButton);
+			}
+		}
+		
+		
+
+		
 		/*
 		var $button = $(".button[name='problem"+id+"']")
 		$button.removeClass("btn-primary");

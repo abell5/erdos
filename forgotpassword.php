@@ -12,6 +12,7 @@
 <!-- Bootstrap Core JavaScript and CSS -->
 <script src="js/bootstrap.min.js"></script>
 <link href="css/bootstrap.css" rel="stylesheet">
+<link rel="stylesheet" href="css/lostpassword.css">
 
 <!--Google Font-->
 <link href='https://fonts.googleapis.com/css?family=Montserrat:400,900' rel='stylesheet' type='text/css'>
@@ -24,18 +25,15 @@
 	</script>
 </head>
 <body>
-<?php require('navbar.php'); ?>
-
-
 <div id="main-container">
 <?php
 require_once('include/db_connect.php');
 require_once('encryptionFunctions.php');
-
+require_once('session_handler.php');
+sessionPersist();
 
 if(!isset($_GET['email'])) {
 	echo "No e-mail provided.";
-	die();
 } else {
 	$email = filter_var($_GET['email'], FILTER_VALIDATE_EMAIL);
 }
@@ -51,8 +49,8 @@ if(!empty($confirmkey)) {
 	$stmt->execute(array(":email"=>$email, ":confirmkey"=>$confirmkey));
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
 	if(!empty($row['id'])) { 
-			?>
-			<div class="form-container">
+?>
+<div class="form-container">
 				<form method="POST" action="changePassword.php">
 					<div class="form-header-box">
 						<h6>Change lost password</h6>
@@ -80,26 +78,9 @@ if(!empty($confirmkey)) {
 						</div>
 					</div>
 				</form>
-			</div>
-			<?php	
-			/*
-			$newPass = sprintf("%06d", mt_rand(1, 999999));
-			
-			$query = "UPDATE `users`SET `password`= :newPass WHERE (`email`) = :email LIMIT 1";
-			$stmt = $DBH->prepare($query);
-			if($stmt->execute(array(":newPass"=>$newPass, ":email"=>$email))) {
-				echo "You have been e-mailed a new password.";
-				$message  = 
-				"Your new Erdos password: $newPass
-				";
-				echo $message;
-				mail($email,"Your latest Erdos password", $message, "From: welcome@geterdos.com");	
-			} else {
-				echo "Database query failed.";
-			}
-			*/
-		
-	} else {
+</div>
+<?php
+} else {
 		echo "Incorrect email or confirmation key.";
 	}	
 } else {
@@ -110,18 +91,21 @@ if(!empty($confirmkey)) {
 	$stmt = $DBH->prepare($query);
 	if($stmt->execute(array(":email" => $email, ":confirmkey"=>$tempConfirmkey))) {
 		$message  = 
-		"Clicking the link below to reset your Erdos password:
-		http://localhost/erdos/forgotpassword.php?email=$email&confirmkey=$tempConfirmkey
+		"Clicking the link below to reset your Uclid password:
+		http://www.uclid.io/forgotpassword.php?email=$email&confirmkey=$tempConfirmkey
 		";
-		echo $message;
-		mail($email,"Fruitfulness over Forgetfullness from Erdos", $message, "From: welcome@geterdos.com");
-		//header('Location: lostpassword.php?&sent=1');
-		//die();
+		//echo $message;
+		mail($email,"Fruitfulness over Forgetfullness from Uclid", $message, "From: welcome@getUclid.com");
+		echo "<div class='note'>
+					A link to reset your password has been sent to your e-mail!<br>
+					If at first you don't see the e-mail, please check your spam bin.
+				</div>";
 	} else {
 		//Error handling.
 		echo "A critical error occured.";
 	}
-} 
+}
+ob_end_flush(); 
 ?>
 </div>
 </body>

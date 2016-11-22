@@ -20,6 +20,4 @@ function generate_salt() {
 	return $salt;
 }
 
-
-
 ?>

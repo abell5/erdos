@@ -50,7 +50,7 @@ $stmt->bindValue(':email',strtolower($email));
 $stmt->execute();
 
 if($stmt->rowCount() > 0) {
-	array_push($errors, "Someone with that e-mail address is already learning on Erdos!");
+	array_push($errors, "Someone with that e-mail address is already learning on Uclid!");
 }
 
 
@@ -90,16 +90,31 @@ if(!empty($errors)) {
 I didn't want to crowd the main register function **/
 function sendConfirmationEmail($email,$key) {
 	$message  = 
-	"Clicking the link below will confirm your email address, and begin your Erdos learning adventure:
-	http://localhost/erdos/confirmemail.php?email=$email&confirmcode=$key
+	"Hi!  Thanks for signing up for the Uclid platform.  You can confirm your e-mail address by clicking the link below:
+	http://www.uclid.io/confirmemail.php?email=$email&confirmcode=$key
+	<br><br>
+	We are excited to see what you accomplish on your learning journey with Uclid!  If you ever have any questions or need help with anything, please reach out to me at this e-mail.  Good luck studying for the SAT!
+	<br><br>
+	Best,
+	Andrew
 	";
 	
 	echo $message;
-	mail($email,"Erdos Confirm Email", $message, "From: welcome@geterdos.com");
-
-	
+	mail($email,"Uclid Confirm Email", $message, "From: andrew@uclid.io");
 }
 
-
-
 ?>
+
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+
+<script language="Javascript">
+$(document).ready(function(){ 
+		window.location.href = "http://uclid.io/app.php?p=dashboard";
+});
+</script>
+	
+</head>
+</html>
+

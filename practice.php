@@ -97,7 +97,10 @@
 					console.log("clicked");
 					$(".slide_button.pressed").prev().trigger("click");
 				});
-				
+				$(".correctNext").on("click", function(e) {
+					console.log("clicked");
+					$(".slide_button.pressed").next().trigger("click");
+				});
 
 
 				$("#mod-list").on("click", function(e) {
@@ -238,20 +241,26 @@
 	</div>
 	
 	<div class="full-menu" name="menu">
-		<div class="menu-header">Problem Solving and Data Analysis</div>
+		<div class="menu-header">Problem Modules</div>
 		<div class="menu-content">	
 			<table>
 				<tr>
 					<th>
-						<div class="menu-box" name="9" mod-name="Inspiration, move me brightly">
+						<div class="menu-box" name="1" mod-name="Inspiration, move me brightly">
 						Module 1:
 						<br>Inspiration, move me brightly
 						</div>
 					</th>
-								<th>
-						<div class="menu-box" name="Big Bertha">
+					<th>
+						<div class="menu-box" mod-name="Big Bertha" name="2">
 						Module 2:
 						<br>Big Bertha
+						</div>
+					</th>
+					<th>
+						<div class="menu-box" mod-name="Get Out and Row" name="3">
+						Module 3:
+						<br>Get Out and Row
 						</div>
 					</th>
 				</tr>
@@ -303,10 +312,12 @@
 			
 				<div class="full-modal-wrapper">
 					<a href="#myModal" role="button" id="not-helpful-button-display" data-toggle="modal" style='display:none'>
+					
 						<div class="flag-box" name="helpful">
-							<div class="flag-icon"><h2><span style="font-size:18px;" class="glyphicon glyphicon-flag" aria-hidden="true"></span></h2></div>
-							<div class="flag-text">Not helpful?</div>
+							<div class="flag-text">
+							<span style="font-size:18px;" class="glyphicon glyphicon-flag" aria-hidden="true"></span>Not helpful?</div>
 						</div>
+						
 					</a>
 						<!-- Modal -->
 						<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -2,8 +2,6 @@
 require_once('include/db_connect.php');
 require_once('encryptionFunctions.php');
 
-echo "PASS" . $_POST['confirmPass'];
-
 $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
 $pass = filter_var($_POST['pass'], FILTER_SANITIZE_STRING);
 $confirmPass = filter_var($_POST['confirmPass'], FILTER_SANITIZE_STRING);
@@ -55,6 +53,7 @@ if(empty($errors)) {
 		$stmt = $DBH->prepare($query);
 		$stmt->bindValue(':id',$row['id']);
 		if($stmt->execute()){
+			echo "Password safely and sucrely changed.  If you are not redirected automatically, please click <a href='login.php?msg=1'>here</a> to login and return to the dashboard.";
 			header('Location: login.php?msg=1');
 		} else {
 			//Error handling
@@ -68,6 +67,4 @@ if(empty($errors)) {
 		echo $e . "<br>";
 	}	
 }
-
-
 ?>

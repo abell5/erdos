@@ -1,0 +1,29 @@
+body {
+	margin: 0;
+	padding: 0;
+	background: #3498db; /* For browsers that do not support gradients */
+	background: -webkit-radial-gradient(circle, #3498db, #2473A0); /* Safari */
+	background: -o-radial-gradient(circle, #3498db, #2473A0); /* Opera 11.6 to 12.0 */
+	background: -moz-radial-gradient(circle, #3498db, #2473A0); /* Firefox 3.6 to 15 */
+	background: radial-gradient(circle, #3498db, #2473A0); /* Standard syntax */
+ }
+ 
+ #main-container {
+	width: 50%;
+	max-width: 600px;
+	
+	margin: auto;
+	margin-top: 100px;
+}
+
+.message {
+	text-align: center;
+	font-size: 18px;
+	color: #fff;
+	font-family: 'Montserrat', sans-serif !important;
+}
+	.message a, .message a:visited {
+		text-decoration: underline;
+		cursor: pointer;
+		color: #2c3e50;
+	}

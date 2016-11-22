@@ -286,13 +286,13 @@ h2 {
 }	
 	
 .flag-box {	
-	float:right;
-	height: 28px;
-	display: block;
-	width: 120px;
-	display: none;
-	border: 1px solid #353C41;
+	margin-left: 5px;
+	display: inline-block;
+	border-left: 2px solid #E4E8EF;
+	height: 30px;
+	float:left;
 }
+/*
 .flag-icon {
 	padding: 3px;
 	color: #fff;
@@ -304,24 +304,46 @@ h2 {
 	font-weight:normal !important;	
 	width: 25px;
 }
-
+*/
 .flag-text {
-	padding: 3px;
-	padding-top: 3px;
+	padding-left: 10px;
+	padding-top: 5px;
 	display: inline-block;
 	height: 27px;
 	float:left;
-	width:93px;
+	width:120px;
 	font-family: 'Montserrat', sans-serif !important;
 	font-size: 14px !important;
 	font-weight:normal !important;	
 }
+	.flag-text span{
+		vertical-align: top;
+		display:inline-block;
+	}
 	.flag-box:hover{
-		background-color: #353C41;
-		color: #fff;
-		cursor:pointer;
+		background-color: #bdc3c7;
+		cursor: pointer;
 	}
 
+.correctNext {
+	margin-left: 15px;
+	vertical-align: bottom;
+	height: 20px;
+	border: 1px solid #2c3e50;
+	border-radius: 3px;
+	text-align: center;
+	width: 120px;
+	display: inline-block;
+	
+	color: #2c3e50;
+	font-family: 'Montserrat', sans-serif !important;
+	font-size: 14px !important;
+	font-weight:normal !important;	
+}
+	.correctNext:hover {
+		background-color: #2ecc71;
+		cursor: pointer;
+	}
 
 #keys {
 	display: inline-block;

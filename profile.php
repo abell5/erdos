@@ -56,6 +56,12 @@ class Profile
 <script language="Javascript">
 $(document).ready(function(){ 
 	
+	$(".square").mouseover(function() {
+			$(this).children(".arrow_box").show();
+		}).mouseout(function() {
+			$(this).children(".arrow_box").hide();
+	});
+	
 	refreshDom = function() {
 		$("#left-sidebar").height($(document).height());
 	}
@@ -86,6 +92,31 @@ $(document).ready(function(){
 		});
 
 	});
+
+	//Calendar tooltip
+	var c = $(".widget[name=calendar]").offset();
+	$(".tool-tip[name=calendar]").css("left",c.left-155);
+	$(".tool-tip[name=calendar]").css("top",c.top+80);	
+	
+	//$(".tool-tip[name=progress]").show();		
+	
+	var displayCookies = 
+	<?php
+		$toolTipList = ["progress","calendar"];
+		$show = [];
+		foreach($toolTipList as $tooltip) {
+			if(!isset($_COOKIE["{$tooltip}"])) {
+				array_push($show,$tooltip);				
+			} elseif ($_COOKIE["{$tooltip}"] == 1) {
+				array_push($show,$tooltip);	
+			}
+		}
+		echo json_encode($show);
+	?>;
+	for(i=0; i<displayCookies.length;i++) {
+		var temp = displayCookies[i];
+		$(".tool-tip[name="+displayCookies[i]+"]").show();
+	}
 	
 	refreshDom();
 	
@@ -110,6 +141,268 @@ $profile = new Profile($user, $DBH);
 	</div>	
 </div>
 
+	<div class="tool-tip" name="calendar">	
+		<div class="tool-tip-left">
+			Mouseover any<br>
+			square to see your<br>
+			work on that day.
+		</div>
+		<div class="tool-tip-right">
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		</div>
+	</div>	
+	<div class="widget" name="calendar">
+		<div class="widget-header"><h6>Problem Calendar</h6></div>
+		<div class="widget-body" style="height: 170px">
+
+		<?php
+				
+			class Calendar
+			{
+				protected $relativeTo;
+				protected $dayTable;
+				protected $user;
+				protected $DBH;
+				protected $n;
+				protected $highestValue;
+				protected $highestValueDay;
+				
+				public function __construct($user, $DBH, $n) {
+					$this->user = $user;
+					$this->DBH = $DBH;
+					$this->n = $n;
+				}
+				
+				public function getHighestValue() {
+					return $this->highestValue;
+				}
+				
+				public function getHighestValueDay() {
+					return $this->highestValueDay;
+				}
+				
+				public function getNumberByDay() {
+					$query = "SELECT B.date, C.Num
+									FROM 
+									(
+									select * from (
+									select date_add('2003-01-01 00:00:00.000', INTERVAL n5.num*10000+n4.num*1000+n3.num*100+n2.num*10+n1.num DAY ) as date from
+									(select 0 as num
+									   union all select 1
+									   union all select 2
+									   union all select 3
+									   union all select 4
+									   union all select 5
+									   union all select 6
+									   union all select 7
+									   union all select 8
+									   union all select 9) n1,
+									(select 0 as num
+									   union all select 1
+									   union all select 2
+									   union all select 3
+									   union all select 4
+									   union all select 5
+									   union all select 6
+									   union all select 7
+									   union all select 8
+									   union all select 9) n2,
+									(select 0 as num
+									   union all select 1
+									   union all select 2
+									   union all select 3
+									   union all select 4
+									   union all select 5
+									   union all select 6
+									   union all select 7
+									   union all select 8
+									   union all select 9) n3,
+									(select 0 as num
+									   union all select 1
+									   union all select 2
+									   union all select 3
+									   union all select 4
+									   union all select 5
+									   union all select 6
+									   union all select 7
+									   union all select 8
+									   union all select 9) n4,
+									(select 0 as num
+									   union all select 1
+									   union all select 2
+									   union all select 3
+									   union all select 4
+									   union all select 5
+									   union all select 6
+									   union all select 7
+									   union all select 8
+									   union all select 9) n5
+									) A
+									where date >=DATE_SUB(NOW(), INTERVAL 90 DAY) and date < NOW()
+									order by date
+									) B
+									LEFT JOIN
+									(
+										SELECT count(`id`) as Num, CAST(`datetime` AS DATE) AS trueDate
+										FROM `response_data`
+										WHERE `user_id` = :user AND `datetime`>=DATE_SUB(Now(), INTERVAL :n DAY)
+										GROUP BY CAST(`datetime` AS DATE) 
+									) C
+									ON B.date = C.trueDate
+									";
+					$stmt = $this->DBH->prepare($query);
+					if($stmt->execute(array(":user"=>$this->user, ":n"=>$this->n))) {
+							$rows = $stmt->fetchAll(PDO::FETCH_BOTH);
+							if(empty($rows)) {
+								return false;
+							} else {					
+								$this->dayTable = $rows;
+								return true;
+							}
+				
+					}				
+				}
+				
+				public function createCalendarArray() {
+					if(!isset($this->dayTable)) {
+						if(!$this->getNumberByDay()) {
+							return false;
+						}
+					}
+					
+					$firstDay = date('w', strtotime($this->dayTable[0]["date"]));
+					$calendarWidth = ceil($this->n / 7)+1;
+					$calendarArray = [];
+					$calendarValueArray = [];
+					$headerRows = [];
+					
+					$k = 0; //This is the counter on the dayTable array
+					for($j=0; $j<$calendarWidth; $j++) {
+						for($i=0; $i<7; $i++) {
+							if($k==0) {
+								$i = $firstDay;
+								for($q=0; $q<$i; $q++) {
+									$calendarArray[$j][$q] = NULL;
+									$calendarValueArray[$j][$q] = -1;
+								}
+							} 
+							if($k < $this->n) {
+							//echo $i . "<br>";
+								$calendarArray[$j][$i] = substr($this->dayTable[$k]['date'],0,10);
+								$calendarValueArray[$j][$i] = $this->dayTable[$k]['Num'];
+								if (is_null($this->dayTable[$k]['Num'])) {
+									$calendarValueArray[$j][$i] = 0;
+								}
+								$k=$k+1;
+							} else {
+								$calendarValueArray[$j][$i] = 0;
+								$calendarArray[$j][$i] = NULL;
+							}
+						}
+					}
+					
+					//echo $calendarArray[0][0] . "<br><br>";
+					//echo $calendarArray[1][0] . "<br><br>";
+					//echo $calendarArray[2][0] . "<br><br>";
+					//var_dump($calendarArray);
+					
+					$unnormalizedCalendarValueArray = $calendarValueArray;
+					
+					$highTopLevel = [];
+					foreach($calendarValueArray as $topLevel) {
+						array_push($highTopLevel, max($topLevel));
+					}
+					$highestValue = max($highTopLevel);
+					$highestValueDay;
+					if($highestValue != 0) {
+						//Normalize all values in the table.
+						for($a=0; $a < sizeOf($calendarValueArray); $a++) {
+							for($b=0; $b < 7; $b++) {
+								if($calendarValueArray[$a][$b] == $highestValue) {
+									$highestValueDay = $calendarArray[$a][$b];
+								}
+								$norm = ($calendarValueArray[$a][$b] - 0) / ($highestValue);
+								$calendarValueArray[$a][$b] = $norm;
+							}
+						}
+						
+						$this->highestValue = $highestValue;
+						$this->highestValueDay = $highestValueDay;
+						
+						echo "<div class='widget-body-left'>";
+						echo "<table>";
+					
+						$dayLabels = ["Su","M","Tu","W","Th","F","Sa"];
+						
+						$k2 = 0; //Count of placed boxes.  Can maybe use this to leverage month labels.
+						for($m=0; $m<7; $m++) {
+							//Row actions
+							echo "<tr>";
+								echo "<th class='center'>" . $dayLabels[$m] . "</th>";
+								for($n=0; $n < sizeOf($calendarArray); $n++) {
+										//echo "<th>" . $calendarArray[$n][$m] . "</th>";
+										//echo $calendarArray[$n][$m] . "<br>";
+											if($calendarValueArray[$n][$m] == 0 && isset($calendarArray[$n][$m])) {
+												echo "<th>" . "<div class='square'
+																	  style='background-color: #ecf0f1 !important'
+																	><div class='arrow_box'>" . $unnormalizedCalendarValueArray[$n][$m] . " problems answered on<br>" . $calendarArray[$n][$m] . "</div></div>" . "</th>";
+												$k2 = $k2+1;
+											} elseif($unnormalizedCalendarValueArray[$n][$m] == 1) {
+												
+												echo "<th>" . "<div class='square'
+																		  style='background-color: rgba(39,174,96," . $calendarValueArray[$n][$m] . ")'
+																		><div class='arrow_box'>" . $unnormalizedCalendarValueArray[$n][$m] . " problem answered on<br>" . $calendarArray[$n][$m] . "</div>" . "</th>";
+												$k2 = $k2+1;
+											} elseif($unnormalizedCalendarValueArray[$n][$m] > 0) {
+												echo "<th>" . "<div class='square'
+																		  style='background-color: rgba(39,174,96," . $calendarValueArray[$n][$m] . ")'
+																		><div class='arrow_box'>" . $unnormalizedCalendarValueArray[$n][$m] . " problems answered on<br>" . $calendarArray[$n][$m] . "</div>" . "</th>";
+												$k2 = $k2+1;
+											} else {
+												echo "<th>" . "<div class='square2'
+																		  style='background-color: rgba(39,174,96," . $calendarValueArray[$n][$m] . ")'
+																		></th>";
+												$k2 = $k2+1;												
+											}
+											//echo "($m,$n)<br>";
+
+
+								}			
+							echo "</tr>";
+						}
+						
+						echo "</table>";
+						
+						echo "</div>";
+						
+						echo "<div class='widget-body-right'>";
+							echo "<div class='calendar-right-inset'>
+										<div class='calendar-right-header'>
+											Record Practice Day
+										</div>
+										<div class='calendar-right-body'>
+											<div class='calendar-bold calendar-bold-number'>" . $this->getHighestValue() . "</div><br> problems on <br><div class='calendar-bold'>". $this->getHighestValueDay() ."</div>
+										</div>
+									</div>";
+						
+						echo "</div>";
+					
+					} else {
+						echo "You haven't done any problems yet!  Start learning!";
+					}
+				}
+				
+			}
+						
+			$cal = new Calendar($user, $DBH, 90);
+			$cal->createCalendarArray();
+			
+			?>
+		
+
+
+		</div>
+	</div>
 	
 <div class="widget">
 	<div class="widget-header"><h6>Goals</h6></div>

@@ -1,8 +1,6 @@
 <?php
 ini_set('session.cookie_httponly',true);
-//require_once('encryptionFunctions.php');
-
-
+require_once('encryptionFunctions.php');
 
 function sessionDestroy() {
 	session_unset();
@@ -23,6 +21,7 @@ function openSession() {
 
 function addUnregisteredUser($id) {
 	require_once('include/db_connect.php');
+	echo "here4";
 
 	$query = "INSERT INTO `users` (`userId`,`datetimeCreated`) VALUES (:user, Now())";
 	$stmt = $DBH->prepare($query);	
@@ -32,7 +31,6 @@ function addUnregisteredUser($id) {
 		//Error handling
 	}
 }
-
 
 function sessionPersist() {
 	session_start();
@@ -71,34 +69,4 @@ function getUserID() {
 	}
 }
 
-
-
-/*
-if(version_compare(phpversion(), '5.4.0')>0) {
-	if(session_status() == PHP_SESSION_NONE) {
-		session_start();
-	}
-} else {
-	if(session_id() == '') {
-		session_start();
-	}
-}
-
-$user = session_id();
-
-function checkPremium($email) {
-	$query = 'SELECT `premium` FROM `users` WHERE `email` = :email';
-	$stmt = $DBH->prepare($query);
-	if($stmt->execute(array(":email" => $email))) {
-		$row = $stmt->fetch(PDO::FETCH_ASSOC);
-		if(!empty($row)) {
-			return $row['premium'];
-		} else {
-			//Something weird happened.  An invalid email address was passed into checkpremium.
-		}
-	} else {
-		//Database error.  Initatiate all of error handling.
-	}
-}
-*/
 ?>
